@@ -1,1 +1,65 @@
-.vercel
+# ==============================================================================
+# DKHP UIT - REPOSITORY SECURITY & IGNORE DEFINITIONS
+# ==============================================================================
+
+# 1. Environment Variables, Credentials & Secret Tokens (CRITICAL)
+.env
+.env.*
+*.env
+*.local
+*.pem
+*.key
+*.cert
+*.crt
+id_rsa*
+secrets.json
+config.private.json
+
+# 2. Python Virtual Environments, Bytecode & Scraper Dumps
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# 3. Raw Network Logs & Intercepted Traffic Captures (Proxyman, Charles, Wireshark)
+*.proxymanlog*
+*.har
+*.pcap
+*.pcapng
+*.chls*
+
+# 4. Raw Crawl Database Dumps (Only compiled & sanitized client assets in production)
+everytime_raw_reviews.json
+everytime_teachers.json
+*.raw.json
+crawl_cache/
+temp/
+tmp/
+*.tmp
+
+# 5. Node, NPM & Build Caches
+node_modules/
+.npm/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 6. Deployment & Cloud Artifacts
+.vercel/
+
+# 7. Operating System & IDE Configs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
