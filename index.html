@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>DKHP UIT - Xếp Thời Khóa Biểu Tự Động & Đăng Ký Học Phần UIT (AI Everytime)</title>
+  <meta name="title" content="DKHP UIT - Xếp Thời Khóa Biểu Tự Động & Đăng Ký Học Phần UIT (AI Everytime)">
+  <meta name="description" content="Tool xếp Thời khóa biểu tự động và hỗ trợ Đăng ký học phần UIT (Trường ĐH Công nghệ Thông tin - ĐHQG TP.HCM). Tích hợp AI chống trùng lịch, đánh giá giảng viên Phật sống từ 900+ review Everytime, xuất script auto DKHP 1 click.">
+  <meta name="keywords" content="tool dkhp uit, dkhp uit, tool dkhp, dkhp, dang ky hoc phan uit, xếp tkb uit, tool xep tkb uit, xep thoi khoa bieu uit, thoi khoa bieu uit, review giang vien uit, phat song uit, script auto dkhp uit, auto dkhp uit, dkhpuit, uit tkb, dkhp.uit.edu.vn, dkhocphan uit, sniper uit">
+  <link rel="canonical" href="https://dkhpuit.vercel.app/">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="author" content="DKHP UIT Team">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dkhpuit.vercel.app/">
+  <meta property="og:title" content="DKHP UIT - Xếp Thời Khóa Biểu & Đăng Ký Học Phần Tự Động">
+  <meta property="og:description" content="Hệ thống xếp Thời khóa biểu thông minh cho sinh viên UIT: AI chống trùng lịch 0.01s, đánh giá giảng viên Phật sống từ Everytime, xuất script auto DKHP 1 click.">
+  <meta property="og:site_name" content="DKHP UIT">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DKHP UIT - Xếp Thời Khóa Biểu & Đăng Ký Học Phần Tự Động">
+  <meta name="twitter:description" content="Hệ thống xếp Thời khóa biểu thông minh cho sinh viên UIT: AI chống trùng lịch 0.01s, đánh giá giảng viên Phật sống từ Everytime, xuất script auto DKHP 1 click.">
+
+  <!-- Structured Data JSON-LD (Rich Snippets for Google Search) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "DKHP UIT - Xếp Thời Khóa Biểu & Đăng Ký Học Phần Tự Động",
+        "url": "https://dkhpuit.vercel.app/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "description": "Công cụ hỗ trợ sinh viên UIT xếp thời khóa biểu tự động, phát hiện trùng lịch, đánh giá giảng viên Everytime và xuất script đăng ký học phần.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "VND"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "DKHP UIT là gì?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "DKHP UIT là hệ thống xếp Thời khóa biểu tự động và hỗ trợ Đăng ký Học phần dành riêng cho sinh viên Trường Đại học Công nghệ Thông tin - ĐHQG TP.HCM (UIT)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Làm thế nào để xếp thời khóa biểu UIT không bị trùng lịch?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Bạn chỉ cần mở tính năng 'Tự động xếp TKB' trên DKHP UIT, chọn các môn cần học. Thuật toán AI CSP sẽ tính toán và đưa ra danh sách các tổ hợp thời khóa biểu tối ưu 100% không trùng lịch chỉ trong 0.01 giây."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Làm sao để xem đánh giá và review giảng viên UIT?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Hệ thống DKHP UIT đã tích hợp sẵn hơn 900 đánh giá thực tế từ cộng đồng sinh viên Everytime UIT. Bấm vào bất kỳ tên giảng viên nào trên giao diện để xem điểm số, mức độ chấm điểm, điểm danh và các nhận xét chân thực."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Script auto ĐKHP UIT hoạt động như thế nào?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sau khi chọn xong thời khóa biểu ưng ý, bạn nhấn nút 'Xuất Script ĐKHP' để nhận đoạn mã JavaScript. Khi vào trang đăng ký học phần chính thức của UIT (dkhp.uit.edu.vn), dán đoạn mã vào Console (F12) để hệ thống tự động tích chọn toàn bộ các lớp trong 1 click."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=2.1">
+</head>
+<body>
+
+  <!-- ==============================================================================
+       1. APP HEADER
+       ============================================================================== -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-logo" style="background: linear-gradient(135deg, #e11d48 0%, #3b82f6 100%);">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div class="brand-info">
+        <h1 class="brand-title">DKHP <span>UIT</span></h1>
+        <span class="badge-semester" id="semesterBadge">Trợ lý AI • Everytime Review</span>
+      </div>
+    </div>
+
+    <!-- Center Plan Management -->
+    <div class="header-center">
+      <div class="plan-selector-box">
+        <i class="fa-solid fa-folder-open" style="color: var(--text-muted); font-size: 13px; margin-left: 4px;"></i>
+        <select id="planSelect" title="Chọn kế hoạch thời khóa biểu">
+          <option value="plan_1">Kế hoạch 1 (Chính)</option>
+          <option value="plan_2">Kế hoạch 2 (Dự phòng)</option>
+          <option value="plan_3">Kế hoạch 3</option>
+        </select>
+        <button class="btn btn-secondary btn-icon-only" id="btnManagePlans" title="Quản lý / Đổi tên kế hoạch" style="width: 28px; height: 28px; padding: 0;">
+          <i class="fa-solid fa-ellipsis-vertical" style="font-size: 12px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Header Actions -->
+    <div class="header-actions">
+      <button class="btn btn-magic" id="btnOpenAutoScheduler" title="Tự động xếp và gợi ý các tổ hợp Thời khóa biểu tối ưu">
+        <i class="fa-solid fa-wand-magic-sparkles" style="color: #fde047;"></i>
+        <span>Tự động xếp TKB</span>
+      </button>
+
+      <button class="btn btn-secondary" id="btnUploadModal" title="Tải lên file Excel TKB mới">
+        <i class="fa-solid fa-file-excel" style="color: #10b981;"></i>
+        <span>Tải file Excel</span>
+      </button>
+
+      <button class="btn btn-secondary" id="btnImportExportCodes" title="Nhập hoặc Xuất danh sách mã lớp để xếp TKB tự động">
+        <i class="fa-solid fa-arrow-right-arrow-left" style="color: #c084fc;"></i>
+        <span>Nhập/Xuất mã lớp</span>
+      </button>
+
+      <button class="btn btn-primary" id="btnExportScript" title="Xuất Script tự động Đăng ký Học phần (Auto ĐKHP)">
+        <i class="fa-solid fa-code" style="color: #67e8f9;"></i>
+        <span>Xuất Script ĐKHP</span>
+      </button>
+
+      <button class="btn btn-secondary" id="btnExportImage" title="Xuất ảnh thời khóa biểu dạng PNG">
+        <i class="fa-solid fa-camera"></i>
+        <span>Lưu ảnh PNG</span>
+      </button>
+
+      <button class="btn btn-secondary btn-icon-only" id="btnExportJson" title="Sao lưu / Nhập file JSON">
+        <i class="fa-solid fa-cloud-arrow-down"></i>
+      </button>
+
+      <button class="btn btn-danger btn-icon-only" id="btnClearAll" title="Xóa toàn bộ môn đã chọn trong kế hoạch này">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+
+      <button class="btn-theme-toggle" id="btnThemeToggle" title="Chuyển đổi giao diện Sáng / Tối">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==============================================================================
+       2. MAIN APP CONTAINER (SIDEBAR & VIEWPORT)
+       ============================================================================== -->
+  <div class="app-container">
+    
+    <!-- LEFT SIDEBAR: SEARCH & COURSE SELECTION -->
+    <aside class="sidebar-panel">
+      <div class="sidebar-search-header">
+        
+        <!-- Dedicated Search Inputs for Subject & Teacher -->
+        <div class="search-filters-group">
+          <!-- Search by Subject (Môn học) -->
+          <div class="filter-box-item">
+            <div class="custom-combobox">
+              <i class="fa-solid fa-book-bookmark combobox-icon" style="color: var(--primary);"></i>
+              <input type="text" id="subjectSearchInput" class="filter-input" placeholder="🔍 Tìm & chọn Môn học (IT001, Giải tích...)" autocomplete="off">
+              <button class="filter-clear-btn" id="subjectClearBtn" title="Xóa chọn môn">&times;</button>
+              <div class="combobox-dropdown custom-scrollbar" id="subjectDropdownList"></div>
+            </div>
+          </div>
+
+          <!-- Search by Lecturer (Giảng viên) -->
+          <div class="filter-box-item">
+            <div class="custom-combobox">
+              <i class="fa-solid fa-user-tie combobox-icon" style="color: var(--accent-purple);"></i>
+              <input type="text" id="teacherSearchInput" class="filter-input" placeholder="🔍 Tìm & chọn Giảng viên (Sơn, Đồng, Nghi...)" autocomplete="off">
+              <button class="filter-clear-btn" id="teacherClearBtn" title="Xóa chọn giảng viên">&times;</button>
+              <div class="combobox-dropdown custom-scrollbar" id="teacherDropdownList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Faculty / Department Quick Tag Pills -->
+        <div class="filter-tags-scroll" id="facultyFilterRow">
+          <span class="filter-pill active" data-filter-type="faculty" data-val="all">Tất cả Khoa</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="IT">IT (CNTT)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="CS">CS (KHMT)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="CE">CE (KTMT)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="SE">SE (KTPM)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="IS">IS (HTTT)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="NT">NT (MMT)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="AI">AI (TTNT)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="DS">DS (KHDL)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="EC">EC (TMĐT)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="MA">MA (Toán)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="EN">EN (Anh văn)</span>
+          <span class="filter-pill" data-filter-type="faculty" data-val="SSH">SSH (LLCT)</span>
+        </div>
+
+        <!-- Filter Tags Row (Days & Shifts) -->
+        <div class="filter-tags-row" id="dayFilterRow">
+          <span class="filter-pill active" data-filter-type="day" data-val="all">Cả tuần</span>
+          <span class="filter-pill" data-filter-type="day" data-val="2">Thứ 2</span>
+          <span class="filter-pill" data-filter-type="day" data-val="3">Thứ 3</span>
+          <span class="filter-pill" data-filter-type="day" data-val="4">Thứ 4</span>
+          <span class="filter-pill" data-filter-type="day" data-val="5">Thứ 5</span>
+          <span class="filter-pill" data-filter-type="day" data-val="6">Thứ 6</span>
+          <span class="filter-pill" data-filter-type="day" data-val="7">Thứ 7</span>
+        </div>
+
+        <div class="filter-tags-row" id="shiftFilterRow">
+          <span class="filter-pill active" data-filter-type="shift" data-val="all">Cả ngày</span>
+          <span class="filter-pill" data-filter-type="shift" data-val="morning">Sáng (T1-5)</span>
+          <span class="filter-pill" data-filter-type="shift" data-val="afternoon">Chiều (T6-10)</span>
+          <span class="filter-pill" data-filter-type="shift" data-val="evening">Tối (T11-14)</span>
+        </div>
+
+        <!-- Active Filter Badge Bar (Shows active teacher / subject filter with clear button) -->
+        <div id="activeFilterTagsBar" class="active-filter-tags-bar" style="display: none;">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Filter Checkboxes -->
+        <div class="filter-checkboxes">
+          <label>
+            <input type="checkbox" id="chkHideConflict">
+            <span>Ẩn lớp trùng lịch</span>
+          </label>
+          <label>
+            <input type="checkbox" id="chkOnlySelected">
+            <span>Chỉ hiện đã chọn</span>
+          </label>
+          <span id="resultsCountBadge" style="font-weight: 700; color: var(--primary);">667 lớp</span>
+        </div>
+
+      </div>
+
+      <!-- Scrollable Search Results List with Custom Scrollbar -->
+      <div class="course-results-container custom-scrollbar" id="courseResultsList">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </aside>
+
+    <!-- RIGHT PANEL: TIMETABLE MATRIX & STATS -->
+    <main class="main-viewport">
+      
+      <!-- Stats Summary Bar -->
+      <div class="stats-summary-bar">
+        <div class="stat-group">
+          <div class="stat-card">
+            <span class="stat-label">Tổng tín chỉ</span>
+            <div class="stat-value" id="statTotalCredits">0 <span>TC</span></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Lớp học phần</span>
+            <div class="stat-value" id="statClassCount">0 <span>lớp</span></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Ngày học / tuần</span>
+            <div class="stat-value" id="statDaysCount">0 <span>ngày</span></div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Trạng thái</span>
+            <div class="stat-value" id="statConflictStatus" style="color: var(--accent-emerald); font-size: 13.5px;">
+              <i class="fa-solid fa-circle-check"></i> Không trùng lịch
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" id="btnToggleSelectedList">
+            <i class="fa-solid fa-list-check"></i>
+            <span>Danh sách môn (<span id="selectedBadgeNum">0</span>)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Conflict Alert Banner (if collisions exist) -->
+      <div class="conflict-alert-banner" id="conflictAlertBanner" style="display: none;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 18px;"></i>
+        <div id="conflictAlertText">Phát hiện trùng lịch giữa các lớp đã chọn! Vui lòng kiểm tra lại.</div>
+      </div>
+
+      <!-- Timetable Scroll Wrapper -->
+      <div class="timetable-scroll-wrapper custom-scrollbar" id="timetableCaptureArea">
+        <div class="timetable-matrix-card">
+          
+          <div class="timetable-grid" id="timetableGrid">
+            <!-- Headers: Tiết | Thứ 2 | Thứ 3 | Thứ 4 | Thứ 5 | Thứ 6 | Thứ 7 -->
+            <div class="grid-header-cell">Tiết / Giờ</div>
+            <div class="grid-header-cell">Thứ Hai</div>
+            <div class="grid-header-cell">Thứ Ba</div>
+            <div class="grid-header-cell">Thứ Tư</div>
+            <div class="grid-header-cell">Thứ Năm</div>
+            <div class="grid-header-cell">Thứ Sáu</div>
+            <div class="grid-header-cell">Thứ Bảy</div>
+
+            <!-- Dynamic Slot Matrix Rendered by app.js -->
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SEO & Information Footer Guide -->
+      <footer class="dkhp-seo-footer">
+        <div class="dkhp-seo-grid">
+          <div>
+            <h2 style="font-size: 13.5px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+              🎓 DKHP UIT - Hệ Thống Xếp Thời Khóa Biểu Tự Động & Hỗ Trợ Đăng Ký Học Phần UIT
+            </h2>
+            <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.6; margin: 0;">
+              Nền tảng hỗ trợ sinh viên Đại học Công nghệ Thông tin (ĐHQG TP.HCM - UIT) tự động hóa quá trình lập kế hoạch học tập, xếp lịch học không trùng giờ, tra cứu review giảng viên thực tế từ Everytime và tạo mã Script đăng ký học phần 1-click.
+            </p>
+          </div>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">
+            <div><i class="fa-solid fa-bolt" style="color: #10b981;"></i> AI CSP chống trùng lịch</div>
+            <div><i class="fa-solid fa-star" style="color: #f59e0b;"></i> 900+ Review Everytime VN</div>
+            <div><i class="fa-solid fa-code" style="color: #38bdf8;"></i> Script Auto ĐKHP 1-Click</div>
+            <div><i class="fa-solid fa-mobile-screen" style="color: #c084fc;"></i> PWA Mobile & Desktop</div>
+          </div>
+        </div>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- ==============================================================================
+       3. MODALS
+       ============================================================================== -->
+  
+  <!-- Upload Excel Modal -->
+  <div class="modal-backdrop" id="modalUpload">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-file-excel" style="color: #10b981; margin-right: 8px;"></i> Tải lên file Thời khóa biểu mới</h3>
+        <button class="modal-close-btn" data-close-modal="modalUpload">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-secondary);">
+          Hệ thống hỗ trợ file Excel (.xlsx, .xls) có định dạng chuẩn như file TKB trường ĐH Công nghệ Thông tin (UIT).
+        </p>
+
+        <div class="upload-dropzone" id="dropzoneExcel">
+          <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+          <h4 style="font-size: 15px; font-weight: 700;">Kéo & Thả file Excel vào đây</h4>
+          <span style="font-size: 12px; color: var(--text-muted);">hoặc bấm để chọn file từ máy tính</span>
+          <input type="file" id="fileInputExcel" accept=".xlsx, .xls" style="display: none;">
+        </div>
+
+        <div id="uploadProgress" style="display: none; font-size: 13px; font-weight: 700; color: var(--primary);">
+          <i class="fa-solid fa-spinner fa-spin"></i> Đang đọc và xử lý dữ liệu môn học...
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 14px;">
+          <button class="btn btn-secondary" id="btnRestoreDefault">
+            <i class="fa-solid fa-rotate-left"></i> Khôi phục dữ liệu gốc
+          </button>
+          <button class="btn btn-secondary" data-close-modal="modalUpload">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selected Courses Drawer Modal -->
+  <div class="modal-backdrop" id="modalSelectedList">
+    <div class="modal-box" style="max-width: 720px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-list-check" style="color: var(--primary); margin-right: 8px;"></i> Danh sách môn học đã chọn</h3>
+        <button class="modal-close-btn" data-close-modal="modalSelectedList">&times;</button>
+      </div>
+      <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <thead>
+            <tr style="border-bottom: 1.5px solid var(--border-color); text-align: left;">
+              <th style="padding: 8px;">Mã Lớp</th>
+              <th style="padding: 8px;">Tên Môn Học</th>
+              <th style="padding: 8px;">Số TC</th>
+              <th style="padding: 8px;">Thời Gian</th>
+              <th style="padding: 8px;">Phòng</th>
+              <th style="padding: 8px; text-align: right;">Thao Tác</th>
+            </tr>
+          </thead>
+          <tbody id="selectedCoursesTableBody">
+            <!-- Rendered by app.js -->
+          </tbody>
+        </table>
+      </div>
+      <div style="padding: 12px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-weight: 700; font-size: 14px;" id="modalSelectedSummary">Tổng: 0 TC</div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-primary" id="btnModalOpenScript">
+            <i class="fa-solid fa-code"></i> Xuất Script ĐKHP
+          </button>
+          <button class="btn btn-secondary" data-close-modal="modalSelectedList">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Auto Registration Script Modal -->
+  <div class="modal-backdrop" id="modalScript">
+    <div class="modal-box" style="max-width: 760px;">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fa-solid fa-terminal" style="color: #38bdf8; margin-right: 8px;"></i>
+          Script Tự Động Đăng Ký Học Phần (UIT ĐKHP)
+        </h3>
+        <button class="modal-close-btn" data-close-modal="modalScript">&times;</button>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px;">
+        
+        <!-- Instruction Steps -->
+        <div class="script-instruction-box">
+          <div class="script-step"><span class="step-num">1</span> Mở trang ĐKHP UIT: <a href="https://dkhocphan.uit.edu.vn" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: underline; font-weight: 700;">dkhocphan.uit.edu.vn</a></div>
+          <div class="script-step"><span class="step-num">2</span> Bấm phím <kbd>F12</kbd> (hoặc <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd>) ➔ Chọn tab <strong>Console</strong></div>
+          <div class="script-step"><span class="step-num">3</span> Dán toàn bộ đoạn mã bên dưới vào Console rồi nhấn <kbd>Enter</kbd> ➔ Hệ thống tự tick chọn tất cả các lớp trong 0.1s!</div>
+        </div>
+
+        <!-- Class Code Tags Summary -->
+        <div class="script-meta-row">
+          <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+            <i class="fa-solid fa-list-check" style="color: var(--primary);"></i>
+            <span>Mã lớp trong script: <span id="scriptClassCountBadge" style="color: var(--primary); font-weight: 800;">8 lớp</span></span>
+          </div>
+          <div class="script-classes-preview custom-scrollbar" id="scriptClassesPreviewList">
+            <!-- Dynamic tags -->
+          </div>
+        </div>
+
+        <!-- Code Viewer & Actions -->
+        <div class="script-code-container">
+          <div class="script-code-header">
+            <span class="script-file-badge">
+              <i class="fa-brands fa-js" style="color: #f7df1e; margin-right: 6px;"></i> auto_dkhp_uit.js
+            </span>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" id="btnDownloadScriptFile" title="Tải file script về máy tính">
+                <i class="fa-solid fa-download"></i> Tải file .js
+              </button>
+              <button class="btn btn-primary btn-sm" id="btnCopyScriptCode" title="Sao chép toàn bộ mã script vào Clipboard">
+                <i class="fa-solid fa-copy"></i> Sao chép Script
+              </button>
+            </div>
+          </div>
+          <textarea id="scriptCodeTextarea" class="script-code-textarea custom-scrollbar" readonly spellcheck="false"></textarea>
+        </div>
+
+      </div>
+      <div style="padding: 12px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 12px; color: var(--text-muted);">
+          <i class="fa-solid fa-shield-halved" style="color: #10b981;"></i> Script an toàn, chạy trực tiếp trên trình duyệt của bạn
+        </span>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" data-close-modal="modalScript">Đóng</button>
+          <button class="btn btn-primary" id="btnCopyScriptModalFooter">
+            <i class="fa-solid fa-copy"></i> Sao chép Script
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import / Export Class Codes Modal -->
+  <div class="modal-backdrop" id="modalImportExportCodes">
+    <div class="modal-box" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fa-solid fa-arrow-right-arrow-left" style="color: #c084fc; margin-right: 8px;"></i>
+          Nhập / Xuất Danh Sách Mã Lớp Học Phần
+        </h3>
+        <button class="modal-close-btn" data-close-modal="modalImportExportCodes">&times;</button>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px;">
+        
+        <!-- Tabs Header -->
+        <div class="code-modal-tabs">
+          <button class="code-tab-btn active" id="tabBtnImportCodes">
+            <i class="fa-solid fa-file-import"></i> 📥 Nhập Mã Lớp (Tự xếp TKB)
+          </button>
+          <button class="code-tab-btn" id="tabBtnExportCodes">
+            <i class="fa-solid fa-file-export"></i> 📤 Xuất Mã Lớp Hiện Tại
+          </button>
+        </div>
+
+        <!-- Tab 1: Import Content -->
+        <div id="tabContentImportCodes" class="code-tab-content">
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+            Dán danh sách mã lớp (mỗi dòng 1 mã lớp, bao gồm cả Lý thuyết và Thực hành). Hệ thống sẽ tự động tìm kiếm, phân nhóm và xếp ngay vào Thời khóa biểu!
+          </p>
+          <textarea id="importCodesTextarea" class="code-box-textarea custom-scrollbar" placeholder="Ví dụ:&#10;IT004.R18&#10;IT004.R18.2&#10;IT007.R111&#10;IT007.R111.2&#10;MA005.R16&#10;NT106.R11&#10;NT106.R11.2&#10;SS007.R17" spellcheck="false"></textarea>
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+            <label style="font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="chkClearBeforeImport" checked>
+              <span>Xóa các môn đang chọn trước khi nhập mới</span>
+            </label>
+            <button class="btn btn-primary" id="btnApplyImportCodes">
+              <i class="fa-solid fa-bolt"></i> <span>Tự động xếp TKB</span>
+            </button>
+          </div>
+
+          <div id="importResultFeedback" style="display: none; font-size: 13px; border-radius: var(--radius-md); padding: 10px 14px; margin-top: 6px;"></div>
+        </div>
+
+        <!-- Tab 2: Export Content -->
+        <div id="tabContentExportCodes" class="code-tab-content" style="display: none;">
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
+            Danh sách toàn bộ mã lớp trong kế hoạch hiện tại dạng văn bản thuần để bạn lưu trữ hoặc gửi cho bạn bè:
+          </p>
+          <textarea id="exportCodesTextarea" class="code-box-textarea custom-scrollbar" readonly spellcheck="false"></textarea>
+          
+          <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
+            <button class="btn btn-primary" id="btnCopyExportCodes">
+              <i class="fa-solid fa-copy"></i> Sao chép danh sách mã
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div style="padding: 12px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary" data-close-modal="modalImportExportCodes">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Auto-Scheduler Modal -->
+  <div class="modal-backdrop" id="modalAutoScheduler">
+    <div class="modal-box" style="max-width: 920px; max-height: 90vh;">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color: #f59e0b; margin-right: 8px;"></i>
+          AI Auto-Scheduler // Xếp Thời Khóa Biểu Tối Ưu Tự Động
+        </h3>
+        <button class="modal-close-btn" data-close-modal="modalAutoScheduler">&times;</button>
+      </div>
+      <div class="modal-body custom-scrollbar" style="display: flex; flex-direction: column; gap: 16px; max-height: calc(90vh - 130px); overflow-y: auto;">
+        
+        <div class="auto-sched-grid">
+          <!-- Left Column: Settings -->
+          <div class="auto-sched-config-pane">
+            
+            <!-- Section 1: Choose Subjects -->
+            <div class="auto-sched-section">
+              <label class="auto-sched-label">
+                <i class="fa-solid fa-book-bookmark" style="color: var(--primary);"></i>
+                <span>1. Chọn các môn học muốn đăng ký</span>
+              </label>
+              
+              <div class="custom-combobox" style="margin-top: 6px;">
+                <i class="fa-solid fa-magnifying-glass combobox-icon"></i>
+                <input type="text" id="autoSchedSearchInput" class="filter-input" placeholder="🔍 Tìm môn (IT004, Hệ điều hành, Toán...)" autocomplete="off">
+                <button class="filter-clear-btn" id="autoSchedClearInputBtn">&times;</button>
+                <div class="combobox-dropdown custom-scrollbar" id="autoSchedDropdown"></div>
+              </div>
+
+              <!-- Selected Subjects Chips -->
+              <div class="auto-sched-chips-container" id="autoSchedChipsList">
+                <!-- Dynamic Chips -->
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                <button class="btn btn-secondary btn-sm" id="btnAutoSchedPreset5" style="font-size: 11px;">
+                  <i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Chọn 5 môn mẫu (17 TC)
+                </button>
+                <button class="btn btn-secondary btn-sm" id="btnAutoSchedClearSubjects" style="font-size: 11px;">
+                  <i class="fa-solid fa-trash"></i> Xóa hết
+                </button>
+              </div>
+            </div>
+
+            <!-- Section 2: Preferences -->
+            <div class="auto-sched-section" style="margin-top: 14px;">
+              <label class="auto-sched-label">
+                <i class="fa-solid fa-sliders" style="color: var(--accent-purple);"></i>
+                <span>2. Thiết lập tiêu chí ưu tiên</span>
+              </label>
+
+              <!-- Days Off Checkboxes -->
+              <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-top: 8px;">
+                🏖️ Ưu tiên trống ngày (Nghỉ học):
+              </div>
+              <div class="auto-sched-days-grid" id="autoSchedDaysOffGrid">
+                <label class="day-check-item"><input type="checkbox" value="2"><span>Thứ 2</span></label>
+                <label class="day-check-item"><input type="checkbox" value="3"><span>Thứ 3</span></label>
+                <label class="day-check-item"><input type="checkbox" value="4"><span>Thứ 4</span></label>
+                <label class="day-check-item"><input type="checkbox" value="5"><span>Thứ 5</span></label>
+                <label class="day-check-item"><input type="checkbox" value="6" checked><span>Thứ 6</span></label>
+                <label class="day-check-item"><input type="checkbox" value="7" checked><span>Thứ 7</span></label>
+              </div>
+
+              <!-- Shift Preference -->
+              <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-top: 10px;">
+                🌅 Khung giờ học mong muốn:
+              </div>
+              <div class="auto-sched-shift-row">
+                <label class="shift-radio-item">
+                  <input type="radio" name="autoSchedShift" value="all" checked>
+                  <span>Tự do (Sáng/Chiều)</span>
+                </label>
+                <label class="shift-radio-item">
+                  <input type="radio" name="autoSchedShift" value="morning">
+                  <span>Ưu tiên Sáng (T1-5)</span>
+                </label>
+                <label class="shift-radio-item">
+                  <input type="radio" name="autoSchedShift" value="afternoon">
+                  <span>Ưu tiên Chiều (T6-10)</span>
+                </label>
+              </div>
+
+              <!-- Continuous classes / avoid gap -->
+              <div style="margin-top: 10px;">
+                <label style="font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox" id="chkAutoSchedAvoidGaps" checked>
+                  <span>☕ Hạn chế thời gian trống tiết giữa giờ</span>
+                </label>
+              </div>
+
+              <!-- Everytime Rating Preferences -->
+              <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-top: 10px;">
+                🔥 Bộ Lọc Thông Minh Everytime VN (AI / NLP):
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+                <label style="font-size: 12px; font-weight: 700; color: #e11d48; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox" id="chkAutoSchedAvoidWarned" checked>
+                  <span>🛑 NÉ TUYỆT ĐỐI Giảng viên Cảnh báo (Né gấp / Chấm gắt)</span>
+                </label>
+                <label style="font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox" id="chkAutoSchedEverytimeTopRated" checked>
+                  <span>🏆 Ưu tiên Giảng viên "Phật Sống" (Tier S - ⭐ >= 4.8)</span>
+                </label>
+                <label style="font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <input type="checkbox" id="chkAutoSchedEverytimeGenerous" checked>
+                  <span>🎁 Ưu tiên Chấm điểm thoáng & Không điểm danh</span>
+                </label>
+              </div>
+
+              <button class="btn btn-magic" id="btnRunAutoScheduler" style="width: 100%; margin-top: 14px; padding: 12px; font-size: 14px;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>Tạo & Tìm Kiếm Phương Án TKB</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Generated Solutions -->
+          <div class="auto-sched-results-pane">
+            <div class="auto-sched-results-header">
+              <div style="font-size: 13.5px; font-weight: 800; color: var(--text-primary);" id="autoSchedResultsCount">
+                ✨ Kết quả gợi ý (0% trùng lịch)
+              </div>
+              <span id="autoSchedElapsedBadge" style="font-size: 11px; color: var(--text-muted);">Thuật toán: CSP Backtracking</span>
+            </div>
+
+            <!-- Solutions List -->
+            <div class="auto-sched-solutions-list custom-scrollbar" id="autoSchedSolutionsList">
+              <div class="auto-sched-empty-state">
+                <i class="fa-solid fa-wand-magic-sparkles" style="font-size: 32px; color: #f59e0b; margin-bottom: 8px;"></i>
+                <div style="font-weight: 700; font-size: 14px;">Chưa tạo phương án nào</div>
+                <div style="font-size: 12px; color: var(--text-muted); max-width: 280px; margin-top: 4px;">
+                  Chọn các môn học bên trái và bấm <strong>"Tạo & Tìm Kiếm"</strong> để hệ thống tự động tìm kiếm các tổ hợp đẹp nhất!
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div style="padding: 12px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 12px; color: var(--text-muted);">
+          <i class="fa-solid fa-bolt" style="color: #10b981;"></i> Thuật toán giải quyết ràng buộc tự động (0.01s)
+        </span>
+        <button class="btn btn-secondary" data-close-modal="modalAutoScheduler">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Everytime Lecturer Review Modal -->
+  <div class="modal-backdrop" id="modalEverytimeReview">
+    <div class="modal-box" style="max-width: 620px; max-height: 90vh;">
+      <div class="modal-header" style="background: linear-gradient(135deg, rgba(225, 29, 72, 0.08), rgba(245, 158, 11, 0.08));">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <span style="background: #e11d48; color: #fff; font-size: 10.5px; font-weight: 900; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.5px;">EVERYTIME VN</span>
+          <span id="everytimeModalTeacherName" style="color: var(--text-primary);">Đánh giá Giảng viên</span>
+        </h3>
+        <button class="modal-close-btn" data-close-modal="modalEverytimeReview">&times;</button>
+      </div>
+      <div class="modal-body custom-scrollbar" id="everytimeModalBody" style="max-height: calc(90vh - 130px); overflow-y: auto; padding: 18px;">
+        <!-- Rendered dynamically -->
+      </div>
+      <div style="padding: 12px 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11.5px; color: var(--text-muted);">
+          <i class="fa-solid fa-shield-check" style="color: #10b981;"></i> Dữ liệu thực từ cộng đồng sinh viên Everytime UIT
+        </span>
+        <button class="btn btn-secondary btn-sm" data-close-modal="modalEverytimeReview">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Plans Modal -->
+  <div class="modal-backdrop" id="modalPlans">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-folder-tree" style="color: var(--accent-purple); margin-right: 8px;"></i> Quản lý các Kế hoạch TKB</h3>
+        <button class="modal-close-btn" data-close-modal="modalPlans">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="newPlanNameInput" class="search-input" placeholder="Tên kế hoạch mới (ví dụ: Kế hoạch VIP)">
+          <button class="btn btn-primary" id="btnCreateNewPlan"><i class="fa-solid fa-plus"></i> Tạo</button>
+        </div>
+
+        <div id="plansListContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+          <!-- Rendered by app.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offline / Online Scripts -->
+  <script src="libs/xlsx.full.min.js"></script>
+  <script src="libs/html2canvas.min.js"></script>
+  <script src="ratings.js?v=2.0"></script>
+  <script src="data.js?v=2.0"></script>
+  <script src="app.js?v=2.0"></script>
+</body>
+</html>
