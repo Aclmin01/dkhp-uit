@@ -69,7 +69,7 @@
 ## 📄 Bản quyền & Đóng góp
 
 Dự án được phát triển phi lợi nhuận nhằm hỗ trợ cộng đồng sinh viên **Đại học Công nghệ Thông tin (UIT - VNU-HCM)**.  
-Mọi đóng góp, báo lỗi hoặc gợi ý tính năng vui lòng tạo **Issue** hoặc **Pull Request** trên GitHub.
+Mọi đóng góp, báo lỗi hoặc gợi ý tính năng vui lòng tạo **Issue** hoặc **Pull Request** trên [GitHub (Ins0720/dkhp-uit)](https://github.com/Ins0720/dkhp-uit).
 
 ---
 *Từ khóa SEO: tool dkhp uit, dkhp uit, dkhp, dang ky hoc phan uit, xếp tkb uit, tool xep tkb uit, xep thoi khoa bieu uit, thoi khoa bieu uit, review giang vien uit, phat song uit, script auto dkhp uit, auto dkhp uit, dkhpuit, uit tkb, dkhp.uit.edu.vn, dkhocphan uit, uit sniper.*
