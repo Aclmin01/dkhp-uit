@@ -29,7 +29,7 @@
    - Bộ lọc AI: `[x] NÉ TUYỆT ĐỐI Giảng viên Cảnh báo` & `[x] Ưu tiên Giảng viên Phật Sống`.
 
 3. **🚀 Xuất Script Auto Đăng Ký Học Phần 1-Click**:
-   - Tự động sinh đoạn mã JavaScript đăng ký nhanh cho cổng [dkhocphan.uit.edu.vn](https://dkhocphan.uit.edu.vn).
+   - Tự động sinh đoạn mã JavaScript đăng ký nhanh cho cổng [dkhp.uit.edu.vn](https://dkhp.uit.edu.vn).
    - Tích chọn toàn bộ mã lớp lý thuyết và thực hành chỉ trong 1 thao tác Console (F12).
 
 4. **🔄 Import / Export Mã Lớp & Đồng Bộ Đa Nền Tảng**:
