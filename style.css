@@ -1808,6 +1808,42 @@ kbd {
   gap: 8px;
 }
 
+.btn-github-star {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.btn-github-star:hover {
+  background: #24292f;
+  color: #fde047 !important;
+  border-color: #f59e0b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+[data-theme="light"] .btn-github-star {
+  background: #f6f8fa;
+  border-color: #d0d7de;
+  color: #24292f;
+}
+
+[data-theme="light"] .btn-github-star:hover {
+  background: #24292f;
+  color: #fde047 !important;
+  border-color: #24292f;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
   .app-container {
