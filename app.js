@@ -2755,7 +2755,7 @@ window.openEverytimeModal = function(teacherName) {
         <div class="everytime-alert-banner warn">
           <i class="fa-solid fa-triangle-exclamation" style="font-size: 22px;"></i>
           <div>
-            <div style="font-size: 13px; font-weight: 800;">🛑 CẢNH BÁO TỪ CỘNG ĐỒNG SINH VIÊN:</div>
+            <div style="font-size: 13px; font-weight: 800;">⚠️ CẢNH BÁO TỪ ĐÁNH GIÁ CỦA SINH VIÊN:</div>
             <div style="font-size: 12px; font-weight: 500; margin-top: 2px;">
               ${redFlagsEscaped}
             </div>
@@ -2767,9 +2767,9 @@ window.openEverytimeModal = function(teacherName) {
         <div class="everytime-alert-banner phatsong">
           <i class="fa-solid fa-crown" style="font-size: 22px; color: #f59e0b;"></i>
           <div>
-            <div style="font-size: 13px; font-weight: 800;">🏆 ĐẠI PHẬT SỐNG UIT (TOP 13% GIẢNG VIÊN TINH HOA):</div>
+            <div style="font-size: 13px; font-weight: 800;">🏆 PHẬT SỐNG UIT (GIẢNG VIÊN ĐƯỢC YÊU THÍCH):</div>
             <div style="font-size: 12px; font-weight: 500; margin-top: 2px;">
-              ${data.recommendPercent}% Sinh viên đề xuất • Chấm điểm cực thoáng & Siêu nhiệt tình!
+              ${data.recommendPercent}% Sinh viên đề xuất • Chấm điểm thoáng & Nhiệt tình hỗ trợ!
             </div>
           </div>
         </div>
@@ -2781,7 +2781,7 @@ window.openEverytimeModal = function(teacherName) {
           <div>
             <div style="font-size: 13px; font-weight: 800;">🌟 GIẢNG VIÊN DẠY TỐT & CÓ TÂM:</div>
             <div style="font-size: 12px; font-weight: 500; margin-top: 2px;">
-              Được ${data.recommendPercent}% sinh viên UIT khen ngợi và đề xuất theo học!
+              Được ${data.recommendPercent}% sinh viên UIT đề xuất theo học!
             </div>
           </div>
         </div>
