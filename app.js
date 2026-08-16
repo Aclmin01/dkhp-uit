@@ -37,6 +37,13 @@ const COLOR_PALETTE = [
   { bg: 'linear-gradient(135deg, #0d9488 0%, #115e59 100%)', border: '#2dd4bf' }  // Teal
 ];
 
+const MAX_EXCEL_UPLOAD_BYTES = 5 * 1024 * 1024;
+const MAX_JSON_IMPORT_BYTES = 1024 * 1024;
+const MAX_PLAN_COUNT = 30;
+const MAX_SELECTED_PER_PLAN = 200;
+const MAX_DATASET_COURSES = 5000;
+const MAX_TOTAL_PRACTICES = 10000;
+
 // ==============================================================================
 // 2. STATE MANAGEMENT
 // ==============================================================================
@@ -77,6 +84,114 @@ function clearElementChildren(element) {
 
 function appendTextNode(element, text) {
   element.appendChild(document.createTextNode(text));
+}
+
+function safeLocalStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (err) {
+    console.error(`[STORAGE] Failed to save key "${key}"`, err);
+    if (typeof showAppToast === 'function') {
+      showAppToast('⚠️ Không thể lưu dữ liệu cục bộ. Trình duyệt có thể đã đầy bộ nhớ.');
+    }
+    return false;
+  }
+}
+
+function getPeriodsArray(item) {
+  return Array.isArray(item?.tiet)
+    ? item.tiet.filter(period => Number.isInteger(period) && period >= 1 && period <= 14)
+    : [];
+}
+
+function isSafeCourseRecord(item, isPractice = false) {
+  if (!item || typeof item !== 'object') return false;
+  if (typeof item.id !== 'string' || !item.id.trim()) return false;
+  if (typeof item.maLop !== 'string' || !item.maLop.trim()) return false;
+  if (typeof item.maMH !== 'string' || !item.maMH.trim()) return false;
+  if (typeof item.tenMH !== 'string') return false;
+  if (typeof item.tenGV !== 'string') return false;
+  if (typeof item.soTC !== 'number' || !Number.isFinite(item.soTC) || item.soTC < 0 || item.soTC > 12) return false;
+  if (!Array.isArray(item.tiet)) return false;
+  if (getPeriodsArray(item).length !== item.tiet.length) return false;
+  if (!(typeof item.thu === 'number' || item.thu === '*')) return false;
+  if (typeof item.thu === 'number' && (item.thu < 2 || item.thu > 7)) return false;
+  if (!isPractice && !Array.isArray(item.practices)) return false;
+  return true;
+}
+
+function sanitizeImportedDataset(data) {
+  if (!Array.isArray(data) || data.length === 0 || data.length > MAX_DATASET_COURSES) {
+    throw new Error('DATASET_SIZE_INVALID');
+  }
+
+  let totalPractices = 0;
+  const courseIds = new Set();
+  data.forEach(course => {
+    if (!isSafeCourseRecord(course, false)) {
+      throw new Error('DATASET_SCHEMA_INVALID');
+    }
+    if (courseIds.has(course.id)) {
+      throw new Error('DATASET_DUPLICATE_ID');
+    }
+    courseIds.add(course.id);
+
+    totalPractices += course.practices.length;
+    if (totalPractices > MAX_TOTAL_PRACTICES) {
+      throw new Error('DATASET_PRACTICE_LIMIT_EXCEEDED');
+    }
+
+    const practiceIds = new Set();
+    course.practices.forEach(practice => {
+      if (!isSafeCourseRecord(practice, true)) {
+        throw new Error('DATASET_PRACTICE_SCHEMA_INVALID');
+      }
+      if (practiceIds.has(practice.id) || courseIds.has(practice.id)) {
+        throw new Error('DATASET_DUPLICATE_ID');
+      }
+      practiceIds.add(practice.id);
+      courseIds.add(practice.id);
+    });
+  });
+
+  return data;
+}
+
+function sanitizeImportedPlans(rawPlans) {
+  if (!rawPlans || typeof rawPlans !== 'object' || Array.isArray(rawPlans)) {
+    throw new Error('PLANS_SCHEMA_INVALID');
+  }
+
+  const entries = Object.entries(rawPlans);
+  if (entries.length === 0 || entries.length > MAX_PLAN_COUNT) {
+    throw new Error('PLAN_COUNT_INVALID');
+  }
+
+  const sanitized = {};
+  for (const [planId, plan] of entries) {
+    if (typeof planId !== 'string' || !planId.trim()) {
+      throw new Error('PLAN_ID_INVALID');
+    }
+    if (!plan || typeof plan !== 'object') {
+      throw new Error('PLAN_SCHEMA_INVALID');
+    }
+    const name = typeof plan.name === 'string' && plan.name.trim() ? plan.name.trim().slice(0, 120) : 'Kế hoạch';
+    const selected = Array.isArray(plan.selected)
+      ? plan.selected.filter(id => typeof id === 'string').slice(0, MAX_SELECTED_PER_PLAN)
+      : [];
+    const practiceChoices = {};
+    if (plan.practiceChoices && typeof plan.practiceChoices === 'object' && !Array.isArray(plan.practiceChoices)) {
+      Object.entries(plan.practiceChoices).forEach(([theoryId, practiceId]) => {
+        if (typeof theoryId === 'string' && typeof practiceId === 'string') {
+          practiceChoices[theoryId] = practiceId;
+        }
+      });
+    }
+    sanitized[planId] = { name, selected, practiceChoices };
+  }
+
+  return sanitized;
 }
 
 function getActivePracticeChoices() {
@@ -131,8 +246,10 @@ function loadInitialDataset() {
   const customData = localStorage.getItem('tkb_custom_dataset');
   if (customData) {
     try {
-      allCourses = JSON.parse(customData);
+      allCourses = sanitizeImportedDataset(JSON.parse(customData));
     } catch (e) {
+      console.warn('[SECURITY] Invalid custom dataset detected, reverting to bundled dataset.', e);
+      localStorage.removeItem('tkb_custom_dataset');
       allCourses = (typeof DEFAULT_TIMETABLE_DATA !== 'undefined') ? DEFAULT_TIMETABLE_DATA : [];
     }
   } else {
@@ -162,19 +279,30 @@ function getDefaultPlans() {
 function loadPlansFromStorage() {
   const savedPlans = localStorage.getItem('tkb_plans');
   const savedHash = localStorage.getItem('tkb_plans_sha256');
+  const savedFastHash = localStorage.getItem('tkb_plans_fast_hash');
 
   if (savedPlans) {
     try {
+      if (window.DKHP_SECURITY && savedFastHash && DKHP_SECURITY.fastHash(savedPlans) !== savedFastHash) {
+        throw new Error('LOCAL_STORAGE_FAST_HASH_MISMATCH');
+      }
       if (window.DKHP_SECURITY && savedHash) {
         DKHP_SECURITY.sha256(savedPlans).then(calculated => {
           if (calculated !== savedHash) {
-            console.warn('[SECURITY] LocalStorage data integrity mismatch detected!');
+            console.warn('[SECURITY] LocalStorage SHA-256 integrity mismatch detected. Resetting stored plans.');
+            localStorage.removeItem('tkb_plans');
+            localStorage.removeItem('tkb_plans_sha256');
+            localStorage.removeItem('tkb_plans_fast_hash');
           }
         }).catch(err => console.error(err));
       }
-      plans = JSON.parse(savedPlans);
+      plans = sanitizeImportedPlans(JSON.parse(savedPlans));
     } catch (e) {
+      console.warn('[SECURITY] Invalid or tampered plan storage detected, falling back to defaults.', e);
       plans = getDefaultPlans();
+      localStorage.removeItem('tkb_plans');
+      localStorage.removeItem('tkb_plans_sha256');
+      localStorage.removeItem('tkb_plans_fast_hash');
     }
   } else {
     plans = getDefaultPlans();
@@ -208,12 +336,15 @@ function loadPlansFromStorage() {
 
 function savePlansToStorage() {
   const plansJson = JSON.stringify(plans);
-  localStorage.setItem('tkb_plans', plansJson);
-  localStorage.setItem('tkb_active_plan', currentPlanId);
+  if (!safeLocalStorageSet('tkb_plans', plansJson)) return;
+  safeLocalStorageSet('tkb_active_plan', currentPlanId);
+  if (window.DKHP_SECURITY) {
+    safeLocalStorageSet('tkb_plans_fast_hash', DKHP_SECURITY.fastHash(plansJson));
+  }
 
   if (window.DKHP_SECURITY) {
     DKHP_SECURITY.sha256(plansJson).then(hash => {
-      localStorage.setItem('tkb_plans_sha256', hash);
+      safeLocalStorageSet('tkb_plans_sha256', hash);
     }).catch(err => console.error(err));
   }
 }
@@ -514,8 +645,8 @@ function renderActiveFilterBadges() {
   if (currentFilters.selectedSubject !== 'all') {
     chips.push(`
       <span class="active-tag-chip">
-        <span>📚 Môn: ${currentFilters.selectedSubject}</span>
-        <button onclick="clearSpecificFilter('subject')" title="Bỏ lọc môn">&times;</button>
+        <span>📚 Môn: ${escapeHtml(currentFilters.selectedSubject)}</span>
+        <button data-clear-filter="subject" title="Bỏ lọc môn">&times;</button>
       </span>
     `);
   }
@@ -523,8 +654,8 @@ function renderActiveFilterBadges() {
   if (currentFilters.selectedTeacher !== 'all') {
     chips.push(`
       <span class="active-tag-chip">
-        <span>👨‍🏫 GV: ${currentFilters.selectedTeacher}</span>
-        <button onclick="clearSpecificFilter('teacher')" title="Bỏ lọc giảng viên">&times;</button>
+        <span>👨‍🏫 GV: ${escapeHtml(currentFilters.selectedTeacher)}</span>
+        <button data-clear-filter="teacher" title="Bỏ lọc giảng viên">&times;</button>
       </span>
     `);
   }
@@ -532,15 +663,15 @@ function renderActiveFilterBadges() {
   if (currentFilters.faculty !== 'all') {
     chips.push(`
       <span class="active-tag-chip">
-        <span>🏛️ Khoa: ${currentFilters.faculty}</span>
-        <button onclick="clearSpecificFilter('faculty')" title="Bỏ lọc khoa">&times;</button>
+        <span>🏛️ Khoa: ${escapeHtml(currentFilters.faculty)}</span>
+        <button data-clear-filter="faculty" title="Bỏ lọc khoa">&times;</button>
       </span>
     `);
   }
 
   if (chips.length > 0) {
     bar.innerHTML = chips.join('') + `
-      <button class="btn btn-secondary" style="padding: 1px 6px; font-size: 11px; border-radius: 9999px;" onclick="clearAllTagFilters()">
+      <button class="btn btn-secondary" style="padding: 1px 6px; font-size: 11px; border-radius: 9999px;" data-clear-all-filters="true">
         Xóa hết lọc
       </button>
     `;
@@ -1081,6 +1212,12 @@ function renderSelectedTable() {
 // 10. EXCEL PARSER (FOR FUTURE SEMESTERS)
 // ==============================================================================
 function handleExcelUpload(file) {
+  if (!file) return;
+  if (file.size > MAX_EXCEL_UPLOAD_BYTES) {
+    alert(`File Excel vượt quá giới hạn ${Math.round(MAX_EXCEL_UPLOAD_BYTES / (1024 * 1024))}MB.`);
+    return;
+  }
+
   const progressEl = document.getElementById('uploadProgress');
   if (progressEl) progressEl.style.display = 'block';
 
@@ -1090,13 +1227,13 @@ function handleExcelUpload(file) {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: 'array' });
       
-      const parsedData = parseWorkbookToCourses(workbook);
+      const parsedData = sanitizeImportedDataset(parseWorkbookToCourses(workbook));
       if (parsedData.length > 0) {
         allCourses = parsedData;
         buildCourseMap();
         buildUniqueMetaLists();
         initSearchableComboboxes();
-        localStorage.setItem('tkb_custom_dataset', JSON.stringify(allCourses));
+        safeLocalStorageSet('tkb_custom_dataset', JSON.stringify(allCourses));
         closeModal('modalUpload');
         renderAll();
         alert(`Tải file thành công! Đã nạp ${allCourses.length} lớp học phần vào hệ thống.`);
@@ -1414,6 +1551,11 @@ function bindEvents() {
     jsonBackupFileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
+      if (file.size > MAX_JSON_IMPORT_BYTES) {
+        alert(`File JSON vượt quá giới hạn ${Math.round(MAX_JSON_IMPORT_BYTES / 1024)}KB.`);
+        jsonBackupFileInput.value = '';
+        return;
+      }
 
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -1428,10 +1570,7 @@ function bindEvents() {
           }
 
           if (validPlans && Object.keys(validPlans).length > 0) {
-            plans = validPlans;
-            Object.keys(plans).forEach(pid => {
-              if (!plans[pid].practiceChoices) plans[pid].practiceChoices = {};
-            });
+            plans = sanitizeImportedPlans(validPlans);
             currentPlanId = (imported.activePlan && plans[imported.activePlan]) ? imported.activePlan : Object.keys(plans)[0];
             savePlansToStorage();
             renderAll();
@@ -1468,6 +1607,19 @@ function bindEvents() {
 
   // Global Delegated Click Handler for all Dynamic Actions (100% immune to inline JS/HTML injection)
   document.addEventListener('click', (e) => {
+    const clearFilterBtn = e.target.closest('[data-clear-filter]');
+    if (clearFilterBtn) {
+      const type = clearFilterBtn.getAttribute('data-clear-filter');
+      if (type) clearSpecificFilter(type);
+      return;
+    }
+
+    const clearAllFiltersBtn = e.target.closest('[data-clear-all-filters]');
+    if (clearAllFiltersBtn) {
+      clearAllTagFilters();
+      return;
+    }
+
     // 1. Open Everytime Lecturer Modal
     const etEl = e.target.closest('[data-open-et]');
     if (etEl) {
@@ -2781,5 +2933,3 @@ bindEvents = function() {
   const btnDownloadScriptFile = document.getElementById('btnDownloadScriptFile');
   if (btnDownloadScriptFile) btnDownloadScriptFile.addEventListener('click', downloadScriptFile);
 };
-
-
