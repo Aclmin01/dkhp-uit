@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-MIT-38bdf8?style=for-the-badge)](LICENSE)
 
 > 🚀 **Website chính thức:** [https://dkhpuit.vercel.app](https://dkhpuit.vercel.app)  
-> 🔗 **Mirror Links:** [https://uit-tkb.vercel.app](https://uit-tkb.vercel.app) | [https://xeptkb-uit.vercel.app](https://xeptkb-uit.vercel.app)
+> 🔗 **Mirror Links:** [https://uit-tkb.vercel.app](https://uit-tkb.vercel.app) • [https://xeptkb-uit.vercel.app](https://xeptkb-uit.vercel.app) • [https://dkhp-uit-ai.vercel.app](https://dkhp-uit-ai.vercel.app) • [https://dkhp-uit-scheduler.vercel.app](https://dkhp-uit-scheduler.vercel.app)
 
 ---
 
