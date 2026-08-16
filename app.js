@@ -1830,6 +1830,8 @@ function initAutoSchedCombobox() {
     renderDropdown(input.value);
     dropdown.classList.add('open');
     dropdown.classList.add('show');
+  };
+
   if (clearBtn) {
     clearBtn.onclick = () => {
       input.value = '';
