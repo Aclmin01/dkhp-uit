@@ -173,23 +173,39 @@
     </div>
   </header>
 
-  <!-- Vibe Coding Notice & Community Contribution Banner -->
-  <div class="vibe-coding-banner" style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(90deg, rgba(225, 29, 72, 0.12), rgba(124, 58, 237, 0.12)); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 7px 18px; font-size: 12px; color: var(--text-secondary); flex-wrap: wrap; gap: 8px;">
-    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-      <span style="background: rgba(225, 29, 72, 0.2); color: #f43f5e; padding: 2px 8px; border-radius: 999px; font-weight: 800; font-size: 11px; letter-spacing: 0.3px;">💡 VIBE CODING PROJECT</span>
-      <span>Website phát triển theo phong cách Vibe Coding để hỗ trợ sinh viên UIT mùa ĐKHP. Mã nguồn mở 100% – Rất hoan nghênh mọi đóng góp, sửa lỗi hoặc Pull Request từ các bạn!</span>
+  <!-- Minimal Clean Community Banner -->
+  <div class="vibe-coding-banner">
+    <div class="vibe-banner-content">
+      <span class="vibe-badge">MÃ NGUỒN MỞ</span>
+      <span class="vibe-text">Website phát triển phi lợi nhuận hỗ trợ sinh viên UIT mùa ĐKHP. Hoan nghênh mọi đóng góp & Pull Request!</span>
     </div>
-    <a href="https://github.com/Aclmin01/dkhp-uit" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+    <a href="https://github.com/Aclmin01/dkhp-uit" target="_blank" rel="noopener noreferrer" class="vibe-link">
       <i class="fa-brands fa-github"></i>
-      <span>Đóng góp trên GitHub</span>
-      <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i>
+      <span>GitHub Repo</span>
+      <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 9.5px;"></i>
     </a>
+  </div>
+
+  <!-- Mobile Segmented View Switcher -->
+  <div class="mobile-view-switcher" id="mobileViewSwitcher">
+    <button class="mobile-tab-btn active" data-mobile-view="matrix">
+      <i class="fa-regular fa-calendar-days"></i>
+      <span>Lịch TKB</span>
+    </button>
+    <button class="mobile-tab-btn" data-mobile-view="search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span>Tìm & Chọn môn</span>
+    </button>
+    <button class="mobile-tab-btn" id="btnMobileSelectedList">
+      <i class="fa-solid fa-list-check"></i>
+      <span>Đã chọn (<span id="mobileSelectedCount">0</span>)</span>
+    </button>
   </div>
 
   <!-- ==============================================================================
        2. MAIN APP CONTAINER (SIDEBAR & VIEWPORT)
        ============================================================================== -->
-  <div class="app-container">
+  <div class="app-container" data-mobile-view="matrix">
     
     <!-- LEFT SIDEBAR: SEARCH & COURSE SELECTION -->
     <aside class="sidebar-panel">
@@ -317,6 +333,12 @@
       <div class="conflict-alert-banner" id="conflictAlertBanner" style="display: none;">
         <i class="fa-solid fa-triangle-exclamation" style="font-size: 18px;"></i>
         <div id="conflictAlertText">Phát hiện trùng lịch giữa các lớp đã chọn! Vui lòng kiểm tra lại.</div>
+      </div>
+
+      <!-- Mobile Scroll / Swipe Hint -->
+      <div class="mobile-swipe-hint">
+        <i class="fa-solid fa-arrows-left-right"></i>
+        <span>Vuốt sang ngang để xem đủ TKB từ Thứ 2 đến Thứ 7</span>
       </div>
 
       <!-- Timetable Scroll Wrapper -->
@@ -795,11 +817,11 @@
   </div>
 
   <!-- Offline / Online Scripts -->
-  <script src="security.js?v=2.8"></script>
+  <script src="security.js?v=2.9"></script>
   <script src="libs/xlsx.full.min.js"></script>
   <script src="libs/html2canvas.min.js"></script>
-  <script src="ratings.js?v=2.8"></script>
-  <script src="data.js?v=2.8"></script>
-  <script src="app.js?v=2.8"></script>
+  <script src="ratings.js?v=2.9"></script>
+  <script src="data.js?v=2.9"></script>
+  <script src="app.js?v=2.9"></script>
 </body>
 </html>

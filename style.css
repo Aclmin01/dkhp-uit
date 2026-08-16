@@ -1844,19 +1844,328 @@ kbd {
   border-color: #24292f;
 }
 
-/* Responsive Breakpoints */
-@media (max-width: 1024px) {
+/* --------------------------------------------------------------------------
+   MINIMAL COMMUNITY BANNER
+   -------------------------------------------------------------------------- */
+.vibe-coding-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-surface-elevated);
+  border-bottom: 1px solid var(--border-color);
+  padding: 6px 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.vibe-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vibe-badge {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--primary);
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 10.5px;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.vibe-text {
+  font-weight: 500;
+}
+
+.vibe-link {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition);
+}
+
+.vibe-link:hover {
+  text-decoration: underline;
+  color: var(--primary-hover);
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE SEGMENTED VIEW SWITCHER
+   -------------------------------------------------------------------------- */
+.mobile-view-switcher {
+  display: none;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  padding: 6px 12px;
+  gap: 6px;
+  position: sticky;
+  top: var(--header-height);
+  z-index: 45;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mobile-tab-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 700;
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: var(--transition);
+  min-height: 40px;
+}
+
+.mobile-tab-btn i {
+  font-size: 13px;
+}
+
+.mobile-tab-btn.active {
+  background-color: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.mobile-tab-btn:active {
+  transform: scale(0.98);
+}
+
+/* Mobile Scroll / Swipe Hint */
+.mobile-swipe-hint {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-light);
+  border: 1px dashed rgba(59, 130, 246, 0.3);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  margin-bottom: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE BREAKPOINTS & MOBILE UX OPTIMIZATION
+   -------------------------------------------------------------------------- */
+
+/* Tablet & Mobile (<= 860px) */
+@media (max-width: 860px) {
+  :root {
+    --header-height: 56px;
+  }
+
+  .app-header {
+    height: var(--header-height);
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .brand-section .logo-text span:last-child {
+    display: none;
+  }
+
+  .brand-section .logo-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .plan-selector-box {
+    padding: 2px 4px;
+  }
+  
+  .plan-selector-box select {
+    font-size: 12px;
+    max-width: 130px;
+  }
+
+  .header-actions {
+    gap: 4px;
+  }
+
+  /* Compact button styling on mobile */
+  .header-actions .btn {
+    padding: 6px 9px;
+    font-size: 11.5px;
+  }
+
+  .header-actions .btn span {
+    display: none;
+  }
+
+  /* Keep text for primary auto scheduler CTA */
+  #btnOpenAutoScheduler span {
+    display: inline;
+  }
+
+  /* Mobile View Switcher activated */
+  .mobile-view-switcher {
+    display: flex;
+  }
+
+  .mobile-swipe-hint {
+    display: flex;
+  }
+
   .app-container {
     flex-direction: column;
     height: auto;
+    min-height: calc(100vh - var(--header-height) - 48px);
     overflow: visible;
   }
-  .sidebar-panel {
+
+  /* Tab Switching Mechanism on Mobile */
+  .app-container[data-mobile-view="matrix"] .sidebar-panel {
+    display: none;
+  }
+  .app-container[data-mobile-view="matrix"] .main-viewport {
+    display: flex;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .app-container[data-mobile-view="search"] .sidebar-panel {
+    display: flex;
     width: 100%;
     max-width: 100%;
-    height: 480px;
+    height: calc(100vh - var(--header-height) - 95px);
+    border-right: none;
   }
-  .main-viewport {
-    height: auto;
+  .app-container[data-mobile-view="search"] .main-viewport {
+    display: none;
+  }
+
+  /* Mobile Timetable Matrix Horizontal Scroll with Sticky Time Column */
+  .timetable-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  .timetable-matrix-card {
+    min-width: 640px;
+  }
+
+  /* Sticky First Column for Time & Periods on Touch Devices */
+  .grid-header-cell:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 9;
+    background-color: var(--grid-header-bg);
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .grid-period-cell {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    background-color: var(--period-label-bg);
+    box-shadow: 2px 0 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .shift-separator-row {
+    position: sticky;
+    left: 0;
+  }
+
+  /* Stats Cards Grid on Mobile */
+  .stats-summary-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .stat-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+  }
+
+  .stat-card {
+    padding: 8px 10px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+  }
+
+  /* Modals Mobile Adaptation */
+  .modal-box {
+    max-width: 95vw;
+    width: 95vw;
+    max-height: 92vh;
+    border-radius: var(--radius-lg);
+    margin: 8px auto;
+  }
+
+  .modal-header {
+    padding: 12px 14px;
+  }
+
+  .modal-title {
+    font-size: 14px;
+  }
+
+  .modal-body {
+    padding: 14px;
+  }
+}
+
+/* Small Smartphone (< 480px) */
+@media (max-width: 480px) {
+  .brand-section .logo-text span:first-child {
+    font-size: 14px;
+  }
+
+  .plan-selector-box select {
+    font-size: 11.5px;
+    max-width: 105px;
+  }
+
+  #btnOpenAutoScheduler {
+    padding: 5px 9px;
+  }
+
+  #btnOpenAutoScheduler span {
+    font-size: 11px;
+  }
+
+  .mobile-tab-btn {
+    padding: 7px 6px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .mobile-tab-btn i {
+    font-size: 11.5px;
+  }
+
+  .course-card {
+    padding: 10px;
+  }
+
+  .course-title {
+    font-size: 12.5px;
   }
 }

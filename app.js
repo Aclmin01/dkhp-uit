@@ -96,9 +96,36 @@ document.addEventListener('DOMContentLoaded', () => {
   loadInitialDataset();
   buildUniqueMetaLists();
   initSearchableComboboxes();
+  initMobileViewSwitcher();
   bindEvents();
   renderAll();
 });
+
+function initMobileViewSwitcher() {
+  const switcher = document.getElementById('mobileViewSwitcher');
+  const appContainer = document.querySelector('.app-container');
+  if (!switcher || !appContainer) return;
+
+  switcher.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-mobile-view]');
+    if (!btn) return;
+
+    const view = btn.getAttribute('data-mobile-view');
+    switcher.querySelectorAll('.mobile-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    appContainer.setAttribute('data-mobile-view', view);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  const btnMobileSelected = document.getElementById('btnMobileSelectedList');
+  if (btnMobileSelected) {
+    btnMobileSelected.addEventListener('click', () => {
+      renderSelectedTable();
+      openModal('modalSelectedCourses');
+    });
+  }
+}
 
 function loadInitialDataset() {
   const customData = localStorage.getItem('tkb_custom_dataset');
@@ -941,6 +968,8 @@ function renderStats() {
   document.getElementById('statClassCount').innerHTML = `${currentSelectedIds.length} <span>môn</span>`;
   document.getElementById('statDaysCount').innerHTML = `${daysSet.size} <span>ngày</span>`;
   document.getElementById('selectedBadgeNum').textContent = currentSelectedIds.length;
+  const mobBadge = document.getElementById('mobileSelectedCount');
+  if (mobBadge) mobBadge.textContent = currentSelectedIds.length;
 
   const statusEl = document.getElementById('statConflictStatus');
   const alertBanner = document.getElementById('conflictAlertBanner');
