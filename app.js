@@ -679,7 +679,8 @@ function renderCourseResults() {
         return `
           <button type="button" class="practice-pill-btn ${isPSelected ? 'selected' : ''} ${pConflict.hasConflict ? 'conflict' : ''}"
                   title="Nhóm ${escapeHtml(groupSuffix)}: ${escapeHtml(pThu)} (Tiết ${escapeHtml(pTiet)}) Phòng ${escapeHtml(p.phong || 'N/A')}"
-                  onclick="selectPracticeGroup('${escapeHtml(course.id)}', '${escapeHtml(p.id)}', event)">
+                  data-select-practice-theory="${escapeHtml(course.id)}"
+                  data-select-practice-id="${escapeHtml(p.id)}">
             <strong>${escapeHtml(groupSuffix || p.maLop)}</strong>: ${escapeHtml(pThu)} (${escapeHtml(pTiet)})
           </button>
         `;
@@ -712,7 +713,7 @@ function renderCourseResults() {
         <span class="meta-chip"><i class="fa-regular fa-calendar"></i> ${escapeHtml(thuStr)}</span>
         <span class="meta-chip"><i class="fa-regular fa-clock"></i> ${escapeHtml(tietStr)}</span>
         <span class="meta-chip"><i class="fa-solid fa-door-open"></i> ${escapeHtml(phongStr)}</span>
-        <span class="meta-chip meta-chip-teacher" onclick="event.stopPropagation(); openEverytimeModal('${escapeHtml(course.tenGV || '').replace(/'/g, "\\'")}')" title="Bấm để xem đánh giá Everytime của ${escapeHtml(gvStr)}">
+        <span class="meta-chip meta-chip-teacher" data-open-et="${escapeHtml(course.tenGV || '')}" title="Bấm để xem đánh giá Everytime của ${escapeHtml(gvStr)}">
           <i class="fa-solid fa-user-tie" style="color: #e11d48;"></i>
           <span>${escapeHtml(gvStr)}</span>
           ${etBadge}
@@ -728,7 +729,7 @@ function renderCourseResults() {
           </span>
         ` : '<span></span>'}
         
-        <button class="btn ${isSelected ? 'btn-danger' : 'btn-primary'}" onclick="toggleCourseSelect('${escapeHtml(course.id)}')" style="padding: 4px 10px; font-size: 12px;">
+        <button class="btn ${isSelected ? 'btn-danger' : 'btn-primary'}" data-toggle-select="${escapeHtml(course.id)}" style="padding: 4px 10px; font-size: 12px;">
           <i class="fa-solid ${isSelected ? 'fa-xmark' : 'fa-plus'}"></i>
           <span>${isSelected ? 'Bỏ chọn' : 'Thêm vào TKB'}</span>
         </button>
@@ -849,25 +850,25 @@ function renderTimetableMatrix() {
 
     block.innerHTML = `
       <div class="block-top-row">
-        <span class="block-class-badge">${item.isTH ? 'TH' : 'LT'} • ${item.maLop}</span>
-        <button class="block-delete-btn" title="Xóa môn này" onclick="event.stopPropagation(); removeCourseFromMatrix('${item.id}')">
+        <span class="block-class-badge">${item.isTH ? 'TH' : 'LT'} • ${escapeHtml(item.maLop)}</span>
+        <button class="block-delete-btn" title="Xóa môn này" data-remove-matrix="${escapeHtml(item.id)}">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <div class="block-center-title">${item.tenMH}</div>
+      <div class="block-center-title">${escapeHtml(item.tenMH)}</div>
 
       <div class="block-bottom-row">
         <div class="block-meta-left">
-          <div class="block-room-info"><i class="fa-solid fa-door-open"></i> ${item.phong || 'N/A'}</div>
-          <div class="block-teacher-info block-teacher-clickable" onclick="event.stopPropagation(); openEverytimeModal('${(item.tenGV || '').replace(/'/g, "\\'")}')" title="Bấm xem đánh giá Everytime của ${item.tenGV || ''}">
+          <div class="block-room-info"><i class="fa-solid fa-door-open"></i> ${escapeHtml(item.phong || 'N/A')}</div>
+          <div class="block-teacher-info block-teacher-clickable" data-open-et="${escapeHtml(item.tenGV || '')}" title="Bấm xem đánh giá Everytime của ${escapeHtml(item.tenGV || '')}">
             <i class="fa-solid fa-user-tie" style="color: #e11d48;"></i>
-            <span>${item.tenGV || 'Chưa phân công'}</span>
+            <span>${escapeHtml(item.tenGV || 'Chưa phân công')}</span>
             ${etBadge}
           </div>
         </div>
         <div class="block-meta-right">
-          <span class="block-tc-badge">${item.soTC} TC</span>
+          <span class="block-tc-badge">${item.soTC || 0} TC</span>
         </div>
       </div>
     `;
@@ -997,7 +998,7 @@ function renderSelectedTable() {
       <td style="padding: 8px;">${escapeHtml(thuStr)} (${escapeHtml(tietStr)})</td>
       <td style="padding: 8px;">${escapeHtml(course.phong || 'N/A')}</td>
       <td style="padding: 8px; text-align: right;">
-        <button class="btn btn-danger" style="padding: 3px 8px; font-size: 11px;" onclick="toggleCourseSelect('${escapeHtml(course.id)}')">
+        <button class="btn btn-danger" style="padding: 3px 8px; font-size: 11px;" data-toggle-select="${escapeHtml(course.id)}">
           <i class="fa-solid fa-trash-can"></i> Xóa
         </button>
       </td>
@@ -1417,12 +1418,103 @@ function bindEvents() {
     if (!name) return;
 
     const newId = 'plan_' + Date.now();
-    plans[newId] = { name: name, selected: [] };
+    plans[newId] = { name: name, selected: [], practiceChoices: {} };
     currentPlanId = newId;
     input.value = '';
     savePlansToStorage();
     renderPlansListModal();
     renderAll();
+  });
+
+  // Global Delegated Click Handler for all Dynamic Actions (100% immune to inline JS/HTML injection)
+  document.addEventListener('click', (e) => {
+    // 1. Open Everytime Lecturer Modal
+    const etEl = e.target.closest('[data-open-et]');
+    if (etEl) {
+      e.stopPropagation();
+      const teacher = etEl.getAttribute('data-open-et');
+      if (teacher) openEverytimeModal(teacher);
+      return;
+    }
+
+    // 2. Toggle Course Selection (Add / Remove)
+    const toggleEl = e.target.closest('[data-toggle-select]');
+    if (toggleEl) {
+      e.stopPropagation();
+      const cid = toggleEl.getAttribute('data-toggle-select');
+      if (cid) toggleCourseSelect(cid);
+      return;
+    }
+
+    // 3. Select Practice Group
+    const pracEl = e.target.closest('[data-select-practice-theory]');
+    if (pracEl) {
+      e.stopPropagation();
+      const tid = pracEl.getAttribute('data-select-practice-theory');
+      const pid = pracEl.getAttribute('data-select-practice-id');
+      if (tid && pid) selectPracticeGroup(tid, pid, e);
+      return;
+    }
+
+    // 4. Remove Course from Timetable Matrix
+    const remMatrixEl = e.target.closest('[data-remove-matrix]');
+    if (remMatrixEl) {
+      e.stopPropagation();
+      const mid = remMatrixEl.getAttribute('data-remove-matrix');
+      if (mid) removeCourseFromMatrix(mid);
+      return;
+    }
+
+    // 5. Remove Subject Chip from Auto-Scheduler
+    const remAutoEl = e.target.closest('[data-remove-autosched]');
+    if (remAutoEl) {
+      e.stopPropagation();
+      const maMH = remAutoEl.getAttribute('data-remove-autosched');
+      if (maMH) removeAutoSchedSubject(maMH);
+      return;
+    }
+
+    // 6. Plan Management Actions
+    const renameEl = e.target.closest('[data-rename-plan]');
+    if (renameEl) {
+      e.stopPropagation();
+      const pid = renameEl.getAttribute('data-rename-plan');
+      if (pid) renamePlan(pid);
+      return;
+    }
+
+    const dupEl = e.target.closest('[data-duplicate-plan]');
+    if (dupEl) {
+      e.stopPropagation();
+      const pid = dupEl.getAttribute('data-duplicate-plan');
+      if (pid) duplicatePlan(pid);
+      return;
+    }
+
+    const delEl = e.target.closest('[data-delete-plan]');
+    if (delEl) {
+      e.stopPropagation();
+      const pid = delEl.getAttribute('data-delete-plan');
+      if (pid) deletePlan(pid);
+      return;
+    }
+
+    // 7. Auto-Scheduler Solutions Actions
+    const applySolEl = e.target.closest('[data-apply-sol]');
+    if (applySolEl) {
+      e.stopPropagation();
+      const sidx = parseInt(applySolEl.getAttribute('data-apply-sol'), 10);
+      if (!isNaN(sidx)) applySolutionToCurrentPlan(sidx);
+      return;
+    }
+
+    const saveSolEl = e.target.closest('[data-save-sol]');
+    if (saveSolEl) {
+      e.stopPropagation();
+      const sidx = parseInt(saveSolEl.getAttribute('data-save-sol'), 10);
+      if (!isNaN(sidx)) saveSolutionAsNewPlan(sidx);
+      return;
+    }
   });
 }
 
@@ -1454,18 +1546,18 @@ function renderPlansListModal() {
 
     row.innerHTML = `
       <div>
-        <strong>${plan.name}</strong>
-        <span style="font-size: 11px; color: var(--text-muted); margin-left: 6px;">(${plan.selected.length} môn)</span>
+        <strong>${escapeHtml(plan.name)}</strong>
+        <span style="font-size: 11px; color: var(--text-muted); margin-left: 6px;">(${(plan.selected || []).length} môn)</span>
       </div>
       <div style="display: flex; gap: 6px;">
-        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="renamePlan('${pid}')">
+        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" data-rename-plan="${escapeHtml(pid)}">
           <i class="fa-solid fa-pen"></i> Đổi tên
         </button>
-        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="duplicatePlan('${pid}')">
+        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" data-duplicate-plan="${escapeHtml(pid)}">
           <i class="fa-solid fa-copy"></i> Nhân bản
         </button>
         ${Object.keys(plans).length > 1 ? `
-          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 11px;" onclick="deletePlan('${pid}')">
+          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 11px;" data-delete-plan="${escapeHtml(pid)}">
             <i class="fa-solid fa-trash"></i>
           </button>
         ` : ''}
@@ -1476,7 +1568,8 @@ function renderPlansListModal() {
 }
 
 window.renamePlan = function(pid) {
-  const newName = prompt('Nhập tên mới cho kế hoạch:', plans[pid].name);
+  const currentName = plans[pid]?.name || '';
+  const newName = prompt('Nhập tên mới cho kế hoạch:', currentName);
   if (newName && newName.trim()) {
     plans[pid].name = newName.trim();
     savePlansToStorage();
@@ -1487,9 +1580,11 @@ window.renamePlan = function(pid) {
 
 window.duplicatePlan = function(pid) {
   const newId = 'plan_' + Date.now();
+  const src = plans[pid] || { name: 'Kế hoạch', selected: [], practiceChoices: {} };
   plans[newId] = {
-    name: plans[pid].name + ' (Bản sao)',
-    selected: [...plans[pid].selected]
+    name: src.name + ' (Bản sao)',
+    selected: [...(src.selected || [])],
+    practiceChoices: { ...(src.practiceChoices || {}) }
   };
   currentPlanId = newId;
   savePlansToStorage();
@@ -1498,7 +1593,8 @@ window.duplicatePlan = function(pid) {
 };
 
 window.deletePlan = function(pid) {
-  if (confirm(`Xác nhận xóa kế hoạch "${plans[pid].name}"?`)) {
+  const planName = plans[pid]?.name || '';
+  if (confirm(`Xác nhận xóa kế hoạch "${planName}"?`)) {
     delete plans[pid];
     if (currentPlanId === pid) currentPlanId = Object.keys(plans)[0];
     savePlansToStorage();
@@ -1646,7 +1742,7 @@ function showAppToast(message) {
     toast.className = 'app-toast';
     document.body.appendChild(toast);
   }
-  toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--accent-emerald);"></i> <span>${message}</span>`;
+  toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--accent-emerald);"></i> <span>${escapeHtml(message)}</span>`;
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
@@ -1755,7 +1851,8 @@ function handleApplyImportCodes() {
     feedback.style.backgroundColor = 'var(--danger-light)';
     feedback.style.color = 'var(--danger)';
     feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Không tìm thấy môn học nào khớp với các mã: <strong>${lines.join(', ')}</strong> trong dữ liệu hiện tại!`;
+    const escapedInput = lines.map(escapeHtml).join(', ');
+    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Không tìm thấy môn học nào khớp với các mã: <strong>${escapedInput}</strong> trong dữ liệu hiện tại!`;
     return;
   }
 
@@ -1789,7 +1886,8 @@ function handleApplyImportCodes() {
 
   let msg = `<i class="fa-solid fa-circle-check"></i> <strong>Đã xếp thành công ${matchedTheories.size} môn học phần vào TKB!</strong>`;
   if (notFoundCodes.length > 0) {
-    msg += `<div style="margin-top: 6px; font-size: 12px; color: var(--accent-amber);">⚠️ Không tìm thấy ${notFoundCodes.length} mã: ${notFoundCodes.join(', ')}</div>`;
+    const escapedNotFound = notFoundCodes.map(escapeHtml).join(', ');
+    msg += `<div style="margin-top: 6px; font-size: 12px; color: var(--accent-amber);">⚠️ Không tìm thấy ${notFoundCodes.length} mã: ${escapedNotFound}</div>`;
   }
   feedback.innerHTML = msg;
   showAppToast(`⚡ Đã tự động xếp ${matchedTheories.size} môn học vào TKB!`);
@@ -1854,8 +1952,8 @@ function renderAutoSchedChips() {
     const chip = document.createElement('span');
     chip.className = 'auto-sched-chip';
     chip.innerHTML = `
-      <span><strong>${meta.maMH}</strong> - ${meta.tenMH}</span>
-      <span class="auto-sched-chip-remove" onclick="removeAutoSchedSubject('${meta.maMH}')">&times;</span>
+      <span><strong>${escapeHtml(meta.maMH)}</strong> - ${escapeHtml(meta.tenMH)}</span>
+      <span class="auto-sched-chip-remove" data-remove-autosched="${escapeHtml(meta.maMH)}">&times;</span>
     `;
     container.appendChild(chip);
   });
@@ -2264,14 +2362,14 @@ function renderAutoSchedSolutions(solutions) {
 
     const teachersHtml = teachersList.map(t => {
       if (!t.rInfo) {
-        return `<span class="sol-teacher-chip" onclick="openEverytimeModal('${t.name.replace(/'/g, "\\'")}')"><i class="fa-solid fa-user-tie"></i> ${t.name}</span>`;
+        return `<span class="sol-teacher-chip" data-open-et="${escapeHtml(t.name)}"><i class="fa-solid fa-user-tie"></i> ${escapeHtml(t.name)}</span>`;
       }
       const bHtml = renderEverytimeBadge(t.name);
-      const topTag = (t.rInfo.tags && t.rInfo.tags.length > 0) ? `#${t.rInfo.tags[0]}` : '';
+      const topTag = (t.rInfo.tags && t.rInfo.tags.length > 0) ? `#${escapeHtml(t.rInfo.tags[0])}` : '';
       return `
-        <span class="sol-teacher-chip" onclick="openEverytimeModal('${t.name.replace(/'/g, "\\'")}')" title="Xem ${t.rInfo.reviewsCount} review Everytime">
+        <span class="sol-teacher-chip" data-open-et="${escapeHtml(t.name)}" title="Xem ${t.rInfo.reviewsCount} review Everytime">
           <i class="fa-solid fa-user-tie"></i>
-          <span>${t.name}</span>
+          <span>${escapeHtml(t.name)}</span>
           ${bHtml}
           ${topTag ? `<span style="color: ${t.rInfo.isWarned ? '#dc2626' : 'var(--primary)'}; font-size: 10.5px; font-weight: 700;">${topTag}</span>` : ''}
         </span>
@@ -2293,11 +2391,11 @@ function renderAutoSchedSolutions(solutions) {
 
       <div style="font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
         <i class="fa-solid fa-calendar-check" style="color: #10b981;"></i>
-        <span>Nghỉ: <strong>${sol.actualDaysOff.length > 0 ? sol.actualDaysOff.join(', ') : 'Không có'}</strong></span>
+        <span>Nghỉ: <strong>${sol.actualDaysOff.length > 0 ? sol.actualDaysOff.map(escapeHtml).join(', ') : 'Không có'}</strong></span>
       </div>
 
       <div class="solution-tags-row">
-        ${sol.classCodes.map(code => `<span class="solution-class-tag">${code}</span>`).join('')}
+        ${sol.classCodes.map(code => `<span class="solution-class-tag">${escapeHtml(code)}</span>`).join('')}
       </div>
 
       <!-- Teachers in this Plan -->
@@ -2311,10 +2409,10 @@ function renderAutoSchedSolutions(solutions) {
       </div>
 
       <div class="solution-card-actions">
-        <button class="btn btn-secondary btn-sm" onclick="saveSolutionAsNewPlan(${index})">
+        <button class="btn btn-secondary btn-sm" data-save-sol="${index}">
           <i class="fa-solid fa-folder-plus"></i> Lưu thành kế hoạch mới
         </button>
-        <button class="btn btn-primary btn-sm" onclick="applySolutionToCurrentPlan(${index})">
+        <button class="btn btn-primary btn-sm" data-apply-sol="${index}">
           <i class="fa-solid fa-bolt"></i> Áp dụng vào TKB này
         </button>
       </div>
@@ -2392,7 +2490,7 @@ function renderEverytimeBadge(gvName) {
   }
 
   return `
-    <span class="everytime-badge ${tierClass}" onclick="event.stopPropagation(); openEverytimeModal('${escapeHtml(gvName).replace(/'/g, "\\'")}')" title="Xem ${et.reviewsCount} review Everytime VN">
+    <span class="everytime-badge ${tierClass}" data-open-et="${escapeHtml(gvName)}" title="Xem ${et.reviewsCount} review Everytime VN">
       ${badgeLabel}
     </span>
   `;
