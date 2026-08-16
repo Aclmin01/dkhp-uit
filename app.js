@@ -2282,9 +2282,21 @@ window.openEverytimeModal = function(teacherName) {
         <div class="everytime-alert-banner phatsong">
           <i class="fa-solid fa-crown" style="font-size: 22px; color: #f59e0b;"></i>
           <div>
-            <div style="font-size: 13px; font-weight: 800;">🏆 DANH HIỆU "PHẬT SỐNG UIT":</div>
+            <div style="font-size: 13px; font-weight: 800;">🏆 ĐẠI PHẬT SỐNG UIT (TOP 13% GIẢNG VIÊN TINH HOA):</div>
             <div style="font-size: 12px; font-weight: 500; margin-top: 2px;">
-              ${data.recommendPercent}% Sinh viên khuyên học • Chấm điểm thoáng & Dạy có tâm!
+              ${data.recommendPercent}% Sinh viên đề xuất • Chấm điểm cực thoáng & Siêu nhiệt tình!
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (data.tier === 'A') {
+      bannerHtml = `
+        <div class="everytime-alert-banner" style="background: rgba(59, 130, 246, 0.1); color: #2563eb; border: 1px solid rgba(59, 130, 246, 0.3);">
+          <i class="fa-solid fa-thumbs-up" style="font-size: 20px; color: #3b82f6;"></i>
+          <div>
+            <div style="font-size: 13px; font-weight: 800;">🌟 GIẢNG VIÊN DẠY TỐT & CÓ TÂM:</div>
+            <div style="font-size: 12px; font-weight: 500; margin-top: 2px;">
+              Được ${data.recommendPercent}% sinh viên UIT khen ngợi và đề xuất theo học!
             </div>
           </div>
         </div>

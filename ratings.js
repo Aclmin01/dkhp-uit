@@ -1,7 +1,11 @@
 /**
- * EVERYTIME VIETNAM ENHANCED AI SENTIMENT DATABASE (UIT)
+ * EVERYTIME VIETNAM STRICT ELITE TIER RATING DATABASE (UIT)
  * Total Real Reviews Analyzed: 909
  * Total Lecturers Evaluated: 218
+ * Tier S (Đại Phật Sống): 29 GV tinh hoa (Yêu cầu >= 5 reviews, rating >= 4.88, 100% đề xuất)
+ * Tier A (Dạy Tốt / Có Tâm): 127 GV
+ * Tier B (Chuẩn Chỉ): 42 GV
+ * Tier C (Cảnh Báo Né): 20 GV
  */
 
 const EVERYTIME_REAL_DATABASE = {
@@ -14,11 +18,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Đề bám sát",
-      "Thầy cô vui tính",
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Không điểm danh",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Đề bám sát"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -83,6 +87,7 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Phật sống UIT",
       "Dạy có tâm",
       "Giảng dễ hiểu"
     ],
@@ -141,10 +146,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -178,16 +183,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyengiatuananh": {
     "name": "Nguyễn Gia Tuấn Anh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 4,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Không điểm danh",
       "Dạy có tâm",
-      "Không điểm danh"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -236,9 +241,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -296,17 +302,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "huynhthithanhthuong": {
     "name": "Huỳnh Thị Thanh Thương",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 4.83,
     "reviewsCount": 12,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -371,9 +377,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 88,
     "redFlags": [],
     "tags": [
-      "Dạy có tâm",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -438,11 +444,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
       "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -507,8 +513,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Phật sống UIT",
       "Dạy có tâm",
+      "Thầy cô vui tính",
       "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
@@ -575,9 +582,9 @@ const EVERYTIME_REAL_DATABASE = {
     "redFlags": [],
     "tags": [
       "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -635,16 +642,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthihuynhnhu": {
     "name": "Nguyễn Thị Huỳnh Như",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Không điểm danh",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -677,10 +684,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -745,11 +753,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Đề bám sát",
-      "Thầy cô vui tính",
       "Phật sống UIT",
-      "Không điểm danh"
+      "Chấm điểm thoáng",
+      "Không điểm danh",
+      "Đề bám sát",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -814,11 +822,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
       "Phật sống UIT",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Chấm điểm thoáng",
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -876,18 +884,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenminhtri": {
     "name": "Nguyễn Minh Trí",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 4.83,
     "reviewsCount": 29,
     "recommendPercent": 97,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Đề bám sát",
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Đề bám sát"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -952,9 +959,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -1004,7 +1012,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "lethimydanh": {
     "name": "Lê Thị Mỹ Danh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 4.8,
     "reviewsCount": 5,
@@ -1069,10 +1077,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Giảng dễ hiểu",
+      "Phật sống UIT",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -1137,11 +1146,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Không điểm danh",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -1206,11 +1215,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Đề bám sát",
-      "Thầy cô vui tính",
       "Phật sống UIT",
-      "Dạy có tâm"
+      "Chấm điểm thoáng",
+      "Dạy có tâm",
+      "Đề bám sát",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -1268,16 +1277,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "quanchikhanhan": {
     "name": "Quan Chí Khánh An",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 4,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -1326,11 +1335,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
       "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -1396,9 +1405,8 @@ const EVERYTIME_REAL_DATABASE = {
     "redFlags": [],
     "tags": [
       "Chấm điểm thoáng",
-      "Thầy cô vui tính",
       "Dạy có tâm",
-      "Phật sống UIT"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -1448,18 +1456,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "duongviethang": {
     "name": "Dương Việt Hằng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 4.8,
     "reviewsCount": 10,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Đề bám sát",
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Đề bám sát",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -1517,7 +1524,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "quantrikhanhan": {
     "name": "Quan Trí Khánh An",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -1547,10 +1554,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Phật sống UIT",
+      "Không điểm danh",
       "Dạy có tâm",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -1615,9 +1623,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Dạy có tâm",
+      "Phật sống UIT",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -1682,9 +1691,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 83,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -1742,18 +1751,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phamtheson": {
     "name": "Phạm Thế Sơn",
-    "tier": "A",
+    "tier": "B",
     "isWarned": false,
     "rating": 4.33,
     "reviewsCount": 9,
     "recommendPercent": 89,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Đề bám sát",
-      "Thầy cô vui tính",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Đề bám sát",
+      "Thầy cô vui tính"
     ],
     "grading": "Chuẩn chỉ",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -1818,9 +1826,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 75,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -1869,6 +1877,7 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Phật sống UIT",
       "Dạy có tâm",
       "Giảng dễ hiểu"
     ],
@@ -1929,9 +1938,9 @@ const EVERYTIME_REAL_DATABASE = {
       "Né gấp / Cảnh báo"
     ],
     "tags": [
+      "Đề bám sát",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Đề bám sát"
+      "Giảng dễ hiểu"
     ],
     "grading": "Chuẩn chỉ",
     "attendance": "Có điểm danh",
@@ -1988,10 +1997,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 94,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Giảng dễ hiểu",
+      "Không điểm danh",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -2058,7 +2067,7 @@ const EVERYTIME_REAL_DATABASE = {
     "tags": [
       "Thầy cô vui tính"
     ],
-    "grading": "Rộng rãi (Thoáng)",
+    "grading": "Chuẩn chỉ",
     "attendance": "Có điểm danh",
     "workload": "Vừa sức",
     "topReviews": [
@@ -2114,16 +2123,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "duongnguyenphuongnam": {
     "name": "Dương Nguyễn Phương Nam",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 4,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Chấm điểm thoáng",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -2165,15 +2174,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenvantoan": {
     "name": "Nguyễn Văn Toàn",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -2207,16 +2216,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "levothanhlam": {
     "name": "Lê Võ Thanh Lâm",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -2257,10 +2266,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 73,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Không điểm danh",
       "Dạy có tâm",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -2325,11 +2334,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 91,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
-      "Phật sống UIT",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Chấm điểm thoáng",
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -2394,9 +2402,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 71,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -2461,10 +2469,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Chấm điểm thoáng",
-      "Dạy có tâm",
       "Phật sống UIT",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Dạy có tâm",
+      "Chấm điểm thoáng"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -2522,7 +2530,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenducvu": {
     "name": "Nguyễn Đức Vũ",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -2643,16 +2651,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "doanduy": {
     "name": "Đoàn Duy",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -2678,7 +2686,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenphuocbaolong": {
     "name": "Nguyễn Phước Bảo Long",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -2703,15 +2711,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tranthidung": {
     "name": "Trần Thị Dung",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -2810,9 +2818,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 86,
     "redFlags": [],
     "tags": [
+      "Chấm điểm thoáng",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -2870,15 +2878,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "dothiminhphung": {
     "name": "Đỗ Thị Minh Phụng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 4.83,
     "reviewsCount": 6,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -2974,10 +2982,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 88,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -3042,11 +3050,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Không điểm danh",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -3177,9 +3185,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -3237,15 +3246,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tathuthuy": {
     "name": "Tạ Thu Thủy",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -3347,6 +3356,7 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Phật sống UIT",
       "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
@@ -3406,9 +3416,9 @@ const EVERYTIME_REAL_DATABASE = {
       "Đề thi khó / Lệch đề"
     ],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -3466,15 +3476,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phamnguyenphuctoan": {
     "name": "Phạm Nguyễn Phúc Toàn",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -3500,7 +3510,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phamvanhau": {
     "name": "Phạm Văn Hậu",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -3532,9 +3542,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 78,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -3592,17 +3602,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "duongphilong": {
     "name": "Dương Phi Long",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Dạy có tâm",
+      "Không điểm danh",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Thầy cô vui tính",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -3636,15 +3646,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phamnguyenthanhbinh": {
     "name": "Phạm Nguyễn Thanh Bình",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -3693,18 +3703,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenvanhoi": {
     "name": "Nguyễn Văn Hợi",
-    "tier": "A",
+    "tier": "B",
     "isWarned": false,
     "rating": 4.31,
     "reviewsCount": 16,
     "recommendPercent": 81,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
-      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -3835,9 +3844,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 86,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -3937,7 +3946,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "lethanhnghia": {
     "name": "Lê Thành Nghĩa",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -4047,9 +4056,9 @@ const EVERYTIME_REAL_DATABASE = {
       "Chấm điểm gắt / Keo điểm"
     ],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Chấm gắt / Keo điểm",
     "attendance": "Có điểm danh",
@@ -4107,7 +4116,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthibichcan": {
     "name": "Nguyễn Thị Bích Cần",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
@@ -4148,15 +4157,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenhuuluong": {
     "name": "Nguyễn Hữu Lượng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Chấm điểm thoáng"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -4197,11 +4206,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 81,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Đề bám sát",
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Đề bám sát",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -4266,10 +4274,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 80,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -4367,8 +4375,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -4523,11 +4532,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
+      "Chấm điểm thoáng",
       "Đề bám sát",
       "Thầy cô vui tính",
-      "Phật sống UIT",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -4578,8 +4586,8 @@ const EVERYTIME_REAL_DATABASE = {
       "Chấm điểm gắt / Keo điểm"
     ],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Chấm gắt / Keo điểm",
     "attendance": "Có điểm danh",
@@ -4672,10 +4680,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
+      "Phật sống UIT",
       "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Phật sống UIT"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -4725,16 +4733,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tonguyennhatquang": {
     "name": "Tô Nguyễn Nhật Quang",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 4.83,
     "reviewsCount": 6,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -4799,9 +4807,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -4850,9 +4858,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Không điểm danh",
       "Dạy có tâm",
-      "Không điểm danh"
+      "Thầy cô vui tính"
     ],
     "grading": "Chuẩn chỉ",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -4878,16 +4886,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phamthithuylinh": {
     "name": "Phạm Thị Thuỳ Linh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -4913,17 +4921,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthivyquy": {
     "name": "Nguyễn Thị Vy Quý",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 4,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5026,10 +5034,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 88,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5087,7 +5095,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tranngocduc": {
     "name": "Trần Ngọc Đức",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -5154,7 +5162,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenhoduytri": {
     "name": "Nguyễn Hồ Duy Tri",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 4,
@@ -5211,8 +5219,8 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5238,7 +5246,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthihoanganh": {
     "name": "Nguyễn Thị Hoàng Anh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -5286,7 +5294,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "totrongnghia": {
     "name": "Tô Trọng Nghĩa",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
@@ -5294,9 +5302,8 @@ const EVERYTIME_REAL_DATABASE = {
     "redFlags": [],
     "tags": [
       "Chấm điểm thoáng",
-      "Thầy cô vui tính",
       "Dạy có tâm",
-      "Phật sống UIT"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5322,7 +5329,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "duongngochao": {
     "name": "Dương Ngọc Hảo",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -5345,17 +5352,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "lebaouyen": {
     "name": "Lê Bảo Uyên",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 4.83,
     "reviewsCount": 6,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5420,8 +5427,8 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 50,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5463,16 +5470,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tranhongnghi": {
     "name": "Trần Hồng Nghi",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 4,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5514,7 +5521,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phanthanhtuan": {
     "name": "Phan Thanh Tuấn",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -5546,9 +5553,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 57,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -5613,11 +5620,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
       "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -5675,7 +5682,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenduy": {
     "name": "Nguyễn Duy",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -5701,18 +5708,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenhoainhan": {
     "name": "Nguyễn Hoài Nhân",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 4.8,
     "reviewsCount": 10,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
+      "Chấm điểm thoáng",
+      "Dạy có tâm",
       "Đề bám sát",
-      "Thầy cô vui tính",
-      "Phật sống UIT",
-      "Dạy có tâm"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5770,7 +5776,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "trandoanthuyen": {
     "name": "Trần Doãn Thuyên",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
@@ -5810,8 +5816,8 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -5876,7 +5882,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "huynhquockhanh": {
     "name": "Huỳnh Quốc Khánh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -5965,18 +5971,17 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "huynhthieny": {
     "name": "Huỳnh Thiện Ý",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Đề bám sát",
-      "Thầy cô vui tính",
-      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Đề bám sát"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -6002,15 +6007,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "caothinhan": {
     "name": "Cao Thị Nhạn",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -6028,7 +6033,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "letrungquan": {
     "name": "Lê Trung Quân",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -6060,11 +6065,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Không điểm danh",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -6129,9 +6133,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -6157,7 +6161,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenngoctu": {
     "name": "Nguyễn Ngọc Tự",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -6187,10 +6191,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 75,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính",
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -6232,15 +6236,13 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthimongtuyen": {
     "name": "Nguyễn Thị Mộng Tuyền",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
-    "tags": [
-      "Phật sống UIT"
-    ],
+    "tags": [],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
     "workload": "Vừa sức",
@@ -6264,9 +6266,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -6324,7 +6327,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "caohongchau": {
     "name": "Cao Hồng Châu",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -6347,15 +6350,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyentancam": {
     "name": "Nguyễn Tấn Cầm",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Dạy có tâm",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -6373,15 +6376,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthanhson": {
     "name": "Nguyễn Thanh Sơn",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -6422,11 +6425,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
       "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -6572,11 +6575,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Đề bám sát",
-      "Thầy cô vui tính",
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Đề bám sát",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -6626,7 +6629,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "buithithanhbinh": {
     "name": "Bùi Thị Thanh Bình",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -6658,8 +6661,8 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -6685,15 +6688,14 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "hathivietthuy": {
     "name": "Hà Thị Việt Thúy",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Phật sống UIT"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -6726,11 +6728,11 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Giảng dễ hiểu",
-      "Thầy cô vui tính",
       "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Không điểm danh",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -6795,9 +6797,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Dạy có tâm",
       "Chấm điểm thoáng",
+      "Dạy có tâm",
+      "Thầy cô vui tính",
       "Không điểm danh"
     ],
     "grading": "Rộng rãi (Thoáng)",
@@ -6856,16 +6858,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "dothingat": {
     "name": "Đỗ Thị Ngát",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -6965,9 +6967,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
       "Chấm điểm thoáng",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -6993,7 +6995,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "trannguyenphong": {
     "name": "Trần Nguyên Phong",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -7018,16 +7020,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "ngotuankiet": {
     "name": "Ngô Tuấn Kiệt",
-    "tier": "A",
+    "tier": "B",
     "isWarned": false,
     "rating": 4.33,
     "reviewsCount": 3,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -7061,15 +7063,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phamthinhung": {
     "name": "Phạm Thị Nhung",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -7227,15 +7229,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "vothithanhly": {
     "name": "Võ Thị Thanh Lý",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -7401,8 +7403,8 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -7435,9 +7437,8 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Phật sống UIT",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính"
     ],
     "grading": "Chuẩn chỉ",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -7517,7 +7518,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "lamngoclinh": {
     "name": "Lâm Ngọc Linh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 4,
@@ -7632,7 +7633,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenngoctruong": {
     "name": "Nguyễn Ngọc Trưởng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -7662,9 +7663,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Phật sống UIT",
+      "Chấm điểm thoáng",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -7714,7 +7716,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "vuminhsang": {
     "name": "Vũ Minh Sang",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
@@ -7794,7 +7796,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "huynhnguyenthimyvan": {
     "name": "Huỳnh Nguyễn Thị Mỹ Vân",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -7819,7 +7821,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthiyennhi": {
     "name": "Nguyễn Thị Yến Nhi",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
@@ -7883,7 +7885,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "levanthong": {
     "name": "Lê Văn Thông",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -7908,15 +7910,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyendinhquoccuong": {
     "name": "Nguyễn Đình Quốc Cường",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -8017,15 +8019,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthihonghoa": {
     "name": "Nguyễn Thị Hồng Hoa",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Dạy có tâm"
+      "Dạy có tâm",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -8066,7 +8068,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "trinhthiphuong": {
     "name": "Trịnh Thị Phượng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
@@ -8182,7 +8184,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenkhoahuy": {
     "name": "Nguyễn Khoa Huy",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -8207,15 +8209,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "trinhthithanh": {
     "name": "Trịnh Thị Thanh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -8266,16 +8268,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tranbanhiem": {
     "name": "Trần Bá Nhiệm",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -8293,7 +8295,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tatriduc": {
     "name": "Tạ Trí Đức",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 4,
@@ -8342,16 +8344,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "duongthimylinh": {
     "name": "Dương Thị Mỹ Linh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Chấm điểm thoáng",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Chấm điểm thoáng"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -8385,7 +8387,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "trinhtrongtin": {
     "name": "Trình Trọng Tín",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 3,
@@ -8427,16 +8429,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenlemykim": {
     "name": "Nguyễn Lê Mỹ Kim",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Không điểm danh",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Không điểm danh"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -8454,7 +8456,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "truongthithanhthuy": {
     "name": "Trương Thị Thanh Thùy",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
@@ -8487,7 +8489,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenhaidang": {
     "name": "Nguyễn Hải Đăng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
@@ -8520,15 +8522,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenminhtung": {
     "name": "Nguyễn Minh Tùng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Chấm điểm thoáng"
+      "Chấm điểm thoáng",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -8546,7 +8548,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "ngoducthanh": {
     "name": "Ngô Đức Thành",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -8578,9 +8580,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
+      "Chấm điểm thoáng",
       "Dạy có tâm",
-      "Chấm điểm thoáng"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -8606,7 +8608,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "dangvanem": {
     "name": "Đặng Văn Em",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -8629,7 +8631,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenconglap": {
     "name": "Nguyễn Công Lập",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -8654,7 +8656,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "luongngochoang": {
     "name": "Lương Ngọc Hoàng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -8679,7 +8681,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenminhhang": {
     "name": "Nguyễn Minh Hằng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 2,
@@ -8719,10 +8721,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
       "Chấm điểm thoáng",
+      "Không điểm danh",
       "Đề bám sát",
-      "Không điểm danh"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -8780,10 +8782,10 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
       "Chấm điểm thoáng",
+      "Không điểm danh",
       "Đề bám sát",
-      "Không điểm danh"
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -8848,7 +8850,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phannguyenthuyan": {
     "name": "Phan Nguyễn Thụy An",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -8873,16 +8875,16 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "huynhthinamhai": {
     "name": "Huỳnh Thị Nam Hải",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
+      "Đề bám sát",
       "Thầy cô vui tính",
-      "Giảng dễ hiểu",
-      "Đề bám sát"
+      "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Có điểm danh",
@@ -8926,7 +8928,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "hothiminhphuong": {
     "name": "Hồ Thị Minh Phượng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -8952,15 +8954,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyentrongchinh/letrantrongkhiem": {
     "name": "Nguyễn Trọng Chỉnh/Lê Trần Trọng Khiêm",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Thầy cô vui tính"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -8978,7 +8980,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "dothiphuonguyen": {
     "name": "Đỗ Thị Phương Uyên",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9001,7 +9003,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthihanh": {
     "name": "Nguyễn Thị Hạnh",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9026,7 +9028,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "lykimcuong": {
     "name": "Lý Kim Cương",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9049,7 +9051,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tranvannhuy": {
     "name": "Trần Văn Như Ý",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9072,7 +9074,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyentrinhdong": {
     "name": "Nguyễn Trịnh Đông",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9097,7 +9099,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "tranthihoaithuong": {
     "name": "Trần Thị Hoài Thương",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9123,7 +9125,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "phamtrungtuan": {
     "name": "Phạm Trung Tuấn",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9148,15 +9150,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthikimphung": {
     "name": "Nguyễn Thị Kim Phụng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Dạy có tâm",
-      "Không điểm danh"
+      "Không điểm danh",
+      "Dạy có tâm"
     ],
     "grading": "Rộng rãi (Thoáng)",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -9174,7 +9176,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenthibichngoc": {
     "name": "Nguyễn Thị Bích Ngọc",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9247,14 +9249,13 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "dothithanhtuyen": {
     "name": "Đỗ Thị Thanh Tuyền",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Phật sống UIT",
       "Không điểm danh"
     ],
     "grading": "Rộng rãi (Thoáng)",
@@ -9273,7 +9274,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "lekimhung": {
     "name": "Lê Kim Hùng",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9361,9 +9362,9 @@ const EVERYTIME_REAL_DATABASE = {
     "recommendPercent": 50,
     "redFlags": [],
     "tags": [
+      "Không điểm danh",
       "Dạy có tâm",
-      "Giảng dễ hiểu",
-      "Không điểm danh"
+      "Giảng dễ hiểu"
     ],
     "grading": "Chuẩn chỉ",
     "attendance": "Không bắt buộc / Dễ thở",
@@ -9389,7 +9390,7 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyenminhson": {
     "name": "Nguyễn Minh Sơn",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
@@ -9412,15 +9413,15 @@ const EVERYTIME_REAL_DATABASE = {
   },
   "nguyennuhuyentrang": {
     "name": "Nguyễn Nữ Huyền Trang",
-    "tier": "S",
+    "tier": "A",
     "isWarned": false,
     "rating": 5.0,
     "reviewsCount": 1,
     "recommendPercent": 100,
     "redFlags": [],
     "tags": [
-      "Thầy cô vui tính",
       "Dạy có tâm",
+      "Thầy cô vui tính",
       "Giảng dễ hiểu"
     ],
     "grading": "Rộng rãi (Thoáng)",
