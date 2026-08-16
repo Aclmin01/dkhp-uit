@@ -68,6 +68,17 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
+function clearElementChildren(element) {
+  if (!element) return;
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+}
+
+function appendTextNode(element, text) {
+  element.appendChild(document.createTextNode(text));
+}
+
 function getActivePracticeChoices() {
   if (!plans || !plans[currentPlanId]) return {};
   if (!plans[currentPlanId].practiceChoices) {
@@ -1688,14 +1699,22 @@ function openScriptModal() {
 
   const previewList = document.getElementById('scriptClassesPreviewList');
   if (previewList) {
-    previewList.innerHTML = '';
+    clearElementChildren(previewList);
     if (classCodes.length === 0) {
-      previewList.innerHTML = `<span style="font-size: 12px; color: var(--text-muted);">(Chưa chọn môn nào)</span>`;
+      const empty = document.createElement('span');
+      empty.style.fontSize = '12px';
+      empty.style.color = 'var(--text-muted)';
+      empty.textContent = '(Chưa chọn môn nào)';
+      previewList.appendChild(empty);
     } else {
       classCodes.forEach(code => {
         const pill = document.createElement('span');
         pill.className = 'script-class-pill';
-        pill.innerHTML = `<i class="fa-solid fa-check" style="font-size: 9px;"></i> ${code}`;
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid fa-check';
+        icon.style.fontSize = '9px';
+        pill.appendChild(icon);
+        appendTextNode(pill, ` ${code}`);
         previewList.appendChild(pill);
       });
     }
@@ -1742,7 +1761,15 @@ function showAppToast(message) {
     toast.className = 'app-toast';
     document.body.appendChild(toast);
   }
-  toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--accent-emerald);"></i> <span>${escapeHtml(message)}</span>`;
+  clearElementChildren(toast);
+  const icon = document.createElement('i');
+  icon.className = 'fa-solid fa-circle-check';
+  icon.style.color = 'var(--accent-emerald)';
+  const text = document.createElement('span');
+  text.textContent = message;
+  toast.appendChild(icon);
+  toast.appendChild(document.createTextNode(' '));
+  toast.appendChild(text);
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
@@ -1797,13 +1824,38 @@ function handleApplyImportCodes() {
   const feedback = document.getElementById('importResultFeedback');
   if (!inputArea || !feedback) return;
 
+  function renderFeedback({ isError, iconClass, message, detail }) {
+    feedback.style.display = 'block';
+    feedback.style.backgroundColor = isError ? 'var(--danger-light)' : 'rgba(16, 185, 129, 0.15)';
+    feedback.style.color = isError ? 'var(--danger)' : 'var(--accent-emerald)';
+    feedback.style.border = isError
+      ? '1px solid rgba(239, 68, 68, 0.3)'
+      : '1px solid rgba(16, 185, 129, 0.3)';
+
+    clearElementChildren(feedback);
+
+    const icon = document.createElement('i');
+    icon.className = iconClass;
+    feedback.appendChild(icon);
+    appendTextNode(feedback, ` ${message}`);
+
+    if (detail) {
+      const detailDiv = document.createElement('div');
+      detailDiv.style.marginTop = '6px';
+      detailDiv.style.fontSize = '12px';
+      detailDiv.style.color = isError ? 'var(--danger)' : 'var(--accent-amber)';
+      detailDiv.textContent = detail;
+      feedback.appendChild(detailDiv);
+    }
+  }
+
   const raw = inputArea.value.trim();
   if (!raw) {
-    feedback.style.display = 'block';
-    feedback.style.backgroundColor = 'var(--danger-light)';
-    feedback.style.color = 'var(--danger)';
-    feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-    feedback.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Vui lòng dán danh sách mã lớp vào ô trước khi bấm áp dụng!';
+    renderFeedback({
+      isError: true,
+      iconClass: 'fa-solid fa-circle-exclamation',
+      message: 'Vui lòng dán danh sách mã lớp vào ô trước khi bấm áp dụng!'
+    });
     return;
   }
 
@@ -1847,12 +1899,12 @@ function handleApplyImportCodes() {
   });
 
   if (matchedTheories.size === 0) {
-    feedback.style.display = 'block';
-    feedback.style.backgroundColor = 'var(--danger-light)';
-    feedback.style.color = 'var(--danger)';
-    feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-    const escapedInput = lines.map(escapeHtml).join(', ');
-    feedback.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Không tìm thấy môn học nào khớp với các mã: <strong>${escapedInput}</strong> trong dữ liệu hiện tại!`;
+    renderFeedback({
+      isError: true,
+      iconClass: 'fa-solid fa-circle-xmark',
+      message: 'Không tìm thấy môn học nào khớp trong dữ liệu hiện tại!',
+      detail: `Mã đã nhập: ${lines.join(', ')}`
+    });
     return;
   }
 
@@ -1879,17 +1931,12 @@ function handleApplyImportCodes() {
   renderAll();
 
   // Show Success Feedback
-  feedback.style.display = 'block';
-  feedback.style.backgroundColor = 'rgba(16, 185, 129, 0.15)';
-  feedback.style.color = 'var(--accent-emerald)';
-  feedback.style.border = '1px solid rgba(16, 185, 129, 0.3)';
-
-  let msg = `<i class="fa-solid fa-circle-check"></i> <strong>Đã xếp thành công ${matchedTheories.size} môn học phần vào TKB!</strong>`;
-  if (notFoundCodes.length > 0) {
-    const escapedNotFound = notFoundCodes.map(escapeHtml).join(', ');
-    msg += `<div style="margin-top: 6px; font-size: 12px; color: var(--accent-amber);">⚠️ Không tìm thấy ${notFoundCodes.length} mã: ${escapedNotFound}</div>`;
-  }
-  feedback.innerHTML = msg;
+  renderFeedback({
+    isError: false,
+    iconClass: 'fa-solid fa-circle-check',
+    message: `Đã xếp thành công ${matchedTheories.size} môn học phần vào TKB!`,
+    detail: notFoundCodes.length > 0 ? `Không tìm thấy ${notFoundCodes.length} mã: ${notFoundCodes.join(', ')}` : ''
+  });
   showAppToast(`⚡ Đã tự động xếp ${matchedTheories.size} môn học vào TKB!`);
 }
 
@@ -2705,6 +2752,5 @@ bindEvents = function() {
   const btnDownloadScriptFile = document.getElementById('btnDownloadScriptFile');
   if (btnDownloadScriptFile) btnDownloadScriptFile.addEventListener('click', downloadScriptFile);
 };
-
 
 
