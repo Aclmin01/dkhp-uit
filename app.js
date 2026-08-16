@@ -57,7 +57,24 @@ let currentFilters = {
   hideConflict: false,
   onlySelected: false
 };
-let selectedPracticeChoices = {}; // theoryMaLop -> selected practiceMaLop
+// Helper for strict XSS / HTML Injection Defense
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function getActivePracticeChoices() {
+  if (!plans || !plans[currentPlanId]) return {};
+  if (!plans[currentPlanId].practiceChoices) {
+    plans[currentPlanId].practiceChoices = {};
+  }
+  return plans[currentPlanId].practiceChoices;
+}
 
 // ==============================================================================
 // 3. INITIALIZATION
@@ -98,14 +115,10 @@ function buildCourseMap() {
 
 function getDefaultPlans() {
   return {
-    'plan_1': { name: 'Kế hoạch 1 (Chính)', selected: [] },
-    'plan_2': { name: 'Kế hoạch 2 (Dự phòng)', selected: [] },
-    'plan_3': { name: 'Kế hoạch 3', selected: [] }
+    'plan_1': { name: 'Kế hoạch 1 (Chính)', selected: [], practiceChoices: {} },
+    'plan_2': { name: 'Kế hoạch 2 (Dự phòng)', selected: [], practiceChoices: {} },
+    'plan_3': { name: 'Kế hoạch 3', selected: [], practiceChoices: {} }
   };
-}
-
-function getDefaultPracticeChoices() {
-  return {};
 }
 
 function loadPlansFromStorage() {
@@ -129,22 +142,29 @@ function loadPlansFromStorage() {
     plans = getDefaultPlans();
   }
 
+  // Ensure each plan has practiceChoices dictionary
+  Object.keys(plans).forEach(pid => {
+    if (!plans[pid].practiceChoices) {
+      plans[pid].practiceChoices = {};
+    }
+  });
+
+  // Legacy migration for old global storage
+  const legacyChoices = localStorage.getItem('tkb_practice_choices');
+  if (legacyChoices) {
+    try {
+      const parsed = JSON.parse(legacyChoices);
+      if (parsed && typeof parsed === 'object' && plans['plan_1'] && Object.keys(plans['plan_1'].practiceChoices).length === 0) {
+        plans['plan_1'].practiceChoices = parsed;
+      }
+    } catch (e) {}
+  }
+
   const savedActivePlan = localStorage.getItem('tkb_active_plan');
   if (savedActivePlan && plans[savedActivePlan]) {
     currentPlanId = savedActivePlan;
   } else {
     currentPlanId = Object.keys(plans)[0] || 'plan_1';
-  }
-
-  const savedChoices = localStorage.getItem('tkb_practice_choices');
-  if (savedChoices) {
-    try { 
-      selectedPracticeChoices = JSON.parse(savedChoices) || {}; 
-    } catch (e) {
-      selectedPracticeChoices = {};
-    }
-  } else {
-    selectedPracticeChoices = {};
   }
 }
 
@@ -152,7 +172,6 @@ function savePlansToStorage() {
   const plansJson = JSON.stringify(plans);
   localStorage.setItem('tkb_plans', plansJson);
   localStorage.setItem('tkb_active_plan', currentPlanId);
-  localStorage.setItem('tkb_practice_choices', JSON.stringify(selectedPracticeChoices));
 
   if (window.DKHP_SECURITY) {
     DKHP_SECURITY.sha256(plansJson).then(hash => {
@@ -374,13 +393,14 @@ function checkTwoItemsOverlap(itemA, itemB) {
 
 function getSelectedFlatItems() {
   const currentSelectedIds = plans[currentPlanId]?.selected || [];
+  const pChoices = getActivePracticeChoices();
   const result = [];
   currentSelectedIds.forEach(id => {
     const item = courseMap.get(id);
     if (item) {
       result.push(item);
-      if (!item.isTH && selectedPracticeChoices[id]) {
-        const pItem = courseMap.get(selectedPracticeChoices[id]);
+      if (!item.isTH && pChoices[id]) {
+        const pItem = courseMap.get(pChoices[id]);
         if (pItem) result.push(pItem);
       }
     }
@@ -625,6 +645,7 @@ function renderCourseResults() {
 
   container.innerHTML = '';
   const fragment = document.createDocumentFragment();
+  const pChoices = getActivePracticeChoices();
 
   filtered.slice(0, 120).forEach(course => {
     const isSelected = selectedIds.has(course.id);
@@ -634,32 +655,32 @@ function renderCourseResults() {
     const theoryConflict = !isSelected ? checkItemConflictWithCurrent(course) : { hasConflict: false };
 
     const thuStr = course.thu === '*' ? 'Chưa xếp' : `Thứ ${course.thu}`;
-    const tietStr = course.tiet.length ? `Tiết ${course.tiet.join(',')}` : (course.tietRaw || 'N/A');
+    const tietStr = (course.tiet && course.tiet.length) ? `Tiết ${course.tiet.join(',')}` : (course.tietRaw || 'N/A');
     const gvStr = course.tenGV || 'Chưa phân công';
     const phongStr = course.phong || 'Chưa xếp';
 
     // Calculate total subject credits (LT + TH)
     const practiceTC = (course.practices && course.practices.length > 0) ? (course.practices[0].soTC || 0) : 0;
-    const totalCourseTC = course.soTC + practiceTC;
-    const creditsLabel = practiceTC > 0 ? `${totalCourseTC} TC` : `${course.soTC} TC`;
+    const totalCourseTC = (course.soTC || 0) + practiceTC;
+    const creditsLabel = practiceTC > 0 ? `${totalCourseTC} TC` : `${course.soTC || 0} TC`;
 
     // Compact Practice Pills HTML
     let practiceHTML = '';
     if (course.practices && course.practices.length > 0) {
-      const selectedPracticeId = selectedPracticeChoices[course.id] || course.practices[0].id;
+      const selectedPracticeId = pChoices[course.id] || course.practices[0].id;
       
       const pills = course.practices.map(p => {
         const isPSelected = selectedPracticeId === p.id;
         const pConflict = checkItemConflictWithCurrent(p);
         const pThu = p.thu === '*' ? '?' : `T${p.thu}`;
-        const pTiet = p.tiet.length ? `${p.tiet[0]}-${p.tiet[p.tiet.length-1]}` : p.tietRaw;
+        const pTiet = (p.tiet && p.tiet.length) ? `${p.tiet[0]}-${p.tiet[p.tiet.length-1]}` : (p.tietRaw || 'N/A');
         const groupSuffix = p.maLop.replace(course.maLop, '');
 
         return `
           <button type="button" class="practice-pill-btn ${isPSelected ? 'selected' : ''} ${pConflict.hasConflict ? 'conflict' : ''}"
-                  title="Nhóm ${groupSuffix}: ${pThu} (Tiết ${pTiet}) Phòng ${p.phong || 'N/A'}"
-                  onclick="selectPracticeGroup('${course.id}', '${p.id}', event)">
-            <strong>${groupSuffix || p.maLop}</strong>: ${pThu} (${pTiet})
+                  title="Nhóm ${escapeHtml(groupSuffix)}: ${escapeHtml(pThu)} (Tiết ${escapeHtml(pTiet)}) Phòng ${escapeHtml(p.phong || 'N/A')}"
+                  onclick="selectPracticeGroup('${escapeHtml(course.id)}', '${escapeHtml(p.id)}', event)">
+            <strong>${escapeHtml(groupSuffix || p.maLop)}</strong>: ${escapeHtml(pThu)} (${escapeHtml(pTiet)})
           </button>
         `;
       }).join('');
@@ -679,21 +700,21 @@ function renderCourseResults() {
       card.innerHTML = `
       <div class="course-card-top">
         <div style="display: flex; align-items: center; gap: 5px;">
-          <span class="course-code-badge">${course.maMH}</span>
-          <span class="course-class-code">${course.maLop}</span>
+          <span class="course-code-badge">${escapeHtml(course.maMH)}</span>
+          <span class="course-class-code">${escapeHtml(course.maLop)}</span>
         </div>
-        <span class="course-credits-badge">${creditsLabel}</span>
+        <span class="course-credits-badge">${escapeHtml(creditsLabel)}</span>
       </div>
 
-      <div class="course-title">${course.tenMH}</div>
+      <div class="course-title">${escapeHtml(course.tenMH)}</div>
 
       <div class="course-meta-row">
-        <span class="meta-chip"><i class="fa-regular fa-calendar"></i> ${thuStr}</span>
-        <span class="meta-chip"><i class="fa-regular fa-clock"></i> ${tietStr}</span>
-        <span class="meta-chip"><i class="fa-solid fa-door-open"></i> ${phongStr}</span>
-        <span class="meta-chip meta-chip-teacher" onclick="event.stopPropagation(); openEverytimeModal('${(course.tenGV || '').replace(/'/g, "\\'")}')" title="Bấm để xem đánh giá Everytime của ${gvStr}">
+        <span class="meta-chip"><i class="fa-regular fa-calendar"></i> ${escapeHtml(thuStr)}</span>
+        <span class="meta-chip"><i class="fa-regular fa-clock"></i> ${escapeHtml(tietStr)}</span>
+        <span class="meta-chip"><i class="fa-solid fa-door-open"></i> ${escapeHtml(phongStr)}</span>
+        <span class="meta-chip meta-chip-teacher" onclick="event.stopPropagation(); openEverytimeModal('${escapeHtml(course.tenGV || '').replace(/'/g, "\\'")}')" title="Bấm để xem đánh giá Everytime của ${escapeHtml(gvStr)}">
           <i class="fa-solid fa-user-tie" style="color: #e11d48;"></i>
-          <span>${gvStr}</span>
+          <span>${escapeHtml(gvStr)}</span>
           ${etBadge}
         </span>
       </div>
@@ -703,11 +724,11 @@ function renderCourseResults() {
       <div class="course-card-actions">
         ${theoryConflict.hasConflict ? `
           <span style="font-size: 10.5px; font-weight: 700; color: var(--danger);">
-            <i class="fa-solid fa-triangle-exclamation"></i> Trùng với ${theoryConflict.conflictingWith.maLop}
+            <i class="fa-solid fa-triangle-exclamation"></i> Trùng với ${escapeHtml(theoryConflict.conflictingWith.maLop)}
           </span>
         ` : '<span></span>'}
         
-        <button class="btn ${isSelected ? 'btn-danger' : 'btn-primary'}" onclick="toggleCourseSelect('${course.id}')" style="padding: 4px 10px; font-size: 12px;">
+        <button class="btn ${isSelected ? 'btn-danger' : 'btn-primary'}" onclick="toggleCourseSelect('${escapeHtml(course.id)}')" style="padding: 4px 10px; font-size: 12px;">
           <i class="fa-solid ${isSelected ? 'fa-xmark' : 'fa-plus'}"></i>
           <span>${isSelected ? 'Bỏ chọn' : 'Thêm vào TKB'}</span>
         </button>
@@ -722,7 +743,8 @@ function renderCourseResults() {
 
 window.selectPracticeGroup = function(theoryId, practiceId, e) {
   if (e) e.stopPropagation();
-  selectedPracticeChoices[theoryId] = practiceId;
+  const pChoices = getActivePracticeChoices();
+  pChoices[theoryId] = practiceId;
   savePlansToStorage();
   renderAll();
 };
@@ -737,11 +759,11 @@ window.toggleCourseSelect = function(courseId) {
   } else {
     currentPlan.selected.push(courseId);
     const course = courseMap.get(courseId);
-    if (course && course.practices && course.practices.length > 0 && !selectedPracticeChoices[courseId]) {
-      selectedPracticeChoices[courseId] = course.practices[0].id;
+    const pChoices = getActivePracticeChoices();
+    if (course && course.practices && course.practices.length > 0 && !pChoices[courseId]) {
+      pChoices[courseId] = course.practices[0].id;
     }
   }
-
   savePlansToStorage();
   renderAll();
 };
@@ -858,9 +880,10 @@ window.removeCourseFromMatrix = function(itemId) {
   const currentPlan = plans[currentPlanId];
   if (!currentPlan) return;
 
+  const pChoices = getActivePracticeChoices();
   let targetIdToRemove = itemId;
   for (const theoryId of currentPlan.selected) {
-    if (selectedPracticeChoices[theoryId] === itemId) {
+    if (pChoices[theoryId] === itemId) {
       targetIdToRemove = theoryId;
       break;
     }
@@ -879,6 +902,7 @@ window.removeCourseFromMatrix = function(itemId) {
 // ==============================================================================
 function renderStats() {
   const currentSelectedIds = plans[currentPlanId]?.selected || [];
+  const pChoices = getActivePracticeChoices();
   let totalTC = 0;
   const daysSet = new Set();
 
@@ -889,8 +913,8 @@ function renderStats() {
       if (item.thu && item.thu !== '*') daysSet.add(item.thu);
       
       // Add practice credits accurately
-      if (selectedPracticeChoices[id]) {
-        const pItem = courseMap.get(selectedPracticeChoices[id]);
+      if (pChoices[id]) {
+        const pItem = courseMap.get(pChoices[id]);
         if (pItem) {
           totalTC += (pItem.soTC || 0);
           if (pItem.thu && pItem.thu !== '*') daysSet.add(pItem.thu);
@@ -915,7 +939,7 @@ function renderStats() {
     statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Trùng ${conflicts.length} lịch`;
 
     const conflictDescriptions = conflicts.map(c => 
-      `<strong>${c.itemA.maLop}</strong> (${c.itemA.tenMH}) trùng với <strong>${c.itemB.maLop}</strong> (${c.itemB.tenMH}) vào Thứ ${c.itemA.thu}`
+      `<strong>${escapeHtml(c.itemA.maLop)}</strong> (${escapeHtml(c.itemA.tenMH)}) trùng với <strong>${escapeHtml(c.itemB.maLop)}</strong> (${escapeHtml(c.itemB.tenMH)}) vào Thứ ${escapeHtml(c.itemA.thu)}`
     ).join(' | ');
 
     alertText.innerHTML = `⚠️ Phát hiện trùng lịch: ${conflictDescriptions}`;
@@ -933,6 +957,7 @@ function renderSelectedTable() {
   if (!tbody) return;
 
   const currentSelectedIds = plans[currentPlanId]?.selected || [];
+  const pChoices = getActivePracticeChoices();
   let totalTC = 0;
 
   if (currentSelectedIds.length === 0) {
@@ -954,63 +979,53 @@ function renderSelectedTable() {
 
     totalTC += (course.soTC || 0);
     const thuStr = course.thu === '*' ? 'Chưa xếp' : `Thứ ${course.thu}`;
-    const tietStr = course.tiet.length ? `Tiết ${course.tiet.join(',')}` : course.tietRaw;
+    const tietStr = (course.tiet && course.tiet.length) ? `Tiết ${course.tiet.join(',')}` : (course.tietRaw || 'N/A');
 
-    const etRating = typeof getEverytimeRating === 'function' ? getEverytimeRating(course.tenGV) : null;
-    const etBadge = etRating ? `
-      <span class="everytime-badge" style="font-size: 10px; margin-left: 6px;" onclick="openEverytimeModal('${(course.tenGV || '').replace(/'/g, "\\'")}')" title="Xem review Everytime">
-        ⭐ ${etRating.rating}
-      </span>
-    ` : '';
+    const etBadge = renderEverytimeBadge(course.tenGV);
 
     const tr = document.createElement('tr');
     tr.style.borderBottom = '1px solid var(--border-color)';
     tr.innerHTML = `
-      <td style="padding: 8px; font-family: var(--font-mono); font-weight: 700; color: var(--primary);">${course.maLop}</td>
+      <td style="padding: 8px; font-family: var(--font-mono); font-weight: 700; color: var(--primary);">${escapeHtml(course.maLop)}</td>
       <td style="padding: 8px; font-weight: 600;">
-        ${course.tenMH}
+        ${escapeHtml(course.tenMH)}
         <div style="font-size: 11.5px; color: var(--text-muted); font-weight: 400; margin-top: 2px;">
-          <i class="fa-solid fa-user-tie"></i> ${course.tenGV || 'Chưa phân công'} ${etBadge}
+          <i class="fa-solid fa-user-tie"></i> ${escapeHtml(course.tenGV || 'Chưa phân công')} ${etBadge}
         </div>
       </td>
-      <td style="padding: 8px; font-weight: 700; color: var(--accent-emerald);">${course.soTC} TC</td>
-      <td style="padding: 8px;">${thuStr} (${tietStr})</td>
-      <td style="padding: 8px;">${course.phong || 'N/A'}</td>
+      <td style="padding: 8px; font-weight: 700; color: var(--accent-emerald);">${course.soTC || 0} TC</td>
+      <td style="padding: 8px;">${escapeHtml(thuStr)} (${escapeHtml(tietStr)})</td>
+      <td style="padding: 8px;">${escapeHtml(course.phong || 'N/A')}</td>
       <td style="padding: 8px; text-align: right;">
-        <button class="btn btn-danger" style="padding: 3px 8px; font-size: 11px;" onclick="toggleCourseSelect('${course.id}')">
+        <button class="btn btn-danger" style="padding: 3px 8px; font-size: 11px;" onclick="toggleCourseSelect('${escapeHtml(course.id)}')">
           <i class="fa-solid fa-trash-can"></i> Xóa
         </button>
       </td>
     `;
     tbody.appendChild(tr);
 
-    if (selectedPracticeChoices[id]) {
-      const p = courseMap.get(selectedPracticeChoices[id]);
+    if (pChoices[id]) {
+      const p = courseMap.get(pChoices[id]);
       if (p) {
         totalTC += (p.soTC || 0);
         const pThu = p.thu === '*' ? 'Chưa xếp' : `Thứ ${p.thu}`;
-        const pTiet = p.tiet.length ? `Tiết ${p.tiet.join(',')}` : p.tietRaw;
-        const pEtRating = typeof getEverytimeRating === 'function' ? getEverytimeRating(p.tenGV) : null;
-        const pEtBadge = pEtRating ? `
-          <span class="everytime-badge" style="font-size: 10px; margin-left: 6px;" onclick="openEverytimeModal('${(p.tenGV || '').replace(/'/g, "\\'")}')" title="Xem review Everytime">
-            ⭐ ${pEtRating.rating}
-          </span>
-        ` : '';
+        const pTiet = (p.tiet && p.tiet.length) ? `Tiết ${p.tiet.join(',')}` : (p.tietRaw || 'N/A');
+        const pEtBadge = renderEverytimeBadge(p.tenGV);
 
         const pTr = document.createElement('tr');
         pTr.style.borderBottom = '1px solid var(--border-color)';
         pTr.style.backgroundColor = 'var(--bg-surface-elevated)';
         pTr.innerHTML = `
-          <td style="padding: 5px 8px 5px 20px; font-family: var(--font-mono); font-size: 11.5px; color: var(--accent-purple);">↳ ${p.maLop} (TH)</td>
+          <td style="padding: 5px 8px 5px 20px; font-family: var(--font-mono); font-size: 11.5px; color: var(--accent-purple);">↳ ${escapeHtml(p.maLop)} (TH)</td>
           <td style="padding: 5px 8px; font-size: 11.5px; color: var(--text-secondary);">
-            ${p.tenMH} (Thực hành)
+            ${escapeHtml(p.tenMH)} (Thực hành)
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 1px;">
-              <i class="fa-solid fa-user-tie"></i> ${p.tenGV || 'Chưa phân công'} ${pEtBadge}
+              <i class="fa-solid fa-user-tie"></i> ${escapeHtml(p.tenGV || 'Chưa phân công')} ${pEtBadge}
             </div>
           </td>
-          <td style="padding: 5px 8px; font-size: 11.5px; font-weight: 700; color: var(--accent-emerald);">${p.soTC} TC</td>
-          <td style="padding: 5px 8px; font-size: 11.5px;">${pThu} (${pTiet})</td>
-          <td style="padding: 5px 8px; font-size: 11.5px;">${p.phong || 'N/A'}</td>
+          <td style="padding: 5px 8px; font-size: 11.5px; font-weight: 700; color: var(--accent-emerald);">${p.soTC || 0} TC</td>
+          <td style="padding: 5px 8px; font-size: 11.5px;">${escapeHtml(pThu)} (${escapeHtml(pTiet)})</td>
+          <td style="padding: 5px 8px; font-size: 11.5px;">${escapeHtml(p.phong || 'N/A')}</td>
           <td style="padding: 5px 8px; text-align: right; font-size: 11px; color: var(--text-muted);">Đi kèm LT</td>
         `;
         tbody.appendChild(pTr);
@@ -1319,14 +1334,81 @@ function bindEvents() {
     }
   });
 
-  // Export JSON Backup
-  document.getElementById('btnExportJson').addEventListener('click', () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(plans, null, 2));
-    const dl = document.createElement('a');
-    dl.setAttribute("href", dataStr);
-    dl.setAttribute("download", `TKB_Backup_${new Date().toISOString().slice(0,10)}.json`);
-    dl.click();
-  });
+  // JSON Backup / Export & Import Handlers
+  const btnExportJson = document.getElementById('btnExportJson');
+  if (btnExportJson) {
+    btnExportJson.addEventListener('click', () => {
+      openModal('modalBackupJson');
+    });
+  }
+
+  const btnDoExportJson = document.getElementById('btnDoExportJson');
+  if (btnDoExportJson) {
+    btnDoExportJson.addEventListener('click', () => {
+      const backupPayload = {
+        version: "2.0",
+        exportDate: new Date().toISOString(),
+        plans: plans,
+        activePlan: currentPlanId
+      };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupPayload, null, 2));
+      const dl = document.createElement('a');
+      dl.setAttribute("href", dataStr);
+      dl.setAttribute("download", `DKHP_UIT_Backup_${new Date().toISOString().slice(0,10)}.json`);
+      dl.click();
+      closeModal('modalBackupJson');
+      if (typeof showAppToast === 'function') {
+        showAppToast('📤 Đã tải xuống file sao lưu TKB thành công!');
+      }
+    });
+  }
+
+  const btnTriggerImportJson = document.getElementById('btnTriggerImportJson');
+  const jsonBackupFileInput = document.getElementById('jsonBackupFileInput');
+  if (btnTriggerImportJson && jsonBackupFileInput) {
+    btnTriggerImportJson.addEventListener('click', () => {
+      jsonBackupFileInput.click();
+    });
+
+    jsonBackupFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const imported = JSON.parse(event.target.result);
+          let validPlans = null;
+
+          if (imported && imported.plans && typeof imported.plans === 'object') {
+            validPlans = imported.plans;
+          } else if (imported && typeof imported === 'object' && Object.keys(imported).some(k => imported[k]?.name && Array.isArray(imported[k]?.selected))) {
+            validPlans = imported;
+          }
+
+          if (validPlans && Object.keys(validPlans).length > 0) {
+            plans = validPlans;
+            Object.keys(plans).forEach(pid => {
+              if (!plans[pid].practiceChoices) plans[pid].practiceChoices = {};
+            });
+            currentPlanId = (imported.activePlan && plans[imported.activePlan]) ? imported.activePlan : Object.keys(plans)[0];
+            savePlansToStorage();
+            renderAll();
+            closeModal('modalBackupJson');
+            if (typeof showAppToast === 'function') {
+              showAppToast('📥 Đã khôi phục toàn bộ Kế hoạch TKB từ file JSON thành công!');
+            }
+          } else {
+            alert('File JSON không đúng định dạng sao lưu Thời khóa biểu UIT!');
+          }
+        } catch (err) {
+          alert('Lỗi đọc file JSON: ' + err.message);
+        }
+        jsonBackupFileInput.value = '';
+      };
+      reader.readAsText(file);
+    });
+  }
 
   // Create New Plan
   document.getElementById('btnCreateNewPlan').addEventListener('click', () => {
@@ -1443,7 +1525,8 @@ function getSelectedClassCodes() {
 
     // 2. Add Practice Class Code (if course has practices)
     if (course.practices && course.practices.length > 0) {
-      const chosenPracticeId = selectedPracticeChoices[cid] || course.practices[0].id;
+      const pChoices = getActivePracticeChoices();
+      const chosenPracticeId = pChoices[cid] || course.practices[0].id;
       const practiceObj = courseMap.get(chosenPracticeId);
       if (practiceObj && practiceObj.maLop) {
         codes.push(practiceObj.maLop.trim());
@@ -1690,8 +1773,9 @@ function handleApplyImportCodes() {
   });
 
   // Assign practice choices
+  const pChoices = getActivePracticeChoices();
   Object.keys(matchedPractices).forEach(tid => {
-    selectedPracticeChoices[tid] = matchedPractices[tid];
+    pChoices[tid] = matchedPractices[tid];
   });
 
   savePlansToStorage();
@@ -1857,13 +1941,7 @@ function initAutoSchedCombobox() {
 }
 
 function checkTwoSlotsOverlap(s1, s2) {
-  if (!s1 || !s2) return false;
-  if (parseInt(s1.thu, 10) !== parseInt(s2.thu, 10)) return false;
-  const start1 = parseInt(s1.tietBatDau, 10);
-  const end1 = parseInt(s1.tietKetThuc, 10);
-  const start2 = parseInt(s2.tietBatDau, 10);
-  const end2 = parseInt(s2.tietKetThuc, 10);
-  return !(end1 < start2 || start1 > end2);
+  return checkTwoItemsOverlap(s1, s2);
 }
 
 function runAutoSchedulerAlgorithm() {
@@ -1960,7 +2038,7 @@ function runAutoSchedulerAlgorithm() {
       let collision = false;
       for (const slot of candidateUnit.slots) {
         for (const occ of occupiedSlots) {
-          if (checkTwoSlotsOverlap(slot, occ)) {
+          if (checkTwoItemsOverlap(slot, occ)) {
             collision = true;
             break;
           }
@@ -1987,7 +2065,7 @@ function runAutoSchedulerAlgorithm() {
     }
   }
 
-  // 4. REFINED MULTI-OBJECTIVE MATHEMATICAL SCORING ALGORITHM
+  // 4. REFINED MULTI-OBJECTIVE MATHEMATICAL SCORING ALGORITHM (ACCURATE SCHEMA)
   const scoredSolutions = validCombinations.map(combo => {
     let score = 50.0; // Baseline neutral score
     let totalCredits = 0;
@@ -1997,8 +2075,8 @@ function runAutoSchedulerAlgorithm() {
     const classCodes = [];
 
     combo.forEach(u => {
-      totalCredits += (u.theory.soTinChi || 0);
-      if (u.practice) totalCredits += (u.practice.soTinChi || 0);
+      totalCredits += (u.theory.soTC || 0);
+      if (u.practice) totalCredits += (u.practice.soTC || 0);
 
       classCodes.push(u.theory.maLop);
       if (u.practice) classCodes.push(u.practice.maLop);
@@ -2006,9 +2084,11 @@ function runAutoSchedulerAlgorithm() {
       u.slots.forEach(s => {
         allSlots.push(s);
         const day = parseInt(s.thu, 10);
-        daysUsed.add(day);
-        if (!daySlotsMap[day]) daySlotsMap[day] = [];
-        daySlotsMap[day].push(s);
+        if (!isNaN(day)) {
+          daysUsed.add(day);
+          if (!daySlotsMap[day]) daySlotsMap[day] = [];
+          daySlotsMap[day].push(s);
+        }
       });
     });
 
@@ -2033,12 +2113,13 @@ function runAutoSchedulerAlgorithm() {
       score += ((6 - daysUsed.size) * 6.0);
     }
 
-    // Score Component B: Shift Alignment (Morning / Afternoon)
+    // Score Component B: Shift Alignment (Morning: Tiet 1-5, Afternoon: Tiet 6-10)
     if (shiftPref === 'morning') {
       let morningCount = 0;
       let totalSlots = allSlots.length || 1;
       allSlots.forEach(s => {
-        if (s.tietBatDau <= 5) morningCount++;
+        const periods = s.tiet || [];
+        if (periods.some(p => p <= 5)) morningCount++;
       });
       const ratio = morningCount / totalSlots;
       score += (ratio * 25.0) - ((1 - ratio) * 20.0);
@@ -2046,19 +2127,27 @@ function runAutoSchedulerAlgorithm() {
       let afternoonCount = 0;
       let totalSlots = allSlots.length || 1;
       allSlots.forEach(s => {
-        if (s.tietBatDau >= 6) afternoonCount++;
+        const periods = s.tiet || [];
+        if (periods.some(p => p >= 6 && p <= 10)) afternoonCount++;
       });
       const ratio = afternoonCount / totalSlots;
       score += (ratio * 25.0) - ((1 - ratio) * 20.0);
     }
 
-    // Score Component C: Avoid Idle Gaps between classes
+    // Score Component C: Avoid Idle Gaps between classes in same day
     if (avoidGaps) {
       let totalGapPeriods = 0;
       Object.keys(daySlotsMap).forEach(d => {
-        const slotsOnDay = daySlotsMap[d].sort((a, b) => a.tietBatDau - b.tietBatDau);
+        const slotsOnDay = daySlotsMap[d].sort((a, b) => {
+          const aMin = (a.tiet && a.tiet.length > 0) ? Math.min(...a.tiet) : 0;
+          const bMin = (b.tiet && b.tiet.length > 0) ? Math.min(...b.tiet) : 0;
+          return aMin - bMin;
+        });
+
         for (let i = 0; i < slotsOnDay.length - 1; i++) {
-          const gap = slotsOnDay[i+1].tietBatDau - slotsOnDay[i].tietKetThuc - 1;
+          const aMax = (slotsOnDay[i].tiet && slotsOnDay[i].tiet.length > 0) ? Math.max(...slotsOnDay[i].tiet) : 0;
+          const bMin = (slotsOnDay[i+1].tiet && slotsOnDay[i+1].tiet.length > 0) ? Math.min(...slotsOnDay[i+1].tiet) : 0;
+          const gap = bMin - aMax - 1;
           if (gap > 0) {
             totalGapPeriods += gap;
           }
@@ -2103,13 +2192,17 @@ function runAutoSchedulerAlgorithm() {
     score += qualityBonus;
 
     if (avoidWarned && hasWarnedTeacher) {
-      score -= 500; // Sink warned combinations to bottom
+      score -= 500.0; // Sink warned combinations to bottom
     }
+
+    const normalizedScore = Math.max(10, Math.min(100, Math.round(score)));
 
     return {
       combo,
       hasWarnedTeacher,
-      score: Math.max(10, Math.min(100, score)),
+      tierSCount,
+      tierACount,
+      score: normalizedScore,
       totalCredits,
       daysCount: daysUsed.size,
       actualDaysOff,
@@ -2236,10 +2329,13 @@ window.applySolutionToCurrentPlan = function(solutionIndex) {
   if (!sol) return;
 
   plans[currentPlanId].selected = [];
+  if (!plans[currentPlanId].practiceChoices) {
+    plans[currentPlanId].practiceChoices = {};
+  }
   sol.combo.forEach(u => {
     plans[currentPlanId].selected.push(u.theory.id);
     if (u.practice) {
-      selectedPracticeChoices[u.theory.id] = u.practice.id;
+      plans[currentPlanId].practiceChoices[u.theory.id] = u.practice.id;
     }
   });
 
@@ -2254,16 +2350,17 @@ window.saveSolutionAsNewPlan = function(solutionIndex) {
   if (!sol) return;
 
   const newId = 'plan_' + Date.now();
-  const planName = `Phương Án #${solutionIndex + 1} (Nghỉ ${sol.actualDaysOff.slice(0,2).join(', ')})`;
+  const planName = `Phương Án #${solutionIndex + 1} (Nghỉ ${sol.actualDaysOff.slice(0,2).join(', ') || '0 ngày'})`;
   plans[newId] = {
     name: planName,
-    selected: []
+    selected: [],
+    practiceChoices: {}
   };
 
   sol.combo.forEach(u => {
     plans[newId].selected.push(u.theory.id);
     if (u.practice) {
-      selectedPracticeChoices[u.theory.id] = u.practice.id;
+      plans[newId].practiceChoices[u.theory.id] = u.practice.id;
     }
   });
 
@@ -2295,7 +2392,7 @@ function renderEverytimeBadge(gvName) {
   }
 
   return `
-    <span class="everytime-badge ${tierClass}" onclick="event.stopPropagation(); openEverytimeModal('${gvName.replace(/'/g, "\\'")}')" title="Xem ${et.reviewsCount} review Everytime VN">
+    <span class="everytime-badge ${tierClass}" onclick="event.stopPropagation(); openEverytimeModal('${escapeHtml(gvName).replace(/'/g, "\\'")}')" title="Xem ${et.reviewsCount} review Everytime VN">
       ${badgeLabel}
     </span>
   `;
@@ -2327,13 +2424,14 @@ window.openEverytimeModal = function(teacherName) {
 
     let bannerHtml = '';
     if (data.tier === 'C' || data.isWarned) {
+      const redFlagsEscaped = (data.redFlags && data.redFlags.length > 0) ? data.redFlags.map(f => escapeHtml(f)).join(' • ') : 'Có nhiều phản hồi tiêu cực về cách chấm điểm / bài tập!';
       bannerHtml = `
         <div class="everytime-alert-banner warn">
           <i class="fa-solid fa-triangle-exclamation" style="font-size: 22px;"></i>
           <div>
             <div style="font-size: 13px; font-weight: 800;">🛑 CẢNH BÁO TỪ CỘNG ĐỒNG SINH VIÊN:</div>
             <div style="font-size: 12px; font-weight: 500; margin-top: 2px;">
-              ${(data.redFlags && data.redFlags.length > 0) ? data.redFlags.join(' • ') : 'Có nhiều phản hồi tiêu cực về cách chấm điểm / bài tập!'}
+              ${redFlagsEscaped}
             </div>
           </div>
         </div>
@@ -2372,9 +2470,9 @@ window.openEverytimeModal = function(teacherName) {
           <div class="everytime-review-card" style="${isLow ? 'border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.04);' : ''}">
             <div class="everytime-review-header">
               <span style="color: ${isLow ? '#dc2626' : '#f59e0b'}; font-weight: 800;">${'★'.repeat(r.rating)} (${r.rating}/5)</span>
-              <span style="color: var(--text-muted); font-size: 11px;">${r.semesterName || 'Học kỳ gần đây'} • ${r.courseName || ''}</span>
+              <span style="color: var(--text-muted); font-size: 11px;">${escapeHtml(r.semesterName || 'Học kỳ gần đây')} • ${escapeHtml(r.courseName || '')}</span>
             </div>
-            <div class="everytime-review-text" style="${isLow ? 'color: #dc2626; font-weight: 600;' : ''}">"${r.text}"</div>
+            <div class="everytime-review-text" style="${isLow ? 'color: #dc2626; font-weight: 600;' : ''}">"${escapeHtml(r.text)}"</div>
             ${r.posvotes > 0 ? `<div style="font-size: 11px; color: var(--accent-emerald); font-weight: 700;"><i class="fa-solid fa-thumbs-up"></i> ${r.posvotes} sinh viên đồng tình</div>` : ''}
           </div>
         `;
@@ -2386,7 +2484,7 @@ window.openEverytimeModal = function(teacherName) {
             <span style="color: #f59e0b; font-weight: 800;">★★★★★ (5/5)</span>
             <span style="color: var(--text-muted); font-size: 11px;">Học kỳ gần đây</span>
           </div>
-          <div class="everytime-review-text">"${data.comment}"</div>
+          <div class="everytime-review-text">"${escapeHtml(data.comment)}"</div>
         </div>
       `;
     }

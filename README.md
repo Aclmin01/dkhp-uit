@@ -59,10 +59,17 @@
 
 ---
 
+## 💡 Lưu ý về Vibe Coding & Đóng góp cộng đồng
+
+- **Vibe Coding Project**: Đây là dự án được phát triển theo phong cách **Vibe Coding** (AI-assisted Pair Programming) nhằm hỗ trợ nhanh chóng và tiện lợi nhất cho sinh viên UIT trong các mùa Đăng ký học phần.
+- **Open Source & Community Driven**: Dự án hoàn toàn **mã nguồn mở 100%**. Rất hoan nghênh mọi đóng góp, phản hồi, báo lỗi (Issues) hoặc Pull Requests từ cộng đồng sinh viên UIT để cùng nhau hoàn thiện công cụ ngày một xịn xò hơn! 🤝
+
+---
+
 ## 📄 Bản quyền & Đóng góp
 
 Dự án được phát triển phi lợi nhuận nhằm hỗ trợ cộng đồng sinh viên **Đại học Công nghệ Thông tin (UIT - VNU-HCM)**.  
-Mọi đóng góp, báo lỗi hoặc gợi ý tính năng vui lòng tạo **Issue** hoặc **Pull Request**.
+Mọi đóng góp, báo lỗi hoặc gợi ý tính năng vui lòng tạo **Issue** hoặc **Pull Request** trên GitHub.
 
 ---
 *Từ khóa SEO: tool dkhp uit, dkhp uit, dkhp, dang ky hoc phan uit, xếp tkb uit, tool xep tkb uit, xep thoi khoa bieu uit, thoi khoa bieu uit, review giang vien uit, phat song uit, script auto dkhp uit, auto dkhp uit, dkhpuit, uit tkb, dkhp.uit.edu.vn, dkhocphan uit, uit sniper.*
