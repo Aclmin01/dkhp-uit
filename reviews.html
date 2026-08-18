@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tra Cứu Đánh Giá Giảng Viên & Môn Học UIT | Everytime Review Hub</title>
+  
+  <meta name="description" content="Tra cứu chi tiết đánh giá, điểm số, mức độ chấm điểm, điểm danh và review đề thi của hơn 218 giảng viên UIT từ 909+ đánh giá thực tế của cộng đồng sinh viên Everytime UIT.">
+  <meta name="keywords" content="review giảng viên UIT, đánh giá giảng viên UIT, phật sống UIT, everytime UIT, môn học UIT, xếp TKB UIT">
+  <meta name="author" content="DKHP UIT Community">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tra Cứu Đánh Giá Giảng Viên & Môn Học UIT | Everytime Review Hub">
+  <meta property="og:description" content="Tổng hợp 909+ đánh giá thực tế, phân loại Tier S/A/B/C, điểm số và review đề thi giảng viên UIT.">
+  <meta property="og:image" content="https://dkhpuit.vercel.app/og-image.png">
+  <meta property="og:url" content="https://dkhpuit.vercel.app/reviews.html">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=2.5">
+</head>
+<body>
+
+  <!-- ==============================================================================
+       1. APP HEADER
+       ============================================================================== -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-logo" style="background: linear-gradient(135deg, #e11d48 0%, #3b82f6 100%);">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div class="brand-info">
+        <h1 class="brand-title">DKHP <span>UIT</span></h1>
+        <span class="badge-semester">Everytime Review Hub</span>
+      </div>
+    </div>
+
+    <!-- Main App Navigation Tabs -->
+    <nav class="header-main-nav">
+      <a href="index.html" class="nav-tab-btn" title="Quay lại trang Xếp TKB & Đăng Ký Học Phần">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>Xếp TKB & ĐKHP</span>
+      </a>
+      <a href="reviews.html" class="nav-tab-btn active" title="Trang tra cứu đánh giá giảng viên & môn học">
+        <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
+        <span>Tra Cứu Review</span>
+        <span class="nav-badge-pill">900+ Review</span>
+      </a>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <a href="index.html" class="btn btn-magic" title="Chuyển sang công cụ Tự động xếp TKB">
+        <i class="fa-solid fa-wand-magic-sparkles" style="color: #fde047;"></i>
+        <span>Tự động xếp TKB</span>
+      </a>
+
+      <a href="https://github.com/Ins0720/dkhp-uit" target="_blank" rel="noopener noreferrer" class="btn-github-star" title="Ủng hộ dự án 1 Star trên GitHub!">
+        <i class="fa-brands fa-github"></i>
+        <span>⭐ Star</span>
+      </a>
+
+      <button class="btn-theme-toggle" id="btnThemeToggle" title="Chuyển đổi giao diện Sáng / Tối">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==============================================================================
+       2. MAIN CONTENT
+       ============================================================================== -->
+  <main class="reviews-page-layout">
+    
+    <!-- Hero Banner -->
+    <section class="reviews-hero-card">
+      <h2 class="reviews-hero-title">
+        <span>⭐ Tra Cứu Đánh Giá Giảng Viên & Môn Học UIT</span>
+      </h2>
+      <p class="reviews-hero-subtitle">
+        Cơ sở dữ liệu thẩm định độc quyền với hơn <strong>900+ đánh giá thực tế</strong> từ cộng đồng sinh viên Everytime UIT. Phân hạng minh bạch theo mức độ chấm điểm, điểm danh, đề thi và khối lượng bài tập.
+      </p>
+
+      <div class="reviews-stats-row">
+        <div class="reviews-stat-badge">
+          <i class="fa-solid fa-user-tie" style="color: var(--primary);"></i>
+          <span id="statTeacherCount"><strong>218</strong> Giảng viên</span>
+        </div>
+        <div class="reviews-stat-badge">
+          <i class="fa-solid fa-comments" style="color: #10b981;"></i>
+          <span id="statReviewCount"><strong>909+</strong> Đánh giá thực tế</span>
+        </div>
+        <div class="reviews-stat-badge">
+          <i class="fa-solid fa-crown" style="color: #f59e0b;"></i>
+          <span id="statTierSCount"><strong>29</strong> Đại Phật Sống (Tier S)</span>
+        </div>
+        <div class="reviews-stat-badge">
+          <i class="fa-solid fa-shield-halved" style="color: #8b5cf6;"></i>
+          <span>100% Ẩn danh & Khách quan</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Filter Controls -->
+    <section class="reviews-controls-bar">
+      <div class="reviews-search-row">
+        <div class="reviews-search-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input 
+            type="text" 
+            id="reviewSearchInput" 
+            class="reviews-search-input" 
+            placeholder="🔍 Tìm nhanh theo tên giảng viên (Đặng Việt Dũng...) hoặc mã/tên môn (IT002, Lập trình OOP, Mạng...)"
+            autocomplete="off"
+          >
+        </div>
+
+        <select id="reviewSortSelect" class="reviews-sort-select">
+          <option value="rating_desc">⭐ Đánh giá cao nhất (5.0 -> 1.0)</option>
+          <option value="reviews_desc">💬 Nhiều review nhất</option>
+          <option value="name_asc">🔤 Tên giảng viên (A - Z)</option>
+        </select>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="reviews-filter-tabs" id="tierFilterTabs">
+        <button class="review-filter-btn active" data-filter-tier="all">
+          <i class="fa-solid fa-list"></i> Tất cả (<span id="countTierAll">218</span>)
+        </button>
+        <button class="review-filter-btn" data-filter-tier="S">
+          <i class="fa-solid fa-crown" style="color: #f59e0b;"></i> Tier S - Phật Sống (<span id="countTierS">29</span>)
+        </button>
+        <button class="review-filter-btn" data-filter-tier="A">
+          <i class="fa-solid fa-gem" style="color: #10b981;"></i> Tier A - Dạy Tốt (<span id="countTierA">127</span>)
+        </button>
+        <button class="review-filter-btn" data-filter-tier="B">
+          <i class="fa-solid fa-book" style="color: #3b82f6;"></i> Tier B - Chuẩn Chỉ (<span id="countTierB">42</span>)
+        </button>
+        <button class="review-filter-btn" data-filter-tier="C">
+          <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i> Tier C - Cảnh Báo (<span id="countTierC">20</span>)
+        </button>
+      </div>
+
+      <!-- Quick Feature Tag Filter -->
+      <div class="reviews-filter-tabs" id="tagFilterTabs" style="border-top: 1px dashed var(--border-color); padding-top: 8px;">
+        <span style="font-size: 11.5px; font-weight: 700; color: var(--text-muted); align-self: center; margin-right: 4px;">
+          Lọc nhanh:
+        </span>
+        <button class="review-filter-btn" data-filter-tag="all">Mọi tiêu chí</button>
+        <button class="review-filter-btn" data-filter-tag="Chấm điểm thoáng">🟢 Chấm điểm thoáng</button>
+        <button class="review-filter-btn" data-filter-tag="Không điểm danh">🌿 Không điểm danh</button>
+        <button class="review-filter-btn" data-filter-tag="Dạy có tâm">☕ Dạy có tâm</button>
+        <button class="review-filter-btn" data-filter-tag="Đề bám sát">📖 Đề bám sát</button>
+      </div>
+    </section>
+
+    <!-- Results Status Count -->
+    <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--text-secondary);">
+      <span id="reviewsResultsCount">Đang hiển thị 218 giảng viên</span>
+      <span style="font-size: 12px; color: var(--text-muted);">Bấm vào thẻ bất kỳ để xem toàn bộ đánh giá chi tiết</span>
+    </div>
+
+    <!-- Teachers Grid Container -->
+    <section class="reviews-grid-container" id="reviewsGridContainer">
+      <!-- Generated via reviews.js -->
+    </section>
+
+  </main>
+
+  <!-- ==============================================================================
+       3. DETAILED REVIEW MODAL
+       ============================================================================== -->
+  <div class="modal-overlay" id="teacherReviewDetailModal" style="display: none;">
+    <div class="modal-container" style="max-width: 720px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="teacher-avatar-circle" id="modalAvatar" style="width: 40px; height: 40px; font-size: 15px;">D</div>
+          <div>
+            <h3 class="modal-title" id="modalTeacherName">Đặng Việt Dũng</h3>
+            <div id="modalTeacherTierBadge" style="margin-top: 2px;"></div>
+          </div>
+        </div>
+        <button class="btn-modal-close" id="btnCloseReviewModal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body" style="max-height: 70vh; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;">
+        <!-- Teacher Overview Box -->
+        <div id="modalOverviewBox" class="teacher-eval-grid" style="grid-template-columns: repeat(3, 1fr); padding: 12px;"></div>
+
+        <!-- Tags Box -->
+        <div id="modalTagsBox" class="teacher-tags-row"></div>
+
+        <!-- Red Flags Warning (if any) -->
+        <div id="modalRedFlagsBox" style="display: none;"></div>
+
+        <!-- Courses Box -->
+        <div id="modalCoursesBox" style="font-size: 12.5px;"></div>
+
+        <!-- Reviews List -->
+        <div>
+          <div style="font-weight: 800; font-size: 14px; margin-bottom: 10px; color: var(--text-primary); display: flex; align-items: center; justify-content: space-between;">
+            <span><i class="fa-solid fa-comments" style="color: var(--primary);"></i> Chi tiết các lượt đánh giá:</span>
+            <span id="modalReviewCountBadge" style="font-size: 12px; color: var(--text-muted); font-weight: 700;"></span>
+          </div>
+          <div id="modalReviewsList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn btn-secondary" id="btnModalCloseBottom">Đóng</button>
+        <button class="btn btn-primary" id="btnScheduleWithTeacher">
+          <i class="fa-solid fa-calendar-plus"></i> Chọn môn & Xếp TKB ngay
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="ratings.js"></script>
+  <script src="reviews.js"></script>
+</body>
+</html>

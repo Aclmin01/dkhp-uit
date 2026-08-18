@@ -2673,6 +2673,24 @@ function runAutoSchedulerAlgorithm() {
     }
 
     // Score Component D: Everytime Quality
+    let totalTeacherStars = 0;
+    const distinctTeacherMap = new Map();
+    combo.forEach(u => {
+      const gv = u.theory.tenGV;
+      if (gv && !distinctTeacherMap.has(gv)) {
+        const rInfo = (typeof getEverytimeRating === 'function') ? getEverytimeRating(gv) : null;
+        const starVal = rInfo ? rInfo.rating : 4.0;
+        distinctTeacherMap.set(gv, starVal);
+      }
+    });
+
+    distinctTeacherMap.forEach(star => {
+      totalTeacherStars += star;
+    });
+
+    const teacherCount = distinctTeacherMap.size || 1;
+    const avgTeacherStars = Math.round((totalTeacherStars / teacherCount) * 10) / 10;
+
     score += qualityBonus;
     if (tierSCount >= 3) {
       highlightBadges.push(`🌟 ${tierSCount} GV Phật Sống`);
@@ -2691,6 +2709,9 @@ function runAutoSchedulerAlgorithm() {
       hasWarnedTeacher,
       tierSCount,
       tierACount,
+      totalTeacherStars,
+      avgTeacherStars,
+      teacherCount,
       score: normalizedScore,
       totalCredits,
       daysCount: daysUsed.size,
@@ -2700,8 +2721,13 @@ function runAutoSchedulerAlgorithm() {
     };
   });
 
-  // Sort by score descending
-  scoredSolutions.sort((a, b) => b.score - a.score);
+  // Sort by Total Teacher Stars Descending (Primary), then by overall score (Secondary)
+  scoredSolutions.sort((a, b) => {
+    if (Math.abs(b.totalTeacherStars - a.totalTeacherStars) >= 0.05) {
+      return b.totalTeacherStars - a.totalTeacherStars;
+    }
+    return b.score - a.score;
+  });
   generatedSolutions = scoredSolutions;
 
   const elapsed = Math.round(performance.now() - startTime);
@@ -2730,14 +2756,14 @@ function renderAutoSchedSolutions(solutions) {
     return;
   }
 
-  if (countBadge) countBadge.textContent = `✨ Tìm thấy ${solutions.length} phương án TKB tối ưu`;
+  if (countBadge) countBadge.textContent = `✨ Tìm thấy ${solutions.length} phương án TKB (Ưu tiên ⭐ sao cao nhất)`;
 
   solutions.slice(0, 30).forEach((sol, index) => {
     const card = document.createElement('div');
     card.className = 'solution-card';
 
-    let scoreColor = sol.score >= 80 ? 'var(--accent-emerald)' : (sol.score >= 50 ? 'var(--accent-amber)' : 'var(--primary)');
-    let scoreText = sol.score >= 85 ? 'Tối ưu vượt trội' : (sol.score >= 65 ? 'Rất tốt' : 'Hợp lý');
+    let scoreColor = sol.avgTeacherStars >= 4.8 ? 'var(--accent-emerald)' : (sol.avgTeacherStars >= 4.0 ? 'var(--accent-amber)' : 'var(--primary)');
+    let scoreText = sol.avgTeacherStars >= 4.8 ? 'Toàn Phật Sống' : (sol.avgTeacherStars >= 4.3 ? 'Dạy rất tốt' : 'Hợp lý');
 
     // Extract lecturers in this combination
     const teachersList = [];
@@ -2774,10 +2800,10 @@ function renderAutoSchedSolutions(solutions) {
 
     card.innerHTML = `
       <div class="solution-card-header">
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
           <span style="font-weight: 800; font-size: 14px; color: var(--text-primary);">Phương án #${index + 1}</span>
           <span class="solution-score-badge" style="color: ${scoreColor};">
-            <i class="fa-solid fa-star"></i> ${sol.score}/100 • ${scoreText}
+            <i class="fa-solid fa-star"></i> ${sol.totalTeacherStars.toFixed(1)}⭐ (${sol.avgTeacherStars.toFixed(1)}⭐ TB) • ${scoreText}
           </span>
         </div>
         <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary);">
@@ -3102,4 +3128,29 @@ bindEvents = function() {
 
   const btnDownloadScriptFile = document.getElementById('btnDownloadScriptFile');
   if (btnDownloadScriptFile) btnDownloadScriptFile.addEventListener('click', downloadScriptFile);
+
+  // Auto-search from URL query parameters (e.g. from reviews.html)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchVal = urlParams.get('search') || urlParams.get('q');
+    if (searchVal) {
+      const trimmed = searchVal.trim();
+      const subjectInput = document.getElementById('subjectSearchInput');
+      const teacherInput = document.getElementById('teacherSearchInput');
+      if (trimmed.match(/^[A-Z]{2}[0-9]{3}/i)) {
+        if (subjectInput) {
+          subjectInput.value = trimmed;
+          subjectInput.dispatchEvent(new Event('input'));
+        }
+      } else {
+        if (teacherInput) {
+          teacherInput.value = trimmed;
+          teacherInput.dispatchEvent(new Event('input'));
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('URL search parameter error:', err);
+  }
 };
+

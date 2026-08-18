@@ -9468,3 +9468,12 @@ function getEverytimeRating(teacherName) {
 
   return null;
 }
+
+if (typeof window !== 'undefined') {
+  window.EVERYTIME_REAL_DATABASE = EVERYTIME_REAL_DATABASE;
+  window.getEverytimeRating = getEverytimeRating;
+  window.normalizeTeacherKey = normalizeTeacherKey;
+  window.getAllEverytimeTeachers = function() {
+    return Object.values(EVERYTIME_REAL_DATABASE);
+  };
+}
