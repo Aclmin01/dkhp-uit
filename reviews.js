@@ -144,6 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ? t.courses.slice(0, 3).map(c => `<span class="teacher-course-badge" title="${escapeHtml(c.tenMH)}">${escapeHtml(c.maMH)}</span>`).join('')
         : `<span style="font-size: 11px; color: var(--text-muted);">Dạy các môn chuyên ngành</span>`;
 
+      const reviewCount = (t.topReviews && t.topReviews.length) ? t.topReviews.length : (t.reviewsCount || 0);
+
       card.innerHTML = `
         <div class="teacher-card-top">
           <div class="teacher-avatar-circle ${tierClass}">${initial}</div>
@@ -151,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="teacher-name-row">
               <span class="teacher-name">${escapeHtml(t.name)}</span>
               <span class="teacher-rating-display">
-                <i class="fa-solid fa-star"></i> ${t.rating.toFixed(1)} <span style="font-size: 11px; color: var(--text-muted);">(${t.reviewsCount} review)</span>
+                <i class="fa-solid fa-star"></i> ${t.rating.toFixed(1)} <span style="font-size: 11px; color: var(--text-muted);">(${reviewCount} review)</span>
               </span>
             </div>
             <div>
@@ -975,8 +977,11 @@ function updateStatCounters(teachers) {
 
   const statTeacherCount = document.getElementById('statTeacherCount');
   const statTierSCount = document.getElementById('statTierSCount');
+  const statReviewCount = document.getElementById('statReviewCount');
   if (statTeacherCount) statTeacherCount.innerHTML = `<strong>${countAll}</strong> Giảng viên`;
   if (statTierSCount) statTierSCount.innerHTML = `<strong>${countS}</strong> Đại Phật Sống (Tier S)`;
+  const totalReviews = teachers.reduce((sum, t) => sum + ((t.topReviews && t.topReviews.length) ? t.topReviews.length : (t.reviewsCount || 0)), 0);
+  if (statReviewCount) statReviewCount.innerHTML = `<strong>${totalReviews}+</strong> Đánh giá thực tế`;
 }
 
 // Helper: Vietnamese String Normalization
