@@ -414,9 +414,131 @@ document.addEventListener('DOMContentLoaded', () => {
     filterAndRender();
   });
 
+  // 11. Connect & Sync Reviews from Supabase Cloud Database
+  syncSupabaseReviews(allTeachers, () => {
+    updateStatCounters(allTeachers);
+    filterAndRender();
+  });
+
   // Initial Run
   filterAndRender();
 });
+
+// Helper: Get Supabase Client instance if configured
+function getSupabaseClient() {
+  const cfg = window.DKHP_SUPABASE_CONFIG;
+  if (!cfg || !cfg.url || !cfg.anonKey || cfg.url.includes('abcdefgh') || typeof window.supabase === 'undefined' || !window.supabase.createClient) {
+    return null;
+  }
+  try {
+    if (!window._dkhp_supabase_instance) {
+      window._dkhp_supabase_instance = window.supabase.createClient(cfg.url, cfg.anonKey);
+    }
+    return window._dkhp_supabase_instance;
+  } catch (e) {
+    console.warn('Supabase initialization warning:', e);
+    return null;
+  }
+}
+
+// Helper: Fetch and Sync Reviews from Supabase Cloud DB
+async function syncSupabaseReviews(allTeachers, onUpdated) {
+  const client = getSupabaseClient();
+  if (!client) return;
+
+  try {
+    const { data, error } = await client
+      .from('uit_teacher_reviews')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.warn('Could not fetch from Supabase (check table name & RLS policies):', error.message);
+      return;
+    }
+
+    if (Array.isArray(data) && data.length > 0) {
+      data.forEach(item => {
+        if (!item.teacher_name || !item.review_text) return;
+        const normKey = window.normalizeTeacherKey ? window.normalizeTeacherKey(item.teacher_name) : item.teacher_name.toLowerCase();
+        let teacher = allTeachers.find(t => t.normKey === normKey || t.name.toLowerCase() === item.teacher_name.toLowerCase());
+
+        const newReviewObj = {
+          rating: item.rating || 5,
+          courseName: item.course_name || 'Môn học',
+          semesterName: item.semester_name || 'Học kỳ gần đây',
+          text: item.review_text,
+          posvotes: item.posvotes || 1
+        };
+
+        if (teacher) {
+          if (!teacher.topReviews) teacher.topReviews = [];
+          if (!teacher.topReviews.some(r => r.text === newReviewObj.text && r.courseName === newReviewObj.courseName)) {
+            teacher.topReviews.unshift(newReviewObj);
+            teacher.reviewsCount = (teacher.reviewsCount || 0) + 1;
+            if (item.tags && Array.isArray(item.tags)) {
+              teacher.tags = Array.from(new Set([...(teacher.tags || []), ...item.tags]));
+            }
+          }
+        } else {
+          teacher = {
+            name: item.teacher_name,
+            normKey: normKey,
+            tier: item.rating >= 4.5 ? 'S' : (item.rating >= 3.8 ? 'A' : (item.rating >= 3.0 ? 'B' : 'C')),
+            rating: item.rating || 5,
+            reviewsCount: 1,
+            recommendPercent: item.rating >= 4 ? 100 : 70,
+            grading: item.grading || 'Rộng rãi (Thoáng)',
+            attendance: item.attendance || 'Không điểm danh / Dễ',
+            workload: item.workload || 'Vừa sức',
+            tags: item.tags || ['#Phật sống UIT'],
+            topReviews: [newReviewObj],
+            courses: [{ maMH: item.course_name, tenMH: item.course_name }]
+          };
+          allTeachers.push(teacher);
+        }
+      });
+
+      if (typeof onUpdated === 'function') {
+        onUpdated();
+      }
+    }
+
+    // Subscribe to Realtime Inserts
+    client
+      .channel('uit_reviews_realtime_channel')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'uit_teacher_reviews' }, payload => {
+        if (payload && payload.new) {
+          const item = payload.new;
+          const normKey = window.normalizeTeacherKey ? window.normalizeTeacherKey(item.teacher_name) : item.teacher_name.toLowerCase();
+          let teacher = allTeachers.find(t => t.normKey === normKey || t.name.toLowerCase() === item.teacher_name.toLowerCase());
+
+          const newReviewObj = {
+            rating: item.rating || 5,
+            courseName: item.course_name || 'Môn học',
+            semesterName: item.semester_name || 'Học kỳ gần đây',
+            text: item.review_text,
+            posvotes: item.posvotes || 1
+          };
+
+          if (teacher) {
+            if (!teacher.topReviews) teacher.topReviews = [];
+            if (!teacher.topReviews.some(r => r.text === newReviewObj.text)) {
+              teacher.topReviews.unshift(newReviewObj);
+              teacher.reviewsCount = (teacher.reviewsCount || 0) + 1;
+            }
+          }
+          if (typeof onUpdated === 'function') {
+            onUpdated();
+          }
+          showReviewToast(`🌟 Có sinh viên vừa đóng góp đánh giá mới cho GV ${item.teacher_name}!`);
+        }
+      })
+      .subscribe();
+  } catch (e) {
+    console.warn('Supabase sync exception:', e);
+  }
+}
 
 // Helper: Load and Apply User Submitted Custom Reviews from LocalStorage
 function loadAndApplyCustomReviews(allTeachers) {
@@ -728,6 +850,29 @@ function initSubmitReviewModal(allTeachers, onReviewAdded) {
         localStorage.setItem('dkhp_custom_reviews', JSON.stringify(stored));
       } catch (err) {
         console.error('Failed to save to localStorage:', err);
+      }
+
+      // Save to Supabase Cloud Database (if configured)
+      const client = getSupabaseClient();
+      if (client) {
+        client.from('uit_teacher_reviews').insert([{
+          teacher_name: teacherName,
+          course_name: courseName,
+          semester_name: semesterName,
+          rating: rating,
+          grading: grading,
+          attendance: attendance,
+          workload: workload,
+          tags: selectedTags,
+          review_text: reviewText,
+          posvotes: 1
+        }]).then(({ error }) => {
+          if (error) {
+            console.warn('Supabase cloud insert warning:', error.message);
+          } else {
+            console.log('✅ Đã lưu đánh giá thành công lên Supabase Cloud DB!');
+          }
+        });
       }
 
       // Apply review to in-memory teacher list
