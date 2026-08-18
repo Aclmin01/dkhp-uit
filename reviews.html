@@ -177,10 +177,10 @@
   </main>
 
   <!-- ==============================================================================
-       3. DETAILED REVIEW MODAL
+       3. DETAILED REVIEW MODAL (CENTERED POPUP)
        ============================================================================== -->
-  <div class="modal-overlay" id="teacherReviewDetailModal" style="display: none;">
-    <div class="modal-container" style="max-width: 720px;">
+  <div class="modal-backdrop" id="teacherReviewDetailModal">
+    <div class="modal-box" style="max-width: 680px; max-height: 88vh;">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 10px;">
           <div class="teacher-avatar-circle" id="modalAvatar" style="width: 40px; height: 40px; font-size: 15px;">D</div>
@@ -189,12 +189,10 @@
             <div id="modalTeacherTierBadge" style="margin-top: 2px;"></div>
           </div>
         </div>
-        <button class="btn-modal-close" id="btnCloseReviewModal">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <button class="modal-close-btn" id="btnCloseReviewModal" title="Đóng cửa sổ review">&times;</button>
       </div>
 
-      <div class="modal-body" style="max-height: 70vh; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;">
+      <div class="modal-body custom-scrollbar" style="max-height: calc(88vh - 130px); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 18px;">
         <!-- Teacher Overview Box -->
         <div id="modalOverviewBox" class="teacher-eval-grid" style="grid-template-columns: repeat(3, 1fr); padding: 12px;"></div>
 
@@ -217,7 +215,7 @@
         </div>
       </div>
 
-      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="modal-footer" style="padding: 12px 18px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface-elevated);">
         <button class="btn btn-secondary" id="btnModalCloseBottom">Đóng</button>
         <button class="btn btn-primary" id="btnScheduleWithTeacher">
           <i class="fa-solid fa-calendar-plus"></i> Chọn môn & Xếp TKB ngay

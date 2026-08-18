@@ -333,7 +333,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    modal.style.display = 'flex';
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
   // Modal Close Handlers
@@ -343,7 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSchedule = document.getElementById('btnScheduleWithTeacher');
 
   function closeModal() {
-    if (modalEl) modalEl.style.display = 'none';
+    if (modalEl) {
+      modalEl.classList.remove('open');
+      document.body.style.overflow = '';
+    }
   }
 
   if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
@@ -353,6 +357,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.target === modalEl) closeModal();
     });
   }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
 
   if (btnSchedule) {
     btnSchedule.addEventListener('click', () => {

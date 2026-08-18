@@ -1712,13 +1712,40 @@ function bindEvents() {
 
 function openModal(id) {
   const m = document.getElementById(id);
-  if (m) m.classList.add('open');
+  if (m) {
+    m.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
 }
 
 function closeModal(id) {
   const m = document.getElementById(id);
-  if (m) m.classList.remove('open');
+  if (m) {
+    m.classList.remove('open');
+    if (!document.querySelector('.modal-backdrop.open, .modal-overlay.open')) {
+      document.body.style.overflow = '';
+    }
+  }
 }
+
+// Global modal close handlers (Backdrop click and Escape key)
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-backdrop.open, .modal-overlay.open').forEach(m => {
+      m.classList.remove('open');
+    });
+    document.body.style.overflow = '';
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList && (e.target.classList.contains('modal-backdrop') || e.target.classList.contains('modal-overlay'))) {
+    e.target.classList.remove('open');
+    if (!document.querySelector('.modal-backdrop.open, .modal-overlay.open')) {
+      document.body.style.overflow = '';
+    }
+  }
+});
 
 function renderPlansListModal() {
   const container = document.getElementById('plansListContainer');
