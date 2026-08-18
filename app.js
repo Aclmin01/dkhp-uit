@@ -2270,11 +2270,46 @@ function checkTwoSlotsOverlap(s1, s2) {
   return checkTwoItemsOverlap(s1, s2);
 }
 
+// Fast Bitwise Slot Mask Generator for ultra-fast collision detection
+function createSlotMask(slots) {
+  const maskEven = new Int16Array(7);
+  const maskOdd = new Int16Array(7);
+
+  slots.forEach(s => {
+    const d = parseInt(s.thu, 10);
+    if (isNaN(d) || d < 2 || d > 8) return;
+    const dayIdx = d - 2;
+    let periodBits = 0;
+    (s.tiet || []).forEach(p => {
+      if (p >= 1 && p <= 10) periodBits |= (1 << (p - 1));
+    });
+
+    const cTuan = s.cachTuan || 1;
+    const tChanLe = s.tuanChanLe || '';
+
+    if (cTuan === 2) {
+      if (tChanLe === 'chan') {
+        maskEven[dayIdx] |= periodBits;
+      } else if (tChanLe === 'le') {
+        maskOdd[dayIdx] |= periodBits;
+      } else {
+        maskEven[dayIdx] |= periodBits;
+        maskOdd[dayIdx] |= periodBits;
+      }
+    } else {
+      maskEven[dayIdx] |= periodBits;
+      maskOdd[dayIdx] |= periodBits;
+    }
+  });
+
+  return { maskEven, maskOdd };
+}
+
 function runAutoSchedulerAlgorithm() {
   // DoS Defense & Client-side Rate Limiter
-  if (window.DKHP_SECURITY && !DKHP_SECURITY.rateLimit('runAutoScheduler', 6, 3000)) {
+  if (window.DKHP_SECURITY && !DKHP_SECURITY.rateLimit('runAutoScheduler', 8, 2000)) {
     if (typeof showAppToast === 'function') {
-      showAppToast('⚠️ Bạn đang thao tác quá nhanh! Vui lòng chờ 2 giây để bảo vệ hệ thống.');
+      showAppToast('⚠️ Bạn đang thao tác quá nhanh! Vui lòng chờ giây lát.');
     }
     return;
   }
@@ -2293,7 +2328,7 @@ function runAutoSchedulerAlgorithm() {
     listContainer.innerHTML = `
       <div style="text-align: center; padding: 36px 12px; color: var(--primary);">
         <i class="fa-solid fa-spinner fa-spin" style="font-size: 28px; margin-bottom: 8px;"></i>
-        <div style="font-weight: 700; font-size: 14px;">Đang tính toán các tổ hợp tối ưu...</div>
+        <div style="font-weight: 700; font-size: 14px;">Đang tính toán toàn bộ không gian tổ hợp tối ưu...</div>
       </div>
     `;
   }
@@ -2306,83 +2341,175 @@ function runAutoSchedulerAlgorithm() {
   const prefTopRated = document.getElementById('chkAutoSchedEverytimeTopRated')?.checked ?? true;
   const prefGenerous = document.getElementById('chkAutoSchedEverytimeGenerous')?.checked ?? true;
 
-  // 2. Build Candidate Units for each subject
-  const subjectGroups = []; // Array of arrays of units
+  // 2. Build and Deduplicate Candidate Units for each subject
+  const subjectGroups = [];
   autoSchedSelectedSubjects.forEach(maMH => {
     const theories = allCourses.filter(c => c.maMH === maMH);
     const units = [];
+    const seenUnitSignatures = new Set();
 
     theories.forEach(th => {
+      // If warned teacher and user strictly requested to avoid warned, filter out early
+      if (avoidWarned && typeof getEverytimeRating === 'function') {
+        const r = getEverytimeRating(th.tenGV);
+        if (r && (r.isWarned || r.tier === 'C')) return;
+      }
+
       if (th.practices && th.practices.length > 0) {
         th.practices.forEach(pr => {
-          units.push({
-            theory: th,
-            practice: pr,
-            slots: [th, pr]
-          });
+          const uSig = `${th.id}#${pr.id}#${th.thu}_${(th.tiet||[]).join('')}#${pr.thu}_${(pr.tiet||[]).join('')}`;
+          if (!seenUnitSignatures.has(uSig)) {
+            seenUnitSignatures.add(uSig);
+            const slots = [th, pr];
+            units.push({
+              theory: th,
+              practice: pr,
+              slots,
+              mask: createSlotMask(slots),
+              uKey: `${th.id}#${pr.id}`
+            });
+          }
         });
       } else {
-        units.push({
-          theory: th,
-          practice: null,
-          slots: [th]
-        });
+        const uSig = `${th.id}##${th.thu}_${(th.tiet||[]).join('')}`;
+        if (!seenUnitSignatures.has(uSig)) {
+          seenUnitSignatures.add(uSig);
+          const slots = [th];
+          units.push({
+            theory: th,
+            practice: null,
+            slots,
+            mask: createSlotMask(slots),
+            uKey: `${th.id}`
+          });
+        }
       }
     });
 
     if (units.length > 0) {
+      // Heuristic Pre-Sorting: Order candidates from most desirable to least desirable
+      units.sort((a, b) => {
+        let scoreA = 0;
+        let scoreB = 0;
+
+        [a, b].forEach((u, idx) => {
+          let sVal = 0;
+          if (typeof getEverytimeRating === 'function') {
+            const r = getEverytimeRating(u.theory.tenGV);
+            if (r) {
+              if (r.tier === 'S') sVal += 35;
+              else if (r.tier === 'A') sVal += 18;
+              else if (r.tier === 'C' || r.isWarned) sVal -= 100;
+              if (prefTopRated && r.rating >= 4.8) sVal += 10;
+              if (prefGenerous && r.grading && r.grading.includes('Thoáng')) sVal += 10;
+            }
+          }
+
+          u.slots.forEach(s => {
+            const d = parseInt(s.thu, 10);
+            if (targetDaysOff.includes(d)) sVal -= 30;
+
+            const periods = s.tiet || [];
+            if (shiftPref === 'morning') {
+              if (periods.some(p => p <= 5)) sVal += 12;
+              if (periods.some(p => p >= 6)) sVal -= 8;
+            } else if (shiftPref === 'afternoon') {
+              if (periods.some(p => p >= 6)) sVal += 12;
+              if (periods.some(p => p <= 5)) sVal -= 8;
+            }
+          });
+
+          if (idx === 0) scoreA = sVal; else scoreB = sVal;
+        });
+
+        return scoreB - scoreA;
+      });
+
       subjectGroups.push({ maMH, units });
     }
   });
 
-  if (subjectGroups.length === 0) {
+  if (subjectGroups.length < autoSchedSelectedSubjects.length) {
     if (listContainer) {
-      listContainer.innerHTML = `<div class="auto-sched-empty-state"><div style="color: var(--danger); font-weight: 700;">Không tìm thấy lớp học phần nào cho các môn đã chọn!</div></div>`;
+      const missing = autoSchedSelectedSubjects.filter(m => !subjectGroups.some(g => g.maMH === m));
+      listContainer.innerHTML = `
+        <div class="auto-sched-empty-state">
+          <i class="fa-solid fa-triangle-exclamation" style="font-size: 32px; color: var(--danger); margin-bottom: 8px;"></i>
+          <div style="font-weight: 700; font-size: 14px; color: var(--danger);">Không đủ lớp mở cho các môn: ${escapeHtml(missing.join(', '))}!</div>
+          <div style="font-size: 12px; color: var(--text-muted); max-width: 320px; margin-top: 4px;">
+            ${avoidWarned ? 'Có thể các lớp này bị loại do bộ lọc "Tránh giảng viên cảnh báo". Hãy thử bỏ tích mục này hoặc đổi môn khác nhé!' : 'Không tìm thấy lớp học phần nào tương ứng trong dữ liệu.'}
+          </div>
+        </div>
+      `;
     }
+    if (countBadge) countBadge.textContent = '❌ Không có phương án phù hợp';
     return;
   }
 
-  // 3. Backtracking Search with CSP Pruning & Watchdog Circuit Breaker
-  const validCombinations = [];
-  const MAX_SOLUTIONS = 150;
-  const watchdog = window.DKHP_SECURITY ? new DKHP_SECURITY.Watchdog(2500) : null;
+  // 3. Variable Ordering (MRV - Minimum Remaining Values)
+  subjectGroups.sort((a, b) => a.units.length - b.units.length);
 
-  function backtrack(groupIndex, currentCombo, occupiedSlots) {
+  // 4. Ultra-Fast Bitmask Backtracking Search with Global Deduplication
+  const validCombinations = [];
+  const seenClassSetKeys = new Set();
+  const seenScheduleGridKeys = new Set();
+  const occMask = { maskEven: new Int16Array(7), maskOdd: new Int16Array(7) };
+  const MAX_SEARCH_SOLUTIONS = 3000;
+  const watchdog = window.DKHP_SECURITY ? new DKHP_SECURITY.Watchdog(2000) : null;
+
+  function backtrack(groupIndex, currentCombo) {
     if (watchdog) watchdog.check();
-    if (validCombinations.length >= MAX_SOLUTIONS) return;
+    if (validCombinations.length >= MAX_SEARCH_SOLUTIONS) return;
 
     if (groupIndex === subjectGroups.length) {
+      // Deduplicate by class codes signature
+      const classKey = currentCombo.map(u => u.uKey).sort().join('|');
+      if (seenClassSetKeys.has(classKey)) return;
+      seenClassSetKeys.add(classKey);
+
+      // Deduplicate by visual schedule grid & teacher signature
+      const schedKey = currentCombo.flatMap(u => u.slots).map(s => `${s.thu}:${(s.tiet||[]).join(',')}@${s.tenGV||''}`).sort().join('|');
+      if (seenScheduleGridKeys.has(schedKey)) return;
+      seenScheduleGridKeys.add(schedKey);
+
       validCombinations.push([...currentCombo]);
       return;
     }
 
     const currentGroup = subjectGroups[groupIndex];
     for (let i = 0; i < currentGroup.units.length; i++) {
-      const candidateUnit = currentGroup.units[i];
+      const candidate = currentGroup.units[i];
+      const uM = candidate.mask;
 
-      // Check collision between candidateUnit.slots and occupiedSlots
+      // Bitwise collision check
       let collision = false;
-      for (const slot of candidateUnit.slots) {
-        for (const occ of occupiedSlots) {
-          if (checkTwoItemsOverlap(slot, occ)) {
-            collision = true;
-            break;
-          }
+      for (let d = 0; d < 7; d++) {
+        if ((occMask.maskEven[d] & uM.maskEven[d]) !== 0 || (occMask.maskOdd[d] & uM.maskOdd[d]) !== 0) {
+          collision = true;
+          break;
         }
-        if (collision) break;
       }
 
       if (!collision) {
-        currentCombo.push(candidateUnit);
-        const nextOccupied = occupiedSlots.concat(candidateUnit.slots);
-        backtrack(groupIndex + 1, currentCombo, nextOccupied);
+        for (let d = 0; d < 7; d++) {
+          occMask.maskEven[d] |= uM.maskEven[d];
+          occMask.maskOdd[d] |= uM.maskOdd[d];
+        }
+        currentCombo.push(candidate);
+
+        backtrack(groupIndex + 1, currentCombo);
+
         currentCombo.pop();
+        for (let d = 0; d < 7; d++) {
+          occMask.maskEven[d] &= ~uM.maskEven[d];
+          occMask.maskOdd[d] &= ~uM.maskOdd[d];
+        }
       }
     }
   }
 
   try {
-    backtrack(0, [], []);
+    backtrack(0, []);
   } catch (err) {
     if (err.message === 'TIMEOUT_CIRCUIT_BREAKER_EXCEEDED') {
       console.warn('[SECURITY] Search halted by ExecutionWatchdog timeout.');
@@ -2391,21 +2518,51 @@ function runAutoSchedulerAlgorithm() {
     }
   }
 
-  // 4. REFINED MULTI-OBJECTIVE MATHEMATICAL SCORING ALGORITHM (ACCURATE SCHEMA)
+  // 5. REFINED MULTI-OBJECTIVE MATHEMATICAL SCORING & HIGHLIGHT ENGINE
   const scoredSolutions = validCombinations.map(combo => {
-    let score = 50.0; // Baseline neutral score
+    let score = 50.0;
     let totalCredits = 0;
     const daysUsed = new Set();
     const allSlots = [];
     const daySlotsMap = {};
     const classCodes = [];
+    const highlightBadges = [];
+
+    let tierSCount = 0;
+    let tierACount = 0;
+    let hasWarnedTeacher = false;
+    let qualityBonus = 0;
 
     combo.forEach(u => {
       totalCredits += (u.theory.soTC || 0);
       if (u.practice) totalCredits += (u.practice.soTC || 0);
 
-      classCodes.push(u.theory.maLop);
-      if (u.practice) classCodes.push(u.practice.maLop);
+      const thCode = u.theory.maLop;
+      const prCode = u.practice ? ` (TH: ${u.practice.maLop})` : '';
+      classCodes.push(thCode + prCode);
+
+      const gvName = u.theory.tenGV;
+      if (gvName && typeof getEverytimeRating === 'function') {
+        const rInfo = getEverytimeRating(gvName);
+        if (rInfo) {
+          if (rInfo.tier === 'C' || rInfo.isWarned) {
+            hasWarnedTeacher = true;
+            qualityBonus -= 100.0;
+          } else if (rInfo.tier === 'S') {
+            tierSCount++;
+            qualityBonus += 30.0;
+          } else if (rInfo.tier === 'A') {
+            tierACount++;
+            qualityBonus += 15.0;
+          }
+
+          if (prefTopRated && rInfo.rating >= 4.8) qualityBonus += 8.0;
+          if (prefGenerous) {
+            if (rInfo.grading && rInfo.grading.includes('Thoáng')) qualityBonus += 8.0;
+            if (rInfo.attendance && (rInfo.attendance.includes('Không') || rInfo.attendance.includes('Dễ'))) qualityBonus += 6.0;
+          }
+        }
+      }
 
       u.slots.forEach(s => {
         allSlots.push(s);
@@ -2433,31 +2590,58 @@ function runAutoSchedulerAlgorithm() {
     });
 
     if (targetDaysOff.length > 0) {
-      score += (targetDaysOffSatisfied * 20.0);
-      score -= (targetDaysOffViolated * 25.0);
+      score += (targetDaysOffSatisfied * 25.0);
+      score -= (targetDaysOffViolated * 35.0);
+      if (targetDaysOffViolated === 0 && targetDaysOffSatisfied === targetDaysOff.length) {
+        score += 20.0; // Perfect Target Days Off Bonus
+        highlightBadges.push(`🏖️ Nghỉ trọn vẹn ${targetDaysOff.map(d=>'T'+d).join(', ')}`);
+      }
     } else {
-      score += ((6 - daysUsed.size) * 6.0);
+      score += ((6 - daysUsed.size) * 8.0);
+      if (daysUsed.size <= 3) {
+        highlightBadges.push(`📅 Siêu gọn (${daysUsed.size} ngày/tuần)`);
+      }
     }
 
-    // Score Component B: Shift Alignment (Morning: Tiet 1-5, Afternoon: Tiet 6-10)
+    // Score Component B: Shift Alignment
+    let morningSlots = 0;
+    let afternoonSlots = 0;
+    allSlots.forEach(s => {
+      const periods = s.tiet || [];
+      if (periods.some(p => p <= 5)) morningSlots++;
+      if (periods.some(p => p >= 6)) afternoonSlots++;
+    });
+
     if (shiftPref === 'morning') {
-      let morningCount = 0;
-      let totalSlots = allSlots.length || 1;
-      allSlots.forEach(s => {
-        const periods = s.tiet || [];
-        if (periods.some(p => p <= 5)) morningCount++;
-      });
-      const ratio = morningCount / totalSlots;
+      const ratio = morningSlots / (allSlots.length || 1);
       score += (ratio * 25.0) - ((1 - ratio) * 20.0);
+      if (afternoonSlots === 0) {
+        score += 30.0; // 100% Morning Bonus
+        highlightBadges.push('☀️ 100% Ca Sáng');
+      }
     } else if (shiftPref === 'afternoon') {
-      let afternoonCount = 0;
-      let totalSlots = allSlots.length || 1;
-      allSlots.forEach(s => {
-        const periods = s.tiet || [];
-        if (periods.some(p => p >= 6 && p <= 10)) afternoonCount++;
-      });
-      const ratio = afternoonCount / totalSlots;
+      const ratio = afternoonSlots / (allSlots.length || 1);
       score += (ratio * 25.0) - ((1 - ratio) * 20.0);
+      if (morningSlots === 0) {
+        score += 30.0; // 100% Afternoon Bonus
+        highlightBadges.push('🌙 100% Ca Chiều');
+      }
+    }
+
+    // Anti-Fatigue Split Shift Penalty (Morning & Afternoon on same day)
+    let splitShiftDays = 0;
+    Object.keys(daySlotsMap).forEach(d => {
+      const slots = daySlotsMap[d];
+      let hasM = false, hasA = false;
+      slots.forEach(s => {
+        const p = s.tiet || [];
+        if (p.some(x => x <= 5)) hasM = true;
+        if (p.some(x => x >= 6)) hasA = true;
+      });
+      if (hasM && hasA) splitShiftDays++;
+    });
+    if (splitShiftDays > 0) {
+      score -= (splitShiftDays * 15.0);
     }
 
     // Score Component C: Avoid Idle Gaps between classes in same day
@@ -2479,46 +2663,25 @@ function runAutoSchedulerAlgorithm() {
           }
         }
       });
-      score -= (totalGapPeriods * 5.0);
+
+      if (totalGapPeriods === 0) {
+        score += 15.0; // Zero Gap Bonus
+        highlightBadges.push('⚡ 0 Tiết Trống');
+      } else {
+        score -= (totalGapPeriods * 6.0);
+      }
     }
 
-    // Score Component D: Everytime Elite Quality Index (Tier S, Tier A, Tier C)
-    let hasWarnedTeacher = false;
-    let tierSCount = 0;
-    let tierACount = 0;
-    let qualityBonus = 0;
-
-    combo.forEach(u => {
-      const gvName = u.theory.tenGV;
-      if (gvName && typeof getEverytimeRating === 'function') {
-        const rInfo = getEverytimeRating(gvName);
-        if (rInfo) {
-          if (rInfo.tier === 'C' || rInfo.isWarned) {
-            hasWarnedTeacher = true;
-            qualityBonus -= 80.0;
-          } else if (rInfo.tier === 'S') {
-            tierSCount++;
-            qualityBonus += 30.0;
-          } else if (rInfo.tier === 'A') {
-            tierACount++;
-            qualityBonus += 15.0;
-          }
-
-          if (prefTopRated && rInfo.rating >= 4.8) {
-            qualityBonus += 8.0;
-          }
-          if (prefGenerous) {
-            if (rInfo.grading && rInfo.grading.includes('Thoáng')) qualityBonus += 8.0;
-            if (rInfo.attendance && (rInfo.attendance.includes('Không') || rInfo.attendance.includes('Dễ'))) qualityBonus += 6.0;
-          }
-        }
-      }
-    });
-
+    // Score Component D: Everytime Quality
     score += qualityBonus;
+    if (tierSCount >= 3) {
+      highlightBadges.push(`🌟 ${tierSCount} GV Phật Sống`);
+    } else if (tierSCount > 0) {
+      highlightBadges.push(`✨ ${tierSCount} GV Phật Sống`);
+    }
 
     if (avoidWarned && hasWarnedTeacher) {
-      score -= 500.0; // Sink warned combinations to bottom
+      score -= 500.0;
     }
 
     const normalizedScore = Math.max(10, Math.min(100, Math.round(score)));
@@ -2532,7 +2695,8 @@ function runAutoSchedulerAlgorithm() {
       totalCredits,
       daysCount: daysUsed.size,
       actualDaysOff,
-      classCodes
+      classCodes,
+      highlightBadges
     };
   });
 
@@ -2541,7 +2705,7 @@ function runAutoSchedulerAlgorithm() {
   generatedSolutions = scoredSolutions;
 
   const elapsed = Math.round(performance.now() - startTime);
-  if (elapsedBadge) elapsedBadge.textContent = `Tính toán trong ${elapsed}ms`;
+  if (elapsedBadge) elapsedBadge.textContent = `Tính toán trong ${elapsed}ms (${scoredSolutions.length} phương án)`;
 
   renderAutoSchedSolutions(scoredSolutions);
 }
@@ -2604,6 +2768,10 @@ function renderAutoSchedSolutions(solutions) {
       `;
     }).join('');
 
+    const badgesHtml = (sol.highlightBadges && sol.highlightBadges.length > 0)
+      ? `<div class="solution-highlight-row">${sol.highlightBadges.map(b => `<span class="solution-highlight-pill">${escapeHtml(b)}</span>`).join('')}</div>`
+      : '';
+
     card.innerHTML = `
       <div class="solution-card-header">
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -2616,6 +2784,8 @@ function renderAutoSchedSolutions(solutions) {
           ${sol.daysCount} ngày học/tuần • <span style="color: var(--primary); font-weight: 800;">${sol.totalCredits} TC</span>
         </div>
       </div>
+
+      ${badgesHtml}
 
       <div style="font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
         <i class="fa-solid fa-calendar-check" style="color: #10b981;"></i>
