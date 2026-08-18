@@ -2,6 +2,9 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/reviews", "destination": "/reviews.html" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -44,7 +47,7 @@
         },
         {
           "key": "Cache-Control",
-          "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400"
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     },
