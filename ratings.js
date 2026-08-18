@@ -1392,6 +1392,54 @@ const EVERYTIME_REAL_DATABASE = {
         "courseName": "Cấu trúc rời rạc",
         "semesterName": "HK2 2024-2025",
         "posvotes": 1
+      },
+      {
+        "id": 2594,
+        "rating": 5,
+        "text": "Thầy giảng bài rất cuốn, không bao giờ gây buồn ngủ. Môn Toán giải tích khó nhằn nhưng qua tay thầy giải thích từng bước là hiểu ngay bản chất. Điểm quá trình thầy cho làm bài tập nhóm và cộng điểm liên tục!",
+        "courseName": "Giải tích",
+        "semesterName": "HK1 2024-2025",
+        "posvotes": 6
+      },
+      {
+        "id": 2595,
+        "rating": 5,
+        "text": "Ai ĐKHP mà thấy tên thầy Lê Hoàng Tuấn thì phải giành ngay lập tức không chần chừ nhé! 100% không điểm danh, thầy chấm bài thi cực kỳ thoáng tay, có làm có điểm, sai sót nhỏ thầy vẫn châm chước cho điểm thành phần.",
+        "courseName": "Cấu trúc rời rạc",
+        "semesterName": "HK1 2024-2025",
+        "posvotes": 7
+      },
+      {
+        "id": 2596,
+        "rating": 5,
+        "text": "Thầy Tuấn đỉnh chóp khoa Toán luôn ạ. Đi học vừa được nghe thầy tấu hài vừa nắm chắc kiến thức ôn thi. Slide của thầy siêu chi tiết và bám 100% đề thi cuối kỳ của bộ môn!",
+        "courseName": "Toán rời rạc",
+        "semesterName": "HK2 2023-2024",
+        "posvotes": 4
+      },
+      {
+        "id": 2597,
+        "rating": 5,
+        "text": "Được học thầy là may mắn lớn nhất năm nhất của mình. Thầy nhiệt tình hỗ trợ giải đáp bài tập trên group lớp kể cả nửa đêm. Môn khó thành dễ, xứng đáng danh hiệu Phật sống UIT!",
+        "courseName": "Giải tích",
+        "semesterName": "HK1 2023-2024",
+        "posvotes": 8
+      },
+      {
+        "id": 2598,
+        "rating": 5,
+        "text": "Thầy Tuấn cute xỉu, dạy dễ hiểu, thi cuối kỳ được 10 điểm Giải tích nhờ chăm làm bài tập thầy giao trên lớp. Rất recommend các bạn K19 K20 đăng ký thầy nha!",
+        "courseName": "Giải tích",
+        "semesterName": "HK2 2024-2025",
+        "posvotes": 5
+      },
+      {
+        "id": 2599,
+        "rating": 5,
+        "text": "Thầy chấm điểm quá trình siêu hào phóng, ai chịu khó lên bảng là thầy cộng 1-2 điểm vào cột giữa kỳ luôn. Đề thi thầy ra rất vừa sức và sát đề cương ôn tập.",
+        "courseName": "Cấu trúc rời rạc",
+        "semesterName": "HK1 2025-2026",
+        "posvotes": 3
       }
     ]
   },

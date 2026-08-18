@@ -443,19 +443,23 @@ function getSupabaseClient() {
 
 // Helper: Fetch and Sync Reviews from Supabase Cloud DB
 async function syncSupabaseReviews(allTeachers, onUpdated) {
-  const client = getSupabaseClient();
-  if (!client) return;
+  const cfg = window.DKHP_SUPABASE_CONFIG;
+  if (!cfg || !cfg.url || !cfg.anonKey) return;
 
   try {
-    const { data, error } = await client
-      .from('uit_teacher_reviews')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const res = await fetch(`${cfg.url}/rest/v1/uit_teacher_reviews?select=*&order=created_at.desc`, {
+      headers: {
+        'apikey': cfg.anonKey,
+        'Authorization': `Bearer ${cfg.anonKey}`
+      }
+    });
 
-    if (error) {
-      console.warn('Could not fetch from Supabase (check table name & RLS policies):', error.message);
+    if (!res.ok) {
+      console.warn('Supabase REST fetch status:', res.status);
       return;
     }
+
+    const data = await res.json();
 
     if (Array.isArray(data) && data.length > 0) {
       data.forEach(item => {
@@ -505,36 +509,39 @@ async function syncSupabaseReviews(allTeachers, onUpdated) {
     }
 
     // Subscribe to Realtime Inserts
-    client
-      .channel('uit_reviews_realtime_channel')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'uit_teacher_reviews' }, payload => {
-        if (payload && payload.new) {
-          const item = payload.new;
-          const normKey = window.normalizeTeacherKey ? window.normalizeTeacherKey(item.teacher_name) : item.teacher_name.toLowerCase();
-          let teacher = allTeachers.find(t => t.normKey === normKey || t.name.toLowerCase() === item.teacher_name.toLowerCase());
+    const client = getSupabaseClient();
+    if (client) {
+      client
+        .channel('uit_reviews_realtime_channel')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'uit_teacher_reviews' }, payload => {
+          if (payload && payload.new) {
+            const item = payload.new;
+            const normKey = window.normalizeTeacherKey ? window.normalizeTeacherKey(item.teacher_name) : item.teacher_name.toLowerCase();
+            let teacher = allTeachers.find(t => t.normKey === normKey || t.name.toLowerCase() === item.teacher_name.toLowerCase());
 
-          const newReviewObj = {
-            rating: item.rating || 5,
-            courseName: item.course_name || 'Môn học',
-            semesterName: item.semester_name || 'Học kỳ gần đây',
-            text: item.review_text,
-            posvotes: item.posvotes || 1
-          };
+            const newReviewObj = {
+              rating: item.rating || 5,
+              courseName: item.course_name || 'Môn học',
+              semesterName: item.semester_name || 'Học kỳ gần đây',
+              text: item.review_text,
+              posvotes: item.posvotes || 1
+            };
 
-          if (teacher) {
-            if (!teacher.topReviews) teacher.topReviews = [];
-            if (!teacher.topReviews.some(r => r.text === newReviewObj.text)) {
-              teacher.topReviews.unshift(newReviewObj);
-              teacher.reviewsCount = (teacher.reviewsCount || 0) + 1;
+            if (teacher) {
+              if (!teacher.topReviews) teacher.topReviews = [];
+              if (!teacher.topReviews.some(r => r.text === newReviewObj.text)) {
+                teacher.topReviews.unshift(newReviewObj);
+                teacher.reviewsCount = (teacher.reviewsCount || 0) + 1;
+              }
             }
+            if (typeof onUpdated === 'function') {
+              onUpdated();
+            }
+            showReviewToast(`🌟 Có sinh viên vừa đóng góp đánh giá mới cho GV ${item.teacher_name}!`);
           }
-          if (typeof onUpdated === 'function') {
-            onUpdated();
-          }
-          showReviewToast(`🌟 Có sinh viên vừa đóng góp đánh giá mới cho GV ${item.teacher_name}!`);
-        }
-      })
-      .subscribe();
+        })
+        .subscribe();
+    }
   } catch (e) {
     console.warn('Supabase sync exception:', e);
   }
@@ -852,26 +859,37 @@ function initSubmitReviewModal(allTeachers, onReviewAdded) {
         console.error('Failed to save to localStorage:', err);
       }
 
-      // Save to Supabase Cloud Database (if configured)
-      const client = getSupabaseClient();
-      if (client) {
-        client.from('uit_teacher_reviews').insert([{
-          teacher_name: teacherName,
-          course_name: courseName,
-          semester_name: semesterName,
-          rating: rating,
-          grading: grading,
-          attendance: attendance,
-          workload: workload,
-          tags: selectedTags,
-          review_text: reviewText,
-          posvotes: 1
-        }]).then(({ error }) => {
-          if (error) {
-            console.warn('Supabase cloud insert warning:', error.message);
+      // Save to Supabase Cloud Database via Direct REST API
+      const cfg = window.DKHP_SUPABASE_CONFIG;
+      if (cfg && cfg.url && cfg.anonKey) {
+        fetch(`${cfg.url}/rest/v1/uit_teacher_reviews`, {
+          method: 'POST',
+          headers: {
+            'apikey': cfg.anonKey,
+            'Authorization': `Bearer ${cfg.anonKey}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify({
+            teacher_name: teacherName,
+            course_name: courseName,
+            semester_name: semesterName,
+            rating: rating,
+            grading: grading,
+            attendance: attendance,
+            workload: workload,
+            tags: selectedTags,
+            review_text: reviewText,
+            posvotes: 1
+          })
+        }).then(res => {
+          if (!res.ok) {
+            console.warn('Supabase REST Insert HTTP Error:', res.status);
           } else {
-            console.log('✅ Đã lưu đánh giá thành công lên Supabase Cloud DB!');
+            console.log('✅ Đã lưu đánh giá trực tiếp lên Supabase Cloud DB thành công!');
           }
+        }).catch(err => {
+          console.error('Supabase direct insert exception:', err);
         });
       }
 
