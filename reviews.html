@@ -264,15 +264,17 @@
 
         <!-- Course & Semester Row -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div class="form-group">
+          <div class="form-group" style="position: relative;">
             <label class="form-label" for="submitCourseInput">📚 Môn học <span style="color: #ef4444;">*</span></label>
             <input 
               type="text" 
               id="submitCourseInput" 
               class="form-control" 
-              placeholder="VD: IT002 - Lập trình OOP" 
+              placeholder="VD: IT002 hoặc Lập trình..." 
               required
+              autocomplete="off"
             >
+            <div class="submit-combobox-list custom-scrollbar" id="submitCourseDropdown" style="display: none;"></div>
           </div>
 
           <div class="form-group">

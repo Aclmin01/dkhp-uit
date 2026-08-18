@@ -483,10 +483,27 @@ function initSubmitReviewModal(allTeachers, onReviewAdded) {
 
   const teacherInput = document.getElementById('submitTeacherInput');
   const teacherDropdown = document.getElementById('submitTeacherDropdown');
+  const courseInput = document.getElementById('submitCourseInput');
+  const courseDropdown = document.getElementById('submitCourseDropdown');
   const starPicker = document.getElementById('starRatingPicker');
   const ratingValueInput = document.getElementById('submitRatingValue');
   const ratingLabel = document.getElementById('starRatingLabel');
   const tagsSelector = document.getElementById('submitTagsSelector');
+
+  // Build unique courses list from timetable data
+  const allCoursesList = [];
+  const seenCourseCodes = new Set();
+  (window.DEFAULT_TIMETABLE_DATA || []).forEach(item => {
+    if (item.maMH && !seenCourseCodes.has(item.maMH)) {
+      seenCourseCodes.add(item.maMH);
+      allCoursesList.push({
+        maMH: item.maMH,
+        tenMH: item.tenMH || item.maMH,
+        soTC: item.soTC || 0,
+        label: `${item.maMH} - ${item.tenMH}`
+      });
+    }
+  });
 
   if (!modal) return;
 
@@ -507,6 +524,7 @@ function initSubmitReviewModal(allTeachers, onReviewAdded) {
       document.body.style.overflow = '';
     }
     if (teacherDropdown) teacherDropdown.style.display = 'none';
+    if (courseDropdown) courseDropdown.style.display = 'none';
   }
 
   if (btnOpen) btnOpen.addEventListener('click', () => openSubmitModal());
@@ -587,15 +605,86 @@ function initSubmitReviewModal(allTeachers, onReviewAdded) {
       if (item) {
         teacherInput.value = item.dataset.teacherName;
         teacherDropdown.style.display = 'none';
-      }
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.form-group')) {
-        teacherDropdown.style.display = 'none';
+        if (courseInput) {
+          setTimeout(() => courseInput.focus(), 100);
+        }
       }
     });
   }
+
+  // Course Autocomplete Suggestions
+  if (courseInput && courseDropdown) {
+    function renderCourseSuggestions() {
+      const q = courseInput.value.trim().toLowerCase();
+      const currentTeacherName = (teacherInput?.value || '').trim();
+      let teacherCourses = [];
+
+      if (currentTeacherName) {
+        const normKey = window.normalizeTeacherKey ? window.normalizeTeacherKey(currentTeacherName) : currentTeacherName.toLowerCase();
+        const foundT = allTeachers.find(t => t.normKey === normKey || t.name.toLowerCase() === currentTeacherName.toLowerCase());
+        if (foundT && foundT.courses) {
+          teacherCourses = foundT.courses;
+        }
+      }
+
+      let matches = [];
+
+      if (!q) {
+        if (teacherCourses.length > 0) {
+          matches = teacherCourses.map(c => ({
+            maMH: c.maMH,
+            tenMH: c.tenMH,
+            soTC: 0,
+            label: `${c.maMH} - ${c.tenMH}`,
+            isTeacherCourse: true
+          }));
+        } else {
+          matches = allCoursesList.slice(0, 10);
+        }
+      } else {
+        const normQ = normalizeStr(q);
+        matches = allCoursesList.filter(c => {
+          return c.maMH.toLowerCase().includes(q) || 
+                 c.tenMH.toLowerCase().includes(q) || 
+                 normalizeStr(c.maMH).includes(normQ) || 
+                 normalizeStr(c.tenMH).includes(normQ);
+        }).slice(0, 10);
+      }
+
+      if (matches.length === 0) {
+        courseDropdown.style.display = 'none';
+        return;
+      }
+
+      courseDropdown.innerHTML = matches.map(c => `
+        <div class="submit-combobox-item" data-course-label="${escapeHtml(c.label || (c.maMH + ' - ' + c.tenMH))}">
+          <span style="font-family: var(--font-mono); font-weight: 700; color: var(--primary);">${escapeHtml(c.maMH)}</span>
+          <span style="font-weight: 600; color: var(--text-primary); margin-left: 6px;">${escapeHtml(c.tenMH)}</span>
+          ${c.isTeacherCourse ? '<span style="font-size: 10px; background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 1px 6px; border-radius: 4px; margin-left: 6px; font-weight: 700;">Môn của GV</span>' : (c.soTC ? `<span style="font-size: 11px; color: var(--text-muted); margin-left: 6px;">(${c.soTC} TC)</span>` : '')}
+        </div>
+      `).join('');
+      courseDropdown.style.display = 'block';
+    }
+
+    courseInput.addEventListener('input', renderCourseSuggestions);
+    courseInput.addEventListener('focus', renderCourseSuggestions);
+
+    courseDropdown.addEventListener('click', (e) => {
+      const item = e.target.closest('.submit-combobox-item');
+      if (item) {
+        courseInput.value = item.dataset.courseLabel;
+        courseDropdown.style.display = 'none';
+      }
+    });
+  }
+
+  // Global click outside dropdowns
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.form-group')) {
+      if (teacherDropdown) teacherDropdown.style.display = 'none';
+      if (courseDropdown) courseDropdown.style.display = 'none';
+    }
+  });
 
   // Form Submit Handler
   if (form) {
