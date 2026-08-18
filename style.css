@@ -2685,3 +2685,121 @@ kbd {
   border-top: 1px solid var(--border-color);
 }
 
+/* ==============================================================================
+   SUBMIT REVIEW FORM STYLES
+   ============================================================================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-md, 8px);
+  border: 1.5px solid var(--border-color);
+  background: var(--bg-surface-elevated, var(--bg-surface));
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.star-rating-picker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface-elevated);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.star-item {
+  font-size: 22px;
+  color: var(--border-color);
+  cursor: pointer;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.star-item.active {
+  color: #f59e0b;
+}
+
+.star-item:hover {
+  transform: scale(1.2);
+}
+
+.submit-tags-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.submit-tag-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.submit-tag-pill:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.submit-tag-pill.active {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.submit-combobox-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-surface-elevated);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 100000;
+  box-shadow: var(--shadow-lg);
+  margin-top: 4px;
+}
+
+.submit-combobox-item {
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.submit-combobox-item:hover {
+  background: var(--primary-light, rgba(59, 130, 246, 0.15));
+  color: var(--primary);
+}
+
+

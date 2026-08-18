@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   });
 
+  // 3.1 Load and Merge User-Submitted Custom Reviews from LocalStorage
+  loadAndApplyCustomReviews(allTeachers);
+
   // 4. Update Header Stats Counters
   updateStatCounters(allTeachers);
 
@@ -405,9 +408,276 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // 10. Initialize Submit Review Modal Controller
+  initSubmitReviewModal(allTeachers, () => {
+    updateStatCounters(allTeachers);
+    filterAndRender();
+  });
+
   // Initial Run
   filterAndRender();
 });
+
+// Helper: Load and Apply User Submitted Custom Reviews from LocalStorage
+function loadAndApplyCustomReviews(allTeachers) {
+  try {
+    const raw = localStorage.getItem('dkhp_custom_reviews');
+    if (!raw) return;
+    const customList = JSON.parse(raw);
+    if (!Array.isArray(customList)) return;
+
+    customList.forEach(item => {
+      if (!item.teacherName || !item.reviewText) return;
+      const normKey = window.normalizeTeacherKey ? window.normalizeTeacherKey(item.teacherName) : item.teacherName.toLowerCase();
+      let teacher = allTeachers.find(t => t.normKey === normKey || t.name.toLowerCase() === item.teacherName.toLowerCase());
+
+      const newReviewObj = {
+        rating: item.rating || 5,
+        courseName: item.courseName || 'Môn học',
+        semesterName: item.semesterName || 'Học kỳ gần đây',
+        text: item.reviewText,
+        posvotes: item.posvotes || 1
+      };
+
+      if (teacher) {
+        if (!teacher.topReviews) teacher.topReviews = [];
+        // Avoid duplicate insertion
+        if (!teacher.topReviews.some(r => r.text === newReviewObj.text && r.courseName === newReviewObj.courseName)) {
+          teacher.topReviews.unshift(newReviewObj);
+          teacher.reviewsCount = (teacher.reviewsCount || 0) + 1;
+          if (item.tags && Array.isArray(item.tags)) {
+            teacher.tags = Array.from(new Set([...(teacher.tags || []), ...item.tags]));
+          }
+        }
+      } else {
+        // Create new teacher profile
+        teacher = {
+          name: item.teacherName,
+          normKey: normKey,
+          tier: item.rating >= 4.5 ? 'S' : (item.rating >= 3.8 ? 'A' : (item.rating >= 3.0 ? 'B' : 'C')),
+          rating: item.rating || 5,
+          reviewsCount: 1,
+          recommendPercent: item.rating >= 4 ? 100 : 70,
+          grading: item.grading || 'Rộng rãi (Thoáng)',
+          attendance: item.attendance || 'Không điểm danh / Dễ',
+          workload: item.workload || 'Vừa sức',
+          tags: item.tags || ['#Phật sống UIT'],
+          topReviews: [newReviewObj],
+          courses: [{ maMH: item.courseName, tenMH: item.courseName }]
+        };
+        allTeachers.push(teacher);
+      }
+    });
+  } catch (e) {
+    console.error('Error parsing custom reviews:', e);
+  }
+}
+
+// Controller: Submit New Review Modal
+function initSubmitReviewModal(allTeachers, onReviewAdded) {
+  const modal = document.getElementById('modalSubmitReview');
+  const btnOpen = document.getElementById('btnOpenSubmitReviewModal');
+  const btnClose = document.getElementById('btnCloseSubmitModal');
+  const btnCancel = document.getElementById('btnCancelSubmitReview');
+  const form = document.getElementById('formSubmitReview');
+
+  const teacherInput = document.getElementById('submitTeacherInput');
+  const teacherDropdown = document.getElementById('submitTeacherDropdown');
+  const starPicker = document.getElementById('starRatingPicker');
+  const ratingValueInput = document.getElementById('submitRatingValue');
+  const ratingLabel = document.getElementById('starRatingLabel');
+  const tagsSelector = document.getElementById('submitTagsSelector');
+
+  if (!modal) return;
+
+  function openSubmitModal(prefillTeacher = '') {
+    if (prefillTeacher && teacherInput) {
+      teacherInput.value = prefillTeacher;
+    }
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (teacherInput) {
+      setTimeout(() => teacherInput.focus(), 150);
+    }
+  }
+
+  function closeSubmitModal() {
+    modal.classList.remove('open');
+    if (!document.querySelector('.modal-backdrop.open, .modal-overlay.open')) {
+      document.body.style.overflow = '';
+    }
+    if (teacherDropdown) teacherDropdown.style.display = 'none';
+  }
+
+  if (btnOpen) btnOpen.addEventListener('click', () => openSubmitModal());
+  if (btnClose) btnClose.addEventListener('click', closeSubmitModal);
+  if (btnCancel) btnCancel.addEventListener('click', closeSubmitModal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeSubmitModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      closeSubmitModal();
+    }
+  });
+
+  // Star Rating Interaction
+  const starLabels = {
+    5: '5/5 Sao (Xuất sắc / Phật sống)',
+    4: '4/5 Sao (Dạy tốt / Nhiệt tình)',
+    3: '3/5 Sao (Bình thường / Chuẩn chỉ)',
+    2: '2/5 Sao (Hơi khó / Chấm chặt)',
+    1: '1/5 Sao (Cảnh báo / Rất gắt)'
+  };
+
+  if (starPicker) {
+    const starItems = starPicker.querySelectorAll('.star-item');
+    starItems.forEach(star => {
+      star.addEventListener('click', () => {
+        const val = parseInt(star.dataset.val);
+        if (ratingValueInput) ratingValueInput.value = val;
+        if (ratingLabel) ratingLabel.textContent = starLabels[val] || `${val}/5 Sao`;
+
+        starItems.forEach(s => {
+          const sVal = parseInt(s.dataset.val);
+          s.classList.toggle('active', sVal <= val);
+        });
+      });
+    });
+  }
+
+  // Tags Toggle Interaction
+  if (tagsSelector) {
+    tagsSelector.addEventListener('click', (e) => {
+      const pill = e.target.closest('.submit-tag-pill');
+      if (pill) {
+        pill.classList.toggle('active');
+      }
+    });
+  }
+
+  // Teacher Autocomplete Suggestions
+  if (teacherInput && teacherDropdown) {
+    teacherInput.addEventListener('input', () => {
+      const q = teacherInput.value.trim().toLowerCase();
+      if (!q) {
+        teacherDropdown.style.display = 'none';
+        return;
+      }
+
+      const matches = allTeachers.filter(t => t.name.toLowerCase().includes(q) || (normalizeStr(t.name)).includes(normalizeStr(q))).slice(0, 8);
+      if (matches.length === 0) {
+        teacherDropdown.style.display = 'none';
+        return;
+      }
+
+      teacherDropdown.innerHTML = matches.map(t => `
+        <div class="submit-combobox-item" data-teacher-name="${escapeHtml(t.name)}">
+          <strong>${escapeHtml(t.name)}</strong>
+          <span style="font-size: 11px; color: var(--text-muted); margin-left: 6px;">(${t.tier ? 'Tier ' + t.tier : 'GV'} • ⭐ ${t.rating})</span>
+        </div>
+      `).join('');
+      teacherDropdown.style.display = 'block';
+    });
+
+    teacherDropdown.addEventListener('click', (e) => {
+      const item = e.target.closest('.submit-combobox-item');
+      if (item) {
+        teacherInput.value = item.dataset.teacherName;
+        teacherDropdown.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.form-group')) {
+        teacherDropdown.style.display = 'none';
+      }
+    });
+  }
+
+  // Form Submit Handler
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const teacherName = (document.getElementById('submitTeacherInput')?.value || '').trim();
+      const courseName = (document.getElementById('submitCourseInput')?.value || '').trim();
+      const semesterName = document.getElementById('submitSemesterSelect')?.value || 'HK2 2025-2026';
+      const rating = parseInt(document.getElementById('submitRatingValue')?.value || '5');
+      const grading = document.getElementById('submitGradingSelect')?.value || 'Rộng rãi (Thoáng)';
+      const attendance = document.getElementById('submitAttendanceSelect')?.value || 'Không điểm danh / Dễ';
+      const workload = document.getElementById('submitWorkloadSelect')?.value || 'Vừa sức';
+      const reviewText = (document.getElementById('submitReviewText')?.value || '').trim();
+
+      const selectedTags = Array.from(document.querySelectorAll('#submitTagsSelector .submit-tag-pill.active')).map(el => el.dataset.tag);
+
+      if (!teacherName || !courseName || !reviewText) {
+        alert('Vui lòng điền đầy đủ Tên Giảng Viên, Môn Học và Nội Dung Đánh Giá!');
+        return;
+      }
+
+      const reviewRecord = {
+        id: 'rev_' + Date.now(),
+        teacherName,
+        courseName,
+        semesterName,
+        rating,
+        grading,
+        attendance,
+        workload,
+        tags: selectedTags,
+        reviewText,
+        createdAt: new Date().toISOString()
+      };
+
+      // Save to localStorage
+      try {
+        const stored = JSON.parse(localStorage.getItem('dkhp_custom_reviews') || '[]');
+        stored.unshift(reviewRecord);
+        localStorage.setItem('dkhp_custom_reviews', JSON.stringify(stored));
+      } catch (err) {
+        console.error('Failed to save to localStorage:', err);
+      }
+
+      // Apply review to in-memory teacher list
+      loadAndApplyCustomReviews(allTeachers);
+
+      // Close modal & reset
+      closeSubmitModal();
+      form.reset();
+      if (ratingValueInput) ratingValueInput.value = '5';
+      if (starPicker) {
+        starPicker.querySelectorAll('.star-item').forEach(s => s.classList.add('active'));
+      }
+      if (ratingLabel) ratingLabel.textContent = '5/5 Sao (Xuất sắc / Phật sống)';
+
+      // Trigger refresh of grid and statistics
+      if (typeof onReviewAdded === 'function') {
+        onReviewAdded();
+      }
+
+      showReviewToast(`🎉 Đã đăng đánh giá cho GV "${teacherName}" thành công! Cảm ơn đóng góp của bạn.`);
+    });
+  }
+}
+
+// Helper: Show Floating Toast Notification
+function showReviewToast(msg) {
+  const toast = document.getElementById('reviewToastNotification');
+  if (!toast) return;
+  toast.innerHTML = `
+    <div style="background: var(--bg-surface-elevated); color: var(--text-primary); border: 1.5px solid #10b981; border-radius: var(--radius-md); padding: 12px 18px; box-shadow: var(--shadow-xl); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 10px; animation: modalPopCenter 0.2s ease;">
+      <i class="fa-solid fa-circle-check" style="color: #10b981; font-size: 18px;"></i>
+      <span>${escapeHtml(msg)}</span>
+    </div>
+  `;
+  toast.style.display = 'block';
+  setTimeout(() => {
+    toast.style.display = 'none';
+  }, 4000);
+}
 
 // Helper: Build Map of Teacher Normalized Key -> Courses
 function buildTeacherCoursesMap() {

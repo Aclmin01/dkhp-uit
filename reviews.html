@@ -60,6 +60,11 @@
 
     <!-- Header Actions -->
     <div class="header-actions">
+      <button class="btn btn-primary" id="btnOpenSubmitReviewModal" title="Đóng góp bài đánh giá cho Giảng viên & Môn học">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span>Viết Đánh Giá</span>
+      </button>
+
       <a href="index.html" class="btn btn-magic" title="Chuyển sang công cụ Tự động xếp TKB">
         <i class="fa-solid fa-wand-magic-sparkles" style="color: #fde047;"></i>
         <span>Tự động xếp TKB</span>
@@ -223,6 +228,147 @@
       </div>
     </div>
   </div>
+
+  <!-- ==============================================================================
+       4. SUBMIT NEW REVIEW MODAL (CENTERED POPUP)
+       ============================================================================== -->
+  <div class="modal-backdrop" id="modalSubmitReview">
+    <div class="modal-box" style="max-width: 640px; max-height: 90vh;">
+      <div class="modal-header" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(147, 51, 234, 0.08));">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;">
+            <i class="fa-solid fa-pen-nib"></i>
+          </div>
+          <div>
+            <h3 class="modal-title">Viết Đánh Giá Giảng Viên & Môn Học</h3>
+            <div style="font-size: 11.5px; color: var(--text-muted);">Đánh giá ẩn danh 100% giúp các bạn sinh viên UIT khóa sau</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btnCloseSubmitModal" title="Đóng">&times;</button>
+      </div>
+
+      <form id="formSubmitReview" class="modal-body custom-scrollbar" style="max-height: calc(90vh - 130px); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 18px;">
+        <!-- Teacher Selection -->
+        <div class="form-group" style="position: relative;">
+          <label class="form-label" for="submitTeacherInput">👨‍🏫 Giảng viên đánh giá <span style="color: #ef4444;">*</span></label>
+          <input 
+            type="text" 
+            id="submitTeacherInput" 
+            class="form-control" 
+            placeholder="Nhập hoặc chọn tên Giảng viên (ví dụ: Đặng Việt Dũng...)" 
+            required 
+            autocomplete="off"
+          >
+          <div class="submit-combobox-list custom-scrollbar" id="submitTeacherDropdown" style="display: none;"></div>
+        </div>
+
+        <!-- Course & Semester Row -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label" for="submitCourseInput">📚 Môn học <span style="color: #ef4444;">*</span></label>
+            <input 
+              type="text" 
+              id="submitCourseInput" 
+              class="form-control" 
+              placeholder="VD: IT002 - Lập trình OOP" 
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="submitSemesterSelect">🗓️ Học kỳ đã học</label>
+            <select id="submitSemesterSelect" class="form-control">
+              <option value="HK2 2025-2026">HK2 2025-2026</option>
+              <option value="HK1 2025-2026">HK1 2025-2026</option>
+              <option value="HK2 2024-2025">HK2 2024-2025</option>
+              <option value="HK1 2024-2025">HK1 2024-2025</option>
+              <option value="Học kỳ Hè">Học kỳ Hè</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Star Rating -->
+        <div class="form-group">
+          <label class="form-label">⭐ Đánh giá tổng quan <span style="color: #ef4444;">*</span></label>
+          <div class="star-rating-picker" id="starRatingPicker">
+            <i class="fa-solid fa-star star-item active" data-val="1"></i>
+            <i class="fa-solid fa-star star-item active" data-val="2"></i>
+            <i class="fa-solid fa-star star-item active" data-val="3"></i>
+            <i class="fa-solid fa-star star-item active" data-val="4"></i>
+            <i class="fa-solid fa-star star-item active" data-val="5"></i>
+            <span id="starRatingLabel" style="font-weight: 800; font-size: 13px; color: #f59e0b; margin-left: 8px;">5/5 Sao (Xuất sắc / Phật sống)</span>
+          </div>
+          <input type="hidden" id="submitRatingValue" value="5">
+        </div>
+
+        <!-- Evaluation Criteria Row -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: var(--bg-surface-elevated); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">📝 Chấm điểm</label>
+            <select id="submitGradingSelect" class="form-control" style="font-size: 12px; padding: 6px 8px;">
+              <option value="Rộng rãi (Thoáng)">Rộng rãi (Thoáng)</option>
+              <option value="Chuẩn chỉ / Công bằng">Chuẩn chỉ / Công bằng</option>
+              <option value="Chặt chẽ / Khó điểm cao">Chặt chẽ / Khó điểm cao</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">🕒 Điểm danh</label>
+            <select id="submitAttendanceSelect" class="form-control" style="font-size: 12px; padding: 6px 8px;">
+              <option value="Không điểm danh / Dễ">Không điểm danh / Dễ</option>
+              <option value="Thỉnh thoảng điểm danh">Thỉnh thoảng điểm danh</option>
+              <option value="Nghiêm ngặt mỗi buổi">Nghiêm ngặt mỗi buổi</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">📚 Khối lượng</label>
+            <select id="submitWorkloadSelect" class="form-control" style="font-size: 12px; padding: 6px 8px;">
+              <option value="Nhẹ nhàng">Nhẹ nhàng</option>
+              <option value="Vừa sức" selected>Vừa sức</option>
+              <option value="Nhiều bài tập / Nặng">Nhiều bài tập / Nặng</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Quick Tags -->
+        <div class="form-group">
+          <label class="form-label">🏷️ Chọn các tag đặc trưng (Bấm để chọn):</label>
+          <div class="submit-tags-selector" id="submitTagsSelector">
+            <span class="submit-tag-pill active" data-tag="Phật sống UIT">#Phật sống UIT</span>
+            <span class="submit-tag-pill active" data-tag="Chấm điểm thoáng">#Chấm điểm thoáng</span>
+            <span class="submit-tag-pill" data-tag="Không điểm danh">#Không điểm danh</span>
+            <span class="submit-tag-pill active" data-tag="Dạy có tâm">#Dạy có tâm</span>
+            <span class="submit-tag-pill" data-tag="Đề bám sát">#Đề bám sát</span>
+            <span class="submit-tag-pill" data-tag="Cho điểm cộng">#Cho điểm cộng</span>
+            <span class="submit-tag-pill" data-tag="Thi thực hành dễ">#Thi thực hành dễ</span>
+            <span class="submit-tag-pill" data-tag="Nhiệt tình giải đáp">#Nhiệt tình giải đáp</span>
+          </div>
+        </div>
+
+        <!-- Detailed Review Textarea -->
+        <div class="form-group">
+          <label class="form-label" for="submitReviewText">💬 Nội dung nhận xét chi tiết <span style="color: #ef4444;">*</span></label>
+          <textarea 
+            id="submitReviewText" 
+            class="form-control" 
+            rows="4" 
+            placeholder="Chia sẻ chi tiết về cách giảng dạy, hình thức thi giữa kỳ/cuối kỳ, có được mang tài liệu hay laptop không, bài tập lab như thế nào..." 
+            required
+            style="line-height: 1.5; resize: vertical;"
+          ></textarea>
+        </div>
+
+        <div class="modal-footer" style="padding: 12px 0 0 0; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+          <button type="button" class="btn btn-secondary" id="btnCancelSubmitReview">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitReviewAction">
+            <i class="fa-solid fa-paper-plane"></i> Gửi Đánh Giá Ngay
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="reviewToastNotification" style="position: fixed; bottom: 24px; right: 24px; z-index: 1000000; display: none;"></div>
 
   <!-- Scripts -->
   <script src="data.js"></script>
