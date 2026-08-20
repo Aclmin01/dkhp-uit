@@ -1870,17 +1870,18 @@ DangKy(monDangKy);
 
 function DangKy(monDangKyString) {
   try {
-    var listMonDangKy = monDangKyString.trim().split('\\n').map((it) => it.trim())
+    var listMonDangKy = monDangKyString.trim().split('\\n').map((it) => it.trim()).filter(Boolean);
     
-    var allRows = [...document.querySelectorAll('form table tr')]
+    var allRows = [...document.querySelectorAll('table tr')];
 
-    var rowsToDangKy = allRows.filter((it) => listMonDangKy.includes(it.querySelector('td:nth-child(2)')?.textContent?.trim()))
+    var rowsToDangKy = allRows.filter((it) => listMonDangKy.includes(it.querySelector('td:nth-child(2)')?.textContent?.trim()));
     
     rowsToDangKy.forEach((it, index) => {
-      it.querySelector('td:first-child input[type="checkbox"]').click();
+      var chk = it.querySelector('input[type="checkbox"]') || it.querySelector('td:first-child');
+      if (chk) chk.click();
       var tenLop = it.querySelector('td:nth-child(2)')?.textContent?.trim();
       successLog(index + 1 + '.Đã chọn lớp ' + tenLop);
-    })
+    });
   } catch {
     errorLog('Chọn lớp không thành công! Bạn tự chọn lớp đi nhé!');
   }
