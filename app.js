@@ -61,6 +61,8 @@ try {
   if (raw) savedExcluded = JSON.parse(raw);
 } catch (e) {}
 
+let currentWeekView = 'all'; // 'all' | 'theory_only' | 'practice_only'
+
 let currentFilters = {
   selectedSubject: 'all',
   selectedTeacher: 'all',
@@ -1134,6 +1136,19 @@ window.toggleCourseSelect = function(courseId) {
   renderAll();
 };
 
+function renderWeekViewStatusIndicator() {
+  const indicator = document.getElementById('weekViewStatusIndicator');
+  if (!indicator) return;
+
+  if (currentWeekView === 'theory_only') {
+    indicator.innerHTML = `<span class="status-pill status-theory"><i class="fa-solid fa-book-open"></i> Đang xem: Tuần KHÔNG có Thực hành (Chỉ Lý thuyết)</span>`;
+  } else if (currentWeekView === 'practice_only') {
+    indicator.innerHTML = `<span class="status-pill status-practice"><i class="fa-solid fa-flask"></i> Đang xem: Tuần CÓ Thực hành (Đầy đủ ca TH)</span>`;
+  } else {
+    indicator.innerHTML = `<span class="status-pill status-all"><i class="fa-solid fa-calendar-week"></i> Đang xem: Đầy đủ toàn bộ lịch học (LT + TH)</span>`;
+  }
+}
+
 // ==============================================================================
 // 8. TIMETABLE MATRIX RENDERER
 // ==============================================================================
@@ -1141,11 +1156,19 @@ function renderTimetableMatrix() {
   const grid = document.getElementById('timetableGrid');
   if (!grid) return;
 
+  renderWeekViewStatusIndicator();
+
   while (grid.children.length > 7) {
     grid.removeChild(grid.lastChild);
   }
 
-  const flatItems = getSelectedFlatItems();
+  let flatItems = getSelectedFlatItems();
+
+  // Filter based on Week View mode (Tuần có TH vs Tuần không có TH)
+  if (currentWeekView === 'theory_only') {
+    flatItems = flatItems.filter(item => !item.isTH);
+  }
+
   const maxPeriodInUse = flatItems.reduce((max, item) => {
     const itemMax = (item.tiet || []).reduce((m, p) => Math.max(m, p), 0);
     return Math.max(max, itemMax);
@@ -3334,9 +3357,61 @@ window.openEverytimeModal = function(teacherName) {
   openModal('modalEverytimeReview');
 };
 
+window.autoScheduleCurrentPlan = function() {
+  const currentSelected = plans[currentPlanId]?.selected || [];
+  const subjectsInPlan = Array.from(new Set(
+    currentSelected.map(id => courseMap.get(id)?.maMH).filter(Boolean)
+  ));
+
+  if (subjectsInPlan.length === 0) {
+    showAppToast('⚠️ Kế hoạch hiện tại chưa có môn nào. Vui lòng chọn ít nhất 1 môn vào TKB trước!');
+    return;
+  }
+
+  autoSchedSelectedSubjects = [...subjectsInPlan];
+  openAutoSchedulerModal();
+  renderAutoSchedChips();
+  renderExcludedTeachersChips();
+  runAutoSchedulerAlgorithm();
+  showAppToast(`⚡ Đang tự động xếp TKB tối ưu cho ${subjectsInPlan.length} môn trong khung hiện tại!`);
+};
+
+window.loadSubjectsFromCurrentPlan = function() {
+  const currentSelected = plans[currentPlanId]?.selected || [];
+  const subjectsInPlan = Array.from(new Set(
+    currentSelected.map(id => courseMap.get(id)?.maMH).filter(Boolean)
+  ));
+
+  if (subjectsInPlan.length === 0) {
+    showAppToast('⚠️ Kế hoạch hiện tại chưa có môn nào!');
+    return;
+  }
+
+  autoSchedSelectedSubjects = [...subjectsInPlan];
+  renderAutoSchedChips();
+  showAppToast(`📥 Đã nạp ${subjectsInPlan.length} môn từ TKB hiện tại: ${subjectsInPlan.join(', ')}`);
+};
+
 const originalBindEvents = bindEvents;
 bindEvents = function() {
   originalBindEvents();
+
+  // Auto Schedule for Current Plan
+  const btnAutoScheduleCurrentPlan = document.getElementById('btnAutoScheduleCurrentPlan');
+  if (btnAutoScheduleCurrentPlan) btnAutoScheduleCurrentPlan.addEventListener('click', autoScheduleCurrentPlan);
+
+  const btnAutoSchedFromCurrentPlan = document.getElementById('btnAutoSchedFromCurrentPlan');
+  if (btnAutoSchedFromCurrentPlan) btnAutoSchedFromCurrentPlan.addEventListener('click', loadSubjectsFromCurrentPlan);
+
+  // Timetable Week View Segmented Control (Đầy đủ vs Tuần không TH vs Tuần có TH)
+  document.querySelectorAll('#weekViewSegmentedControl .seg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#weekViewSegmentedControl .seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentWeekView = btn.dataset.weekView || 'all';
+      renderTimetableMatrix();
+    });
+  });
 
   const btnOpenAutoScheduler = document.getElementById('btnOpenAutoScheduler');
   if (btnOpenAutoScheduler) btnOpenAutoScheduler.addEventListener('click', openAutoSchedulerModal);

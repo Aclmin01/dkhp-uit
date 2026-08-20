@@ -349,11 +349,39 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-magic" id="btnAutoScheduleCurrentPlan" title="Tự động xếp lại tổ hợp tối ưu 0% trùng lịch cho các môn đang có trong TKB này">
+            <i class="fa-solid fa-wand-magic-sparkles" style="color: #fde047;"></i>
+            <span>⚡ Tự xếp TKB khung này</span>
+          </button>
           <button class="btn btn-secondary" id="btnToggleSelectedList">
             <i class="fa-solid fa-list-check"></i>
             <span>Danh sách môn (<span id="selectedBadgeNum">0</span>)</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Timetable View Controls (Xem tuần có Thực hành vs Tuần không Thực hành) -->
+      <div class="timetable-view-controls">
+        <div class="week-view-toggle-container">
+          <span class="week-view-toggle-title">
+            <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Chế độ xem:
+          </span>
+          <div class="segmented-control" id="weekViewSegmentedControl">
+            <button type="button" class="seg-btn active" data-week-view="all" title="Hiển thị toàn bộ lịch học (Lý thuyết + Thực hành)">
+              <i class="fa-solid fa-calendar-week"></i> Đầy đủ (LT + TH)
+            </button>
+            <button type="button" class="seg-btn" data-week-view="theory_only" title="Chỉ hiển thị các buổi Lý thuyết (Tuần không có thực hành)">
+              <i class="fa-solid fa-book-open"></i> 📘 Tuần Không TH (Chỉ LT)
+            </button>
+            <button type="button" class="seg-btn" data-week-view="practice_only" title="Xem các buổi học trong tuần có Thực hành">
+              <i class="fa-solid fa-flask"></i> 🔬 Tuần Có Thực Hành
+            </button>
+          </div>
+        </div>
+
+        <div class="week-view-status-indicator" id="weekViewStatusIndicator">
+          <span class="status-pill status-all"><i class="fa-solid fa-eye"></i> Đầy đủ lịch học</span>
         </div>
       </div>
 
@@ -653,10 +681,15 @@
                 <!-- Dynamic Chips -->
               </div>
 
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-                <button class="btn btn-secondary btn-sm" id="btnAutoSchedPreset5" style="font-size: 11px;">
-                  <i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Chọn 5 môn mẫu (17 TC)
-                </button>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; flex-wrap: wrap; gap: 6px;">
+                <div style="display: flex; gap: 6px;">
+                  <button class="btn btn-secondary btn-sm" id="btnAutoSchedFromCurrentPlan" style="font-size: 11px;" title="Nạp nhanh các môn đang chọn trong TKB hiện tại">
+                    <i class="fa-solid fa-calendar-check" style="color: var(--primary);"></i> Lấy môn TKB này
+                  </button>
+                  <button class="btn btn-secondary btn-sm" id="btnAutoSchedPreset5" style="font-size: 11px;">
+                    <i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Mẫu 5 môn (17 TC)
+                  </button>
+                </div>
                 <button class="btn btn-secondary btn-sm" id="btnAutoSchedClearSubjects" style="font-size: 11px;">
                   <i class="fa-solid fa-trash"></i> Xóa hết
                 </button>
