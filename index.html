@@ -648,7 +648,7 @@
 
   <!-- AI Auto-Scheduler Modal -->
   <div class="modal-backdrop" id="modalAutoScheduler">
-    <div class="modal-box" style="max-width: 920px; max-height: 90vh;">
+    <div class="modal-box" style="max-width: 1240px; width: 95vw; max-height: 92vh;">
       <div class="modal-header">
         <h3 class="modal-title">
           <i class="fa-solid fa-wand-magic-sparkles" style="color: #f59e0b; margin-right: 8px;"></i>
@@ -656,11 +656,11 @@
         </h3>
         <button class="modal-close-btn" data-close-modal="modalAutoScheduler">&times;</button>
       </div>
-      <div class="modal-body custom-scrollbar" style="display: flex; flex-direction: column; gap: 16px; max-height: calc(90vh - 130px); overflow-y: auto;">
+      <div class="modal-body custom-scrollbar" style="display: flex; flex-direction: column; gap: 16px; max-height: calc(92vh - 120px); overflow-y: auto; padding: 18px;">
         
         <div class="auto-sched-grid">
           <!-- Left Column: Settings -->
-          <div class="auto-sched-config-pane">
+          <div class="auto-sched-config-pane custom-scrollbar" style="max-height: calc(92vh - 160px); overflow-y: auto;">
             
             <!-- Section 1: Choose Subjects -->
             <div class="auto-sched-section">
@@ -761,23 +761,36 @@
                   <span>🎁 Ưu tiên Chấm điểm thoáng & Không điểm danh</span>
                 </label>
               </div>
+            </div>
 
-              <!-- Excluded Teachers in Auto-Scheduler -->
-              <div style="font-size: 12px; font-weight: 700; color: #ef4444; margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
-                <span style="display: flex; align-items: center; gap: 6px;">
-                  <i class="fa-solid fa-user-slash"></i> 🚫 Né Giảng viên (Đã chọn):
-                </span>
+            <!-- Section 3: Excluded Teachers (Né Giảng viên) -->
+            <div class="auto-sched-section" style="margin-top: 14px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <label class="auto-sched-label" style="color: #ef4444;">
+                  <i class="fa-solid fa-user-slash"></i>
+                  <span>3. Loại trừ Giảng viên (Né thầy/cô)</span>
+                </label>
                 <span id="autoSchedExcludedCountBadge" style="font-size: 11px; font-weight: 800; color: #ef4444;">0 GV</span>
               </div>
-              <div class="excluded-teachers-chips-bar" id="autoSchedExcludedChipsList" style="margin-top: 4px; min-height: 24px;">
-                <span style="font-size: 11px; color: var(--text-muted);">(Chưa loại trừ GV nào - Chọn ở thanh bên trái hoặc né nhanh)</span>
+
+              <div class="custom-combobox" style="margin-top: 6px;">
+                <i class="fa-solid fa-user-slash combobox-icon" style="color: #ef4444;"></i>
+                <input type="text" id="autoSchedExcludeTeacherInput" class="filter-input" placeholder="🚫 Tìm & chọn GV cần né (Sơn, Nghi, Kiệt...)" autocomplete="off">
+                <button class="filter-clear-btn" id="autoSchedExcludeTeacherClearBtn" title="Xóa hết GV loại trừ">&times;</button>
+                <div class="combobox-dropdown custom-scrollbar" id="autoSchedExcludeTeacherDropdown"></div>
               </div>
 
-              <button class="btn btn-magic" id="btnRunAutoScheduler" style="width: 100%; margin-top: 14px; padding: 12px; font-size: 14px;">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span>Tạo & Tìm Kiếm Phương Án TKB</span>
-              </button>
+              <!-- Excluded Teachers Chips in Auto-Scheduler -->
+              <div class="excluded-teachers-chips-bar" id="autoSchedExcludedChipsList" style="margin-top: 6px; min-height: 28px;">
+                <span style="font-size: 11px; color: var(--text-muted);">(Chưa loại trừ GV nào - Tìm kiếm ở trên hoặc bấm né nhanh)</span>
+              </div>
             </div>
+
+            <!-- Action Button -->
+            <button class="btn btn-magic" id="btnRunAutoScheduler" style="width: 100%; margin-top: 16px; padding: 13px; font-size: 14px; font-weight: 800; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Tạo & Tìm Kiếm Phương Án TKB</span>
+            </button>
 
           </div>
 

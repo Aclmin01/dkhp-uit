@@ -117,8 +117,12 @@ function renderExcludedTeachersChips() {
 
   const teachers = currentFilters.excludedTeachers || [];
 
+  const autoSchedClearBtn = document.getElementById('autoSchedExcludeTeacherClearBtn');
   if (clearBtn) {
     clearBtn.style.display = teachers.length > 0 ? 'flex' : 'none';
+  }
+  if (autoSchedClearBtn) {
+    autoSchedClearBtn.style.display = teachers.length > 0 ? 'flex' : 'none';
   }
 
   if (autoSchedCountBadge) {
@@ -151,15 +155,21 @@ function renderExcludedTeachersChips() {
   // Render in Auto-Scheduler modal
   if (autoSchedContainer) {
     if (teachers.length === 0) {
-      autoSchedContainer.innerHTML = `<span style="font-size: 11px; color: var(--text-muted);">(Chưa loại trừ GV nào - Chọn ở thanh bên trái để né)</span>`;
+      autoSchedContainer.innerHTML = `<span style="font-size: 11px; color: var(--text-muted);">(Chưa loại trừ GV nào - Tìm kiếm ở trên hoặc bấm né nhanh)</span>`;
     } else {
-      autoSchedContainer.innerHTML = teachers.map(t => `
+      const chipsHtml = teachers.map(t => `
         <span class="excluded-teacher-chip">
           <i class="fa-solid fa-user-slash" style="font-size: 10px;"></i>
           <span>${escapeHtml(t)}</span>
           <button type="button" data-remove-excluded-teacher="${escapeHtml(t)}" title="Bỏ loại trừ">&times;</button>
         </span>
       `).join('');
+
+      autoSchedContainer.innerHTML = chipsHtml + `
+        <button type="button" class="btn btn-secondary" style="padding: 1px 7px; font-size: 11px; border-radius: 9999px; color: #ef4444;" data-clear-all-excluded="true" title="Xóa tất cả GV loại trừ">
+          <i class="fa-solid fa-trash-can" style="font-size: 9px;"></i> Xóa hết (${teachers.length})
+        </button>
+      `;
     }
   }
 }
@@ -2432,6 +2442,8 @@ function openAutoSchedulerModal() {
 
   renderAutoSchedChips();
   initAutoSchedCombobox();
+  initAutoSchedExcludeTeacherCombobox();
+  renderExcludedTeachersChips();
   openModal('modalAutoScheduler');
 }
 
@@ -2530,6 +2542,85 @@ function initAutoSchedCombobox() {
 
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#autoSchedSearchInput') && !e.target.closest('#autoSchedDropdown')) {
+      dropdown.classList.remove('open');
+      dropdown.classList.remove('show');
+    }
+  });
+}
+
+function initAutoSchedExcludeTeacherCombobox() {
+  const input = document.getElementById('autoSchedExcludeTeacherInput');
+  const dropdown = document.getElementById('autoSchedExcludeTeacherDropdown');
+  const clearBtn = document.getElementById('autoSchedExcludeTeacherClearBtn');
+  if (!input || !dropdown) return;
+
+  function renderDropdown(filterText = '') {
+    const q = removeDiacritics(filterText.trim());
+    const matched = uniqueTeachersList.filter(t => 
+      !q || removeDiacritics(t.name).includes(q)
+    );
+
+    if (matched.length === 0) {
+      dropdown.innerHTML = `<div style="padding: 10px; font-size: 12px; color: var(--text-muted); text-align: center;">Không tìm thấy giảng viên</div>`;
+      return;
+    }
+
+    dropdown.innerHTML = '';
+    matched.slice(0, 60).forEach(t => {
+      const isExcluded = (currentFilters.excludedTeachers || []).includes(t.name);
+      const opt = document.createElement('div');
+      opt.className = `combobox-option ${isExcluded ? 'is-excluded active' : ''}`;
+      opt.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 7px;">
+          <i class="fa-solid ${isExcluded ? 'fa-square-check' : 'fa-square'}" style="color: ${isExcluded ? '#ef4444' : 'var(--text-muted)'}; font-size: 13px;"></i>
+          <span><strong>${escapeHtml(t.name)}</strong></span>
+        </div>
+        <span class="combobox-count-badge" style="${isExcluded ? 'color: #ef4444; border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.1);' : ''}">
+          ${isExcluded ? 'Đã loại trừ' : `${t.count} lớp`}
+        </span>
+      `;
+      opt.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        if (isExcluded) {
+          removeExcludedTeacher(t.name);
+        } else {
+          addExcludedTeacher(t.name);
+        }
+        renderDropdown(input.value);
+      });
+      dropdown.appendChild(opt);
+    });
+  }
+
+  input.onfocus = () => {
+    renderDropdown(input.value);
+    dropdown.classList.add('open');
+    dropdown.classList.add('show');
+  };
+
+  input.onclick = () => {
+    renderDropdown(input.value);
+    dropdown.classList.add('open');
+    dropdown.classList.add('show');
+  };
+
+  input.oninput = () => {
+    renderDropdown(input.value);
+    dropdown.classList.add('open');
+    dropdown.classList.add('show');
+  };
+
+  if (clearBtn) {
+    clearBtn.onclick = () => {
+      clearAllExcludedTeachers();
+      input.value = '';
+      dropdown.classList.remove('open');
+      dropdown.classList.remove('show');
+    };
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#autoSchedExcludeTeacherInput') && !e.target.closest('#autoSchedExcludeTeacherDropdown')) {
       dropdown.classList.remove('open');
       dropdown.classList.remove('show');
     }

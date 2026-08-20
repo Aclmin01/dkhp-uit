@@ -1538,11 +1538,11 @@ kbd {
 /* Auto-Scheduler Modal Layout */
 .auto-sched-grid {
   display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 18px;
+  grid-template-columns: 460px 1fr;
+  gap: 20px;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 960px) {
   .auto-sched-grid {
     grid-template-columns: 1fr;
   }
@@ -1552,9 +1552,10 @@ kbd {
   background-color: var(--bg-surface-elevated);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 14px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
+  gap: 12px;
 }
 
 .auto-sched-label {
@@ -1655,23 +1656,24 @@ kbd {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 400px;
 }
 
 .auto-sched-results-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 6px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .auto-sched-solutions-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-height: 480px;
+  gap: 12px;
+  max-height: calc(92vh - 220px);
   overflow-y: auto;
-  padding-right: 4px;
+  padding-right: 6px;
 }
 
 .auto-sched-empty-state {
