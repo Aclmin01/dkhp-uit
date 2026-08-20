@@ -240,11 +240,26 @@
           <div class="filter-box-item">
             <div class="custom-combobox">
               <i class="fa-solid fa-user-tie combobox-icon" style="color: var(--accent-purple);"></i>
-              <input type="text" id="teacherSearchInput" class="filter-input" placeholder="🔍 Tìm & chọn Giảng viên (Sơn, Đồng, Nghi...)" autocomplete="off">
+              <input type="text" id="teacherSearchInput" class="filter-input" placeholder="🔍 Tìm & xem Giảng viên (Sơn, Đồng, Nghi...)" autocomplete="off">
               <button class="filter-clear-btn" id="teacherClearBtn" title="Xóa chọn giảng viên">&times;</button>
               <div class="combobox-dropdown custom-scrollbar" id="teacherDropdownList"></div>
             </div>
           </div>
+
+          <!-- Exclude Lecturer (Loại trừ Giảng viên - Chọn nhiều) -->
+          <div class="filter-box-item">
+            <div class="custom-combobox">
+              <i class="fa-solid fa-user-slash combobox-icon" style="color: #ef4444;"></i>
+              <input type="text" id="excludeTeacherSearchInput" class="filter-input" placeholder="🚫 Loại trừ Giảng viên (Chọn nhiều GV cần né...)" autocomplete="off">
+              <button class="filter-clear-btn" id="excludeTeacherClearBtn" title="Xóa tất cả GV loại trừ">&times;</button>
+              <div class="combobox-dropdown custom-scrollbar" id="excludeTeacherDropdownList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Excluded Teachers Chips List (Hiển thị các GV đã chọn để loại trừ) -->
+        <div class="excluded-teachers-chips-bar" id="excludedTeachersChipsBar" style="display: none;">
+          <!-- Dynamic Chips -->
         </div>
 
         <!-- Faculty / Department Quick Tag Pills -->
@@ -712,6 +727,17 @@
                   <input type="checkbox" id="chkAutoSchedEverytimeGenerous" checked>
                   <span>🎁 Ưu tiên Chấm điểm thoáng & Không điểm danh</span>
                 </label>
+              </div>
+
+              <!-- Excluded Teachers in Auto-Scheduler -->
+              <div style="font-size: 12px; font-weight: 700; color: #ef4444; margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                <span style="display: flex; align-items: center; gap: 6px;">
+                  <i class="fa-solid fa-user-slash"></i> 🚫 Né Giảng viên (Đã chọn):
+                </span>
+                <span id="autoSchedExcludedCountBadge" style="font-size: 11px; font-weight: 800; color: #ef4444;">0 GV</span>
+              </div>
+              <div class="excluded-teachers-chips-bar" id="autoSchedExcludedChipsList" style="margin-top: 4px; min-height: 24px;">
+                <span style="font-size: 11px; color: var(--text-muted);">(Chưa loại trừ GV nào - Chọn ở thanh bên trái hoặc né nhanh)</span>
               </div>
 
               <button class="btn btn-magic" id="btnRunAutoScheduler" style="width: 100%; margin-top: 14px; padding: 12px; font-size: 14px;">

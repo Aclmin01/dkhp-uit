@@ -55,15 +55,112 @@ let currentPlanId = 'plan_1';
 let uniqueSubjectsList = []; // Array of { maMH, tenMH, count }
 let uniqueTeachersList = []; // Array of { name, count }
 
+let savedExcluded = [];
+try {
+  const raw = localStorage.getItem('dkhp_excluded_teachers');
+  if (raw) savedExcluded = JSON.parse(raw);
+} catch (e) {}
+
 let currentFilters = {
   selectedSubject: 'all',
   selectedTeacher: 'all',
+  excludedTeachers: Array.isArray(savedExcluded) ? savedExcluded : [],
   faculty: 'all',
   day: 'all',
   shift: 'all',
   hideConflict: false,
   onlySelected: false
 };
+
+function saveExcludedTeachersToStorage() {
+  safeLocalStorageSet('dkhp_excluded_teachers', JSON.stringify(currentFilters.excludedTeachers || []));
+}
+
+function addExcludedTeacher(name) {
+  if (!name || typeof name !== 'string') return;
+  const cleanName = name.trim();
+  if (!cleanName || cleanName.includes('Chưa phân công')) return;
+  if (!currentFilters.excludedTeachers) currentFilters.excludedTeachers = [];
+  if (!currentFilters.excludedTeachers.includes(cleanName)) {
+    currentFilters.excludedTeachers.push(cleanName);
+    saveExcludedTeachersToStorage();
+    renderExcludedTeachersChips();
+    renderAll();
+    showAppToast(`🚫 Đã thêm "${cleanName}" vào danh sách loại trừ`);
+  }
+}
+
+function removeExcludedTeacher(name) {
+  if (!currentFilters.excludedTeachers) return;
+  currentFilters.excludedTeachers = currentFilters.excludedTeachers.filter(t => t !== name);
+  saveExcludedTeachersToStorage();
+  renderExcludedTeachersChips();
+  renderAll();
+  showAppToast(`✅ Đã bỏ loại trừ: "${name}"`);
+}
+
+function clearAllExcludedTeachers() {
+  currentFilters.excludedTeachers = [];
+  saveExcludedTeachersToStorage();
+  renderExcludedTeachersChips();
+  renderAll();
+  showAppToast('✅ Đã xóa toàn bộ danh sách GV loại trừ');
+}
+
+function renderExcludedTeachersChips() {
+  const container = document.getElementById('excludedTeachersChipsBar');
+  const autoSchedContainer = document.getElementById('autoSchedExcludedChipsList');
+  const autoSchedCountBadge = document.getElementById('autoSchedExcludedCountBadge');
+  const clearBtn = document.getElementById('excludeTeacherClearBtn');
+
+  const teachers = currentFilters.excludedTeachers || [];
+
+  if (clearBtn) {
+    clearBtn.style.display = teachers.length > 0 ? 'flex' : 'none';
+  }
+
+  if (autoSchedCountBadge) {
+    autoSchedCountBadge.textContent = `${teachers.length} GV`;
+  }
+
+  // Render on Sidebar
+  if (container) {
+    if (teachers.length === 0) {
+      container.innerHTML = '';
+      container.style.display = 'none';
+    } else {
+      const chipsHtml = teachers.map(t => `
+        <span class="excluded-teacher-chip">
+          <i class="fa-solid fa-user-slash" style="font-size: 10px;"></i>
+          <span>${escapeHtml(t)}</span>
+          <button type="button" data-remove-excluded-teacher="${escapeHtml(t)}" title="Bỏ loại trừ GV này">&times;</button>
+        </span>
+      `).join('');
+
+      container.innerHTML = chipsHtml + `
+        <button type="button" class="btn btn-secondary" style="padding: 1px 7px; font-size: 11px; border-radius: 9999px; color: #ef4444;" data-clear-all-excluded="true" title="Xóa tất cả GV loại trừ">
+          <i class="fa-solid fa-trash-can" style="font-size: 9px;"></i> Xóa hết (${teachers.length})
+        </button>
+      `;
+      container.style.display = 'flex';
+    }
+  }
+
+  // Render in Auto-Scheduler modal
+  if (autoSchedContainer) {
+    if (teachers.length === 0) {
+      autoSchedContainer.innerHTML = `<span style="font-size: 11px; color: var(--text-muted);">(Chưa loại trừ GV nào - Chọn ở thanh bên trái để né)</span>`;
+    } else {
+      autoSchedContainer.innerHTML = teachers.map(t => `
+        <span class="excluded-teacher-chip">
+          <i class="fa-solid fa-user-slash" style="font-size: 10px;"></i>
+          <span>${escapeHtml(t)}</span>
+          <button type="button" data-remove-excluded-teacher="${escapeHtml(t)}" title="Bỏ loại trừ">&times;</button>
+        </span>
+      `).join('');
+    }
+  }
+}
 // Helper for strict XSS / HTML Injection Defense
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
@@ -529,11 +626,78 @@ function initSearchableComboboxes() {
     renderAll();
   });
 
+  // --- Exclude Teacher Combobox (Multi-selection) ---
+  const excludeInput = document.getElementById('excludeTeacherSearchInput');
+  const excludeDropdown = document.getElementById('excludeTeacherDropdownList');
+  const excludeClear = document.getElementById('excludeTeacherClearBtn');
+
+  function renderExcludeTeacherDropdown(filterText = '') {
+    if (!excludeDropdown) return;
+    const q = removeDiacritics(filterText.trim());
+    const matched = uniqueTeachersList.filter(t => 
+      !q || removeDiacritics(t.name).includes(q)
+    );
+
+    if (matched.length === 0) {
+      excludeDropdown.innerHTML = `<div style="padding: 8px; font-size: 11.5px; color: var(--text-muted); text-align: center;">Không tìm thấy giảng viên</div>`;
+      return;
+    }
+
+    excludeDropdown.innerHTML = '';
+    matched.slice(0, 60).forEach(t => {
+      const isExcluded = (currentFilters.excludedTeachers || []).includes(t.name);
+      const opt = document.createElement('div');
+      opt.className = `combobox-option ${isExcluded ? 'is-excluded active' : ''}`;
+      opt.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 7px;">
+          <i class="fa-solid ${isExcluded ? 'fa-square-check' : 'fa-square'}" style="color: ${isExcluded ? '#ef4444' : 'var(--text-muted)'}; font-size: 13px;"></i>
+          <span><strong>${escapeHtml(t.name)}</strong></span>
+        </div>
+        <span class="combobox-count-badge" style="${isExcluded ? 'color: #ef4444; border-color: rgba(239,68,68,0.35); background: rgba(239,68,68,0.1);' : ''}">
+          ${isExcluded ? 'Đã loại trừ' : `${t.count} lớp`}
+        </span>
+      `;
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isExcluded) {
+          removeExcludedTeacher(t.name);
+        } else {
+          addExcludedTeacher(t.name);
+        }
+        renderExcludeTeacherDropdown(excludeInput ? excludeInput.value : '');
+      });
+      excludeDropdown.appendChild(opt);
+    });
+  }
+
+  if (excludeInput && excludeDropdown) {
+    excludeInput.addEventListener('focus', () => {
+      renderExcludeTeacherDropdown(excludeInput.value);
+      excludeDropdown.classList.add('open');
+      if (subjectDropdown) subjectDropdown.classList.remove('open');
+      if (teacherDropdown) teacherDropdown.classList.remove('open');
+    });
+
+    excludeInput.addEventListener('input', (e) => {
+      renderExcludeTeacherDropdown(e.target.value);
+      excludeDropdown.classList.add('open');
+    });
+
+    if (excludeClear) {
+      excludeClear.addEventListener('click', () => {
+        clearAllExcludedTeachers();
+        if (excludeInput) excludeInput.value = '';
+        excludeDropdown.classList.remove('open');
+      });
+    }
+  }
+
   // Close dropdowns when clicking outside
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.custom-combobox')) {
-      subjectDropdown.classList.remove('open');
-      teacherDropdown.classList.remove('open');
+      if (subjectDropdown) subjectDropdown.classList.remove('open');
+      if (teacherDropdown) teacherDropdown.classList.remove('open');
+      if (excludeDropdown) excludeDropdown.classList.remove('open');
     }
   });
 }
@@ -616,6 +780,7 @@ function checkItemConflictWithCurrent(targetItem) {
 // ==============================================================================
 function renderAll() {
   renderPlanSelect();
+  renderExcludedTeachersChips();
   renderActiveFilterBadges();
   renderTimetableMatrix();
   renderCourseResults();
@@ -669,6 +834,15 @@ function renderActiveFilterBadges() {
     `);
   }
 
+  if (currentFilters.excludedTeachers && currentFilters.excludedTeachers.length > 0) {
+    chips.push(`
+      <span class="active-tag-chip" style="background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.35);">
+        <span>🚫 Né ${currentFilters.excludedTeachers.length} GV</span>
+        <button data-clear-filter="excludedTeachers" title="Xóa tất cả GV loại trừ" style="color: #ef4444;">&times;</button>
+      </span>
+    `);
+  }
+
   if (chips.length > 0) {
     bar.innerHTML = chips.join('') + `
       <button class="btn btn-secondary" style="padding: 1px 6px; font-size: 11px; border-radius: 9999px;" data-clear-all-filters="true">
@@ -700,6 +874,9 @@ window.clearSpecificFilter = function(type) {
     document.querySelectorAll('#facultyFilterRow .filter-pill').forEach(p => {
       p.classList.toggle('active', p.dataset.val === 'all');
     });
+  } else if (type === 'excludedTeachers') {
+    clearAllExcludedTeachers();
+    return;
   }
   renderAll();
 };
@@ -708,17 +885,24 @@ window.clearAllTagFilters = function() {
   currentFilters.selectedSubject = 'all';
   currentFilters.selectedTeacher = 'all';
   currentFilters.faculty = 'all';
+  currentFilters.excludedTeachers = [];
+  saveExcludedTeachersToStorage();
   const sInput = document.getElementById('subjectSearchInput');
   const tInput = document.getElementById('teacherSearchInput');
+  const eInput = document.getElementById('excludeTeacherSearchInput');
   const sClear = document.getElementById('subjectClearBtn');
   const tClear = document.getElementById('teacherClearBtn');
+  const eClear = document.getElementById('excludeTeacherClearBtn');
   if (sInput) sInput.value = '';
   if (tInput) tInput.value = '';
+  if (eInput) eInput.value = '';
   if (sClear) sClear.style.display = 'none';
   if (tClear) tClear.style.display = 'none';
+  if (eClear) eClear.style.display = 'none';
   document.querySelectorAll('#facultyFilterRow .filter-pill').forEach(p => {
     p.classList.toggle('active', p.dataset.val === 'all');
   });
+  renderExcludedTeachersChips();
   renderAll();
 };
 
@@ -727,8 +911,8 @@ function getCourseColor(maMH) {
   for (let i = 0; i < maMH.length; i++) {
     hash = maMH.charCodeAt(i) + ((hash << 5) - hash);
   }
-  const idx = Math.abs(hash) % COLOR_PALETTE.length;
-  return COLOR_PALETTE[idx];
+  const index = Math.abs(hash) % COLOR_PALETTE.length;
+  return COLOR_PALETTE[index];
 }
 
 function renderCourseResults() {
@@ -760,6 +944,18 @@ function renderCourseResults() {
       const matchGV = removeDiacritics(c.tenGV).includes(tInputVal);
       const matchTHGV = c.practices && c.practices.some(p => removeDiacritics(p.tenGV).includes(tInputVal));
       if (!matchGV && !matchTHGV) return false;
+    }
+
+    // 2b. Exclude Teachers Filter (Blacklist)
+    if (currentFilters.excludedTeachers && currentFilters.excludedTeachers.length > 0) {
+      const isExcludedTheory = c.tenGV && currentFilters.excludedTeachers.includes(c.tenGV.trim());
+      if (isExcludedTheory) return false;
+
+      // If course has practices, check if all practices are taught by excluded teachers
+      if (c.practices && c.practices.length > 0) {
+        const availablePractices = c.practices.filter(p => !p.tenGV || !currentFilters.excludedTeachers.includes(p.tenGV.trim()));
+        if (availablePractices.length === 0) return false;
+      }
     }
 
     // 3. Faculty Filter
@@ -1620,6 +1816,37 @@ function bindEvents() {
       return;
     }
 
+    const removeExcludedBtn = e.target.closest('[data-remove-excluded-teacher]');
+    if (removeExcludedBtn) {
+      e.stopPropagation();
+      const teacherName = removeExcludedBtn.getAttribute('data-remove-excluded-teacher');
+      if (teacherName) removeExcludedTeacher(teacherName);
+      return;
+    }
+
+    const clearAllExcludedBtn = e.target.closest('[data-clear-all-excluded]');
+    if (clearAllExcludedBtn) {
+      e.stopPropagation();
+      clearAllExcludedTeachers();
+      return;
+    }
+
+    const toggleExcludeBtn = e.target.closest('[data-toggle-exclude-teacher]');
+    if (toggleExcludeBtn) {
+      e.stopPropagation();
+      const teacherName = toggleExcludeBtn.getAttribute('data-toggle-exclude-teacher');
+      if (teacherName) {
+        const isCurrentlyExcluded = (currentFilters.excludedTeachers || []).includes(teacherName.trim());
+        if (isCurrentlyExcluded) {
+          removeExcludedTeacher(teacherName.trim());
+        } else {
+          addExcludedTeacher(teacherName.trim());
+        }
+        openEverytimeModal(teacherName); // Refresh modal view
+      }
+      return;
+    }
+
     // 1. Open Everytime Lecturer Modal
     const etEl = e.target.closest('[data-open-et]');
     if (etEl) {
@@ -2369,6 +2596,11 @@ function runAutoSchedulerAlgorithm() {
     const seenUnitSignatures = new Set();
 
     theories.forEach(th => {
+      // If teacher is in excluded teachers list, filter out completely
+      if (currentFilters.excludedTeachers && currentFilters.excludedTeachers.length > 0) {
+        if (th.tenGV && currentFilters.excludedTeachers.includes(th.tenGV.trim())) return;
+      }
+
       // If warned teacher and user strictly requested to avoid warned, filter out early
       if (avoidWarned && typeof getEverytimeRating === 'function') {
         const r = getEverytimeRating(th.tenGV);
@@ -2377,6 +2609,11 @@ function runAutoSchedulerAlgorithm() {
 
       if (th.practices && th.practices.length > 0) {
         th.practices.forEach(pr => {
+          // Check if practice teacher is excluded
+          if (currentFilters.excludedTeachers && currentFilters.excludedTeachers.length > 0) {
+            if (pr.tenGV && currentFilters.excludedTeachers.includes(pr.tenGV.trim())) return;
+          }
+
           const uSig = `${th.id}#${pr.id}#${th.thu}_${(th.tiet||[]).join('')}#${pr.thu}_${(pr.tiet||[]).join('')}`;
           if (!seenUnitSignatures.has(uSig)) {
             seenUnitSignatures.add(uSig);
@@ -3080,6 +3317,16 @@ window.openEverytimeModal = function(teacherName) {
         <div class="everytime-reviews-list">
           ${reviewsHtml}
         </div>
+      </div>
+
+      <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11.5px; color: var(--text-muted);">
+          <i class="fa-solid fa-filter"></i> Quản lý bộ lọc TKB & Xếp lịch tự động
+        </span>
+        <button type="button" class="btn ${((currentFilters.excludedTeachers || []).includes(data.name.trim())) ? 'btn-secondary' : 'btn-danger'} btn-sm" data-toggle-exclude-teacher="${escapeHtml(data.name)}" style="font-size: 12px; font-weight: 700;">
+          <i class="fa-solid ${((currentFilters.excludedTeachers || []).includes(data.name.trim())) ? 'fa-check' : 'fa-user-slash'}"></i>
+          <span>${((currentFilters.excludedTeachers || []).includes(data.name.trim())) ? '✅ Đang Trong Danh Sách Né (Bấm Để Hủy)' : '🚫 Thêm Vào Danh Sách Né GV Này'}</span>
+        </button>
       </div>
     `;
   }
