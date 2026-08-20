@@ -2280,6 +2280,98 @@ function switchCodesModalTab(tabName) {
   }
 }
 
+function extractClassCodesFromText(text) {
+  if (!text || typeof text !== 'string') return [];
+  // Match UIT class code patterns: e.g. IT004.R18, IT004.R18.2, NT105.R11, MA005.R14, CS106.O21, SS007.R13, etc.
+  const regex = /\b[A-Z]{2,4}[0-9]{3}(?:\.[A-Za-z0-9_.-]+)?\b/gi;
+  const matches = text.match(regex);
+  if (matches && matches.length > 0) {
+    return Array.from(new Set(matches.map(m => m.trim().toUpperCase())));
+  }
+  return text.split(/[\n,;\s]+/).map(s => s.trim().toUpperCase()).filter(Boolean);
+}
+
+function parseAndApplyCodesToPlan(planId, rawText, clearBefore = true) {
+  const codes = extractClassCodesFromText(rawText);
+  if (codes.length === 0) {
+    return { success: false, message: 'Không tìm thấy mã môn học nào!' };
+  }
+
+  const matchedTheories = new Set();
+  const matchedPractices = {}; // theoryId -> practiceId
+  const notFoundCodes = [];
+  const foundClassNames = [];
+
+  codes.forEach(code => {
+    const cleanCode = code.toUpperCase();
+    let found = false;
+
+    // 1. Direct check in courseMap
+    for (const [id, c] of courseMap.entries()) {
+      if (id.toUpperCase() === cleanCode || (c.maLop && c.maLop.toUpperCase() === cleanCode)) {
+        found = true;
+        let isPracticeChild = false;
+        for (const parent of allCourses) {
+          if (parent.practices && parent.practices.some(p => p.id === c.id)) {
+            matchedTheories.add(parent.id);
+            matchedPractices[parent.id] = c.id;
+            foundClassNames.push(`${c.maLop} (TH • ${parent.tenMH})`);
+            isPracticeChild = true;
+            break;
+          }
+        }
+
+        if (!isPracticeChild) {
+          matchedTheories.add(c.id);
+          foundClassNames.push(`${c.maLop} (LT • ${c.tenMH})`);
+        }
+        break;
+      }
+    }
+
+    if (!found) {
+      notFoundCodes.push(code);
+    }
+  });
+
+  if (matchedTheories.size === 0) {
+    return {
+      success: false,
+      message: 'Không tìm thấy môn học nào khớp trong dữ liệu!',
+      notFoundCodes
+    };
+  }
+
+  if (!plans[planId]) {
+    plans[planId] = { name: 'Kế hoạch mới', selected: [], practiceChoices: {} };
+  }
+
+  if (clearBefore) {
+    plans[planId].selected = [];
+    plans[planId].practiceChoices = {};
+  }
+
+  matchedTheories.forEach(tid => {
+    if (!plans[planId].selected.includes(tid)) {
+      plans[planId].selected.push(tid);
+    }
+  });
+
+  if (!plans[planId].practiceChoices) plans[planId].practiceChoices = {};
+  Object.keys(matchedPractices).forEach(tid => {
+    plans[planId].practiceChoices[tid] = matchedPractices[tid];
+  });
+
+  return {
+    success: true,
+    theoryCount: matchedTheories.size,
+    practiceCount: Object.keys(matchedPractices).length,
+    totalCount: codes.length,
+    foundClassNames,
+    notFoundCodes
+  };
+}
+
 function handleApplyImportCodes() {
   const inputArea = document.getElementById('importCodesTextarea');
   const feedback = document.getElementById('importResultFeedback');
@@ -2315,90 +2407,137 @@ function handleApplyImportCodes() {
     renderFeedback({
       isError: true,
       iconClass: 'fa-solid fa-circle-exclamation',
-      message: 'Vui lòng dán danh sách mã lớp vào ô trước khi bấm áp dụng!'
+      message: 'Vui lòng dán danh sách mã lớp hoặc mã Bookmarklet vào ô trước khi bấm áp dụng!'
     });
     return;
   }
 
-  const lines = raw.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
-  const matchedTheories = new Set();
-  const matchedPractices = {}; // theoryId -> practiceId
-  const notFoundCodes = [];
-  const foundClassNames = [];
+  const isBookmarkletOrScript = raw.includes('javascript:') || raw.includes('Set(') || raw.includes('function(') || raw.includes('querySelectorAll');
+  const chkClear = document.getElementById('chkClearBeforeImport');
+  const clearBefore = chkClear ? chkClear.checked : true;
 
-  lines.forEach(code => {
-    const cleanCode = code.toUpperCase();
-    let found = false;
+  const result = parseAndApplyCodesToPlan(currentPlanId, raw, clearBefore);
 
-    // 1. Direct check in courseMap
-    for (const [id, c] of courseMap.entries()) {
-      if (id.toUpperCase() === cleanCode || (c.maLop && c.maLop.toUpperCase() === cleanCode)) {
-        found = true;
-        // Check if this course is a practice child of a theory course
-        let isPracticeChild = false;
-        for (const parent of allCourses) {
-          if (parent.practices && parent.practices.some(p => p.id === c.id)) {
-            matchedTheories.add(parent.id);
-            matchedPractices[parent.id] = c.id;
-            foundClassNames.push(`${c.maLop} (TH • ${parent.tenMH})`);
-            isPracticeChild = true;
-            break;
-          }
-        }
-
-        if (!isPracticeChild) {
-          matchedTheories.add(c.id);
-          foundClassNames.push(`${c.maLop} (LT • ${c.tenMH})`);
-        }
-        break;
-      }
-    }
-
-    if (!found) {
-      notFoundCodes.push(code);
-    }
-  });
-
-  if (matchedTheories.size === 0) {
+  if (!result.success) {
     renderFeedback({
       isError: true,
       iconClass: 'fa-solid fa-circle-xmark',
-      message: 'Không tìm thấy môn học nào khớp trong dữ liệu hiện tại!',
-      detail: `Mã đã nhập: ${lines.join(', ')}`
+      message: result.message || 'Không tìm thấy môn học nào khớp!',
+      detail: result.notFoundCodes ? `Mã không khớp: ${result.notFoundCodes.join(', ')}` : ''
     });
     return;
   }
-
-  // Clear existing if checked
-  const chkClear = document.getElementById('chkClearBeforeImport');
-  if (chkClear && chkClear.checked) {
-    plans[currentPlanId].selected = [];
-  }
-
-  // Merge selected
-  matchedTheories.forEach(tid => {
-    if (!plans[currentPlanId].selected.includes(tid)) {
-      plans[currentPlanId].selected.push(tid);
-    }
-  });
-
-  // Assign practice choices
-  const pChoices = getActivePracticeChoices();
-  Object.keys(matchedPractices).forEach(tid => {
-    pChoices[tid] = matchedPractices[tid];
-  });
 
   savePlansToStorage();
   renderAll();
 
   // Show Success Feedback
+  const successMsg = isBookmarkletOrScript
+    ? `🪄 Đã nhận diện mã Bookmarklet/Script! Tự động trích xuất ${result.totalCount} mã lớp & xếp thành công ${result.theoryCount} môn vào TKB!`
+    : `Đã xếp thành công ${result.theoryCount} môn học phần vào Thời khóa biểu!`;
+
   renderFeedback({
     isError: false,
     iconClass: 'fa-solid fa-circle-check',
-    message: `Đã xếp thành công ${matchedTheories.size} môn học phần vào TKB!`,
-    detail: notFoundCodes.length > 0 ? `Không tìm thấy ${notFoundCodes.length} mã: ${notFoundCodes.join(', ')}` : ''
+    message: successMsg,
+    detail: result.notFoundCodes && result.notFoundCodes.length > 0 ? `Không tìm thấy ${result.notFoundCodes.length} mã: ${result.notFoundCodes.join(', ')}` : ''
   });
-  showAppToast(`⚡ Đã tự động xếp ${matchedTheories.size} môn học vào TKB!`);
+  showAppToast(isBookmarkletOrScript ? `🪄 Đã giải mã Bookmarklet & xếp ${result.theoryCount} môn vào TKB!` : `⚡ Đã xếp ${result.theoryCount} môn vào TKB!`);
+}
+
+function setupImportCodesFileDrop() {
+  const dropzoneWrapper = document.getElementById('importDropzoneWrapper');
+  const dropzoneOverlay = document.getElementById('dropzoneDragOverlay');
+  const fileInput = document.getElementById('importTxtFileInput');
+  const btnSelectFiles = document.getElementById('btnSelectTxtFiles');
+  const inputArea = document.getElementById('importCodesTextarea');
+
+  if (btnSelectFiles && fileInput) {
+    btnSelectFiles.addEventListener('click', () => fileInput.click());
+  }
+
+  function handleFiles(files) {
+    if (!files || files.length === 0) return;
+
+    if (files.length === 1) {
+      // Single file mode
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result || '';
+        if (inputArea) inputArea.value = content;
+        handleApplyImportCodes();
+      };
+      reader.readAsText(file);
+    } else {
+      // Multiple files mode -> Create separate plan for each file!
+      let loadedCount = 0;
+      const totalFiles = files.length;
+      let firstPlanId = null;
+
+      Array.from(files).forEach((file, idx) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result || '';
+          const cleanName = file.name.replace(/\.[^/.]+$/, '').toUpperCase();
+          const planKey = 'plan_' + Date.now() + '_' + idx;
+          if (!firstPlanId) firstPlanId = planKey;
+
+          plans[planKey] = {
+            name: `Phương án: ${cleanName}`,
+            selected: [],
+            practiceChoices: {}
+          };
+
+          parseAndApplyCodesToPlan(planKey, content, true);
+          loadedCount++;
+
+          if (loadedCount === totalFiles) {
+            if (firstPlanId) currentPlanId = firstPlanId;
+            savePlansToStorage();
+            renderAll();
+            closeModal('modalImportExportCodes');
+            showAppToast(`🎉 Đã tự động tạo ${totalFiles} Kế hoạch TKB từ ${totalFiles} file .txt!`);
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+      fileInput.value = '';
+    });
+  }
+
+  if (dropzoneWrapper) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzoneWrapper.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (dropzoneOverlay) dropzoneOverlay.style.display = 'flex';
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzoneWrapper.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (dropzoneOverlay) dropzoneOverlay.style.display = 'none';
+      });
+    });
+
+    dropzoneWrapper.addEventListener('drop', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (dropzoneOverlay) dropzoneOverlay.style.display = 'none';
+      if (e.dataTransfer && e.dataTransfer.files) {
+        handleFiles(e.dataTransfer.files);
+      }
+    });
+  }
 }
 
 async function copyExportCodes() {
@@ -3493,6 +3632,9 @@ bindEvents = function() {
 
   const btnAutoSchedFromCurrentPlan = document.getElementById('btnAutoSchedFromCurrentPlan');
   if (btnAutoSchedFromCurrentPlan) btnAutoSchedFromCurrentPlan.addEventListener('click', loadSubjectsFromCurrentPlan);
+
+  // Setup Drag & Drop and File Picker for Import Codes Modal
+  setupImportCodesFileDrop();
 
   // Timetable Week View Segmented Control (Đầy đủ vs Tuần không TH vs Tuần có TH)
   document.querySelectorAll('#weekViewSegmentedControl .seg-btn').forEach(btn => {

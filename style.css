@@ -1519,6 +1519,30 @@ kbd {
   box-shadow: 0 0 0 2px var(--primary-light);
 }
 
+.import-dropzone-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.dropzone-drag-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.88);
+  border: 2px dashed var(--primary);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.15s ease-in-out;
+}
+
 /* Magic Gradient Button */
 .btn-magic {
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #9333ea 100%);

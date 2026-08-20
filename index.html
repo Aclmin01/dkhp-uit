@@ -607,22 +607,35 @@
 
         <!-- Tab 1: Import Content -->
         <div id="tabContentImportCodes" class="code-tab-content">
-          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">
-            Dán danh sách mã lớp (mỗi dòng 1 mã lớp, bao gồm cả Lý thuyết và Thực hành). Hệ thống sẽ tự động tìm kiếm, phân nhóm và xếp ngay vào Thời khóa biểu!
-          </p>
-          <textarea id="importCodesTextarea" class="code-box-textarea custom-scrollbar" placeholder="Ví dụ:&#10;IT004.R18&#10;IT004.R18.2&#10;IT007.R111&#10;IT007.R111.2&#10;MA005.R16&#10;NT106.R11&#10;NT106.R11.2&#10;SS007.R17" spellcheck="false"></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+            <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.4; margin: 0;">
+              Dán danh sách mã lớp, <strong>hoặc toàn bộ mã Bookmarklet/Script</strong>, hoặc <strong>kéo thả file .txt</strong> vào đây:
+            </p>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnSelectTxtFiles" style="font-size: 11px;">
+              <i class="fa-solid fa-file-arrow-up" style="color: var(--primary);"></i> <span>Chọn file .txt</span>
+            </button>
+            <input type="file" id="importTxtFileInput" multiple accept=".txt,.js,.json" style="display: none;">
+          </div>
           
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
-            <label style="font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+          <div class="import-dropzone-wrapper" id="importDropzoneWrapper">
+            <textarea id="importCodesTextarea" class="code-box-textarea custom-scrollbar" placeholder="Dán danh sách mã lớp (IT004.R18, NT105.R11...) HOẶC dán thẳng mã Bookmarklet (javascript:...) vào đây, hoặc kéo thả 1 hay nhiều file .txt vào...&#10;&#10;Ví dụ dán Bookmarklet:&#10;javascript:(function(){var list=new Set(['NT105.R11','NT105.R11.1','MA005.R14','NT106.R13','NT106.R13.1','IT007.R17','IT007.R17.1','IT004.R118','IT004.R118.1','SS007.R13']);...})();" spellcheck="false" style="min-height: 140px;"></textarea>
+            <div class="dropzone-drag-overlay" id="dropzoneDragOverlay" style="display: none;">
+              <i class="fa-solid fa-cloud-arrow-down" style="font-size: 32px; color: var(--primary);"></i>
+              <span style="font-size: 13px; font-weight: 700; color: #ffffff; margin-top: 6px;">Thả 1 hoặc nhiều file .txt vào đây!</span>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; flex-wrap: wrap; gap: 8px;">
+            <label style="font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
               <input type="checkbox" id="chkClearBeforeImport" checked>
-              <span>Xóa các môn đang chọn trước khi nhập mới</span>
+              <span>Xóa các môn đang chọn trước khi nạp</span>
             </label>
             <button class="btn btn-primary" id="btnApplyImportCodes">
-              <i class="fa-solid fa-bolt"></i> <span>Tự động xếp TKB</span>
+              <i class="fa-solid fa-bolt"></i> <span>Tự động giải mã & Xếp TKB</span>
             </button>
           </div>
 
-          <div id="importResultFeedback" style="display: none; font-size: 13px; border-radius: var(--radius-md); padding: 10px 14px; margin-top: 6px;"></div>
+          <div id="importResultFeedback" style="display: none; font-size: 13px; border-radius: var(--radius-md); padding: 10px 14px; margin-top: 8px;"></div>
         </div>
 
         <!-- Tab 2: Export Content -->
