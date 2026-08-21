@@ -379,7 +379,16 @@ function buildCourseMap() {
 
 function getDefaultPlans() {
   return {
-    'plan_1': { name: 'Kế hoạch 1 (Chính)', selected: [], practiceChoices: {} },
+    'plan_1': {
+      name: 'Kế hoạch 1 (Chính)',
+      selected: ['SS007.R13', 'IT007.R17', 'NT105.R11', 'MA005.R14', 'IT004.R118', 'NT106.R13'],
+      practiceChoices: {
+        'IT007.R17': 'IT007.R17.1',
+        'NT105.R11': 'NT105.R11.1',
+        'IT004.R118': 'IT004.R118.1',
+        'NT106.R13': 'NT106.R13.1'
+      }
+    },
     'plan_2': { name: 'Kế hoạch 2 (Dự phòng)', selected: [], practiceChoices: {} },
     'plan_3': { name: 'Kế hoạch 3', selected: [], practiceChoices: {} }
   };
@@ -387,34 +396,33 @@ function getDefaultPlans() {
 
 function loadPlansFromStorage() {
   const savedPlans = localStorage.getItem('tkb_plans');
-  const savedHash = localStorage.getItem('tkb_plans_sha256');
-  const savedFastHash = localStorage.getItem('tkb_plans_fast_hash');
 
   if (savedPlans) {
     try {
-      if (window.DKHP_SECURITY && savedFastHash && DKHP_SECURITY.fastHash(savedPlans) !== savedFastHash) {
-        throw new Error('LOCAL_STORAGE_FAST_HASH_MISMATCH');
+      const parsed = JSON.parse(savedPlans);
+      if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+        plans = sanitizeImportedPlans(parsed);
+      } else {
+        plans = getDefaultPlans();
       }
-      if (window.DKHP_SECURITY && savedHash) {
-        DKHP_SECURITY.sha256(savedPlans).then(calculated => {
-          if (calculated !== savedHash) {
-            console.warn('[SECURITY] LocalStorage SHA-256 integrity mismatch detected. Resetting stored plans.');
-            localStorage.removeItem('tkb_plans');
-            localStorage.removeItem('tkb_plans_sha256');
-            localStorage.removeItem('tkb_plans_fast_hash');
-          }
-        }).catch(err => console.error(err));
-      }
-      plans = sanitizeImportedPlans(JSON.parse(savedPlans));
     } catch (e) {
-      console.warn('[SECURITY] Invalid or tampered plan storage detected, falling back to defaults.', e);
+      console.warn('Error parsing saved plans, falling back to defaults:', e);
       plans = getDefaultPlans();
-      localStorage.removeItem('tkb_plans');
-      localStorage.removeItem('tkb_plans_sha256');
-      localStorage.removeItem('tkb_plans_fast_hash');
     }
   } else {
     plans = getDefaultPlans();
+  }
+
+  // If plans exist but all plans are empty, load default plan_1 courses
+  const allEmpty = Object.values(plans).every(p => !p.selected || p.selected.length === 0);
+  if (allEmpty && plans['plan_1']) {
+    plans['plan_1'].selected = ['SS007.R13', 'IT007.R17', 'NT105.R11', 'MA005.R14', 'IT004.R118', 'NT106.R13'];
+    plans['plan_1'].practiceChoices = {
+      'IT007.R17': 'IT007.R17.1',
+      'NT105.R11': 'NT105.R11.1',
+      'IT004.R118': 'IT004.R118.1',
+      'NT106.R13': 'NT106.R13.1'
+    };
   }
 
   // Ensure each plan has practiceChoices dictionary
@@ -424,22 +432,11 @@ function loadPlansFromStorage() {
     }
   });
 
-  // Legacy migration for old global storage
-  const legacyChoices = localStorage.getItem('tkb_practice_choices');
-  if (legacyChoices) {
-    try {
-      const parsed = JSON.parse(legacyChoices);
-      if (parsed && typeof parsed === 'object' && plans['plan_1'] && Object.keys(plans['plan_1'].practiceChoices).length === 0) {
-        plans['plan_1'].practiceChoices = parsed;
-      }
-    } catch (e) {}
-  }
-
   const savedActivePlan = localStorage.getItem('tkb_active_plan');
   if (savedActivePlan && plans[savedActivePlan]) {
     currentPlanId = savedActivePlan;
   } else {
-    currentPlanId = Object.keys(plans)[0] || 'plan_1';
+    currentPlanId = 'plan_1';
   }
 }
 
@@ -1156,10 +1153,8 @@ function renderWeekViewStatusIndicator() {
 
   if (currentWeekView === 'theory_only') {
     indicator.innerHTML = `<span class="status-pill status-theory"><i class="fa-solid fa-book-open"></i> Đang xem: Tuần KHÔNG có Thực hành (Chỉ Lý thuyết)</span>`;
-  } else if (currentWeekView === 'practice_only') {
-    indicator.innerHTML = `<span class="status-pill status-practice"><i class="fa-solid fa-flask"></i> Đang xem: Tuần CÓ Thực hành (Đầy đủ ca TH)</span>`;
   } else {
-    indicator.innerHTML = `<span class="status-pill status-all"><i class="fa-solid fa-calendar-week"></i> Đang xem: Đầy đủ toàn bộ lịch học (LT + TH)</span>`;
+    indicator.innerHTML = `<span class="status-pill status-practice"><i class="fa-solid fa-flask"></i> Đang xem: Tuần CÓ Thực hành (LT + TH)</span>`;
   }
 }
 

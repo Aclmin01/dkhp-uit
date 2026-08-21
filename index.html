@@ -94,7 +94,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=4.0">
+  <link rel="stylesheet" href="style.css?v=4.5">
 </head>
 <body>
 
@@ -368,20 +368,17 @@
             <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Chế độ xem:
           </span>
           <div class="segmented-control" id="weekViewSegmentedControl">
-            <button type="button" class="seg-btn active" data-week-view="all" title="Hiển thị toàn bộ lịch học (Lý thuyết + Thực hành)">
-              <i class="fa-solid fa-calendar-week"></i> Đầy đủ (LT + TH)
-            </button>
-            <button type="button" class="seg-btn" data-week-view="theory_only" title="Chỉ hiển thị các buổi Lý thuyết (Tuần không có thực hành)">
-              <i class="fa-solid fa-book-open"></i> 📘 Tuần Không TH (Chỉ LT)
-            </button>
-            <button type="button" class="seg-btn" data-week-view="practice_only" title="Xem các buổi học trong tuần có Thực hành">
+            <button type="button" class="seg-btn active" data-week-view="all" title="Xem tuần có lịch học Thực hành (Hiển thị cả Lý thuyết & Thực hành)">
               <i class="fa-solid fa-flask"></i> 🔬 Tuần Có Thực Hành
+            </button>
+            <button type="button" class="seg-btn" data-week-view="theory_only" title="Chỉ hiển thị các buổi Lý thuyết (Tuần không có lịch thực hành)">
+              <i class="fa-solid fa-book-open"></i> 📘 Tuần Không TH (Chỉ LT)
             </button>
           </div>
         </div>
 
         <div class="week-view-status-indicator" id="weekViewStatusIndicator">
-          <span class="status-pill status-all"><i class="fa-solid fa-eye"></i> Đầy đủ lịch học</span>
+          <span class="status-pill status-practice"><i class="fa-solid fa-flask"></i> Đang xem: Tuần CÓ Thực hành</span>
         </div>
       </div>
 
@@ -915,11 +912,11 @@
   </div>
 
   <!-- Offline / Online Scripts -->
-  <script src="security.js?v=4.0"></script>
+  <script src="security.js?v=4.5"></script>
   <script src="libs/xlsx.full.min.js"></script>
   <script src="libs/html2canvas.min.js"></script>
-  <script src="ratings.js?v=4.0"></script>
-  <script src="data.js?v=4.0"></script>
-  <script src="app.js?v=4.0"></script>
+  <script src="ratings.js?v=4.5"></script>
+  <script src="data.js?v=4.5"></script>
+  <script src="app.js?v=4.5"></script>
 </body>
 </html>
