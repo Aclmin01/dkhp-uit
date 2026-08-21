@@ -1077,21 +1077,24 @@ function renderCourseResults() {
 
       card.innerHTML = `
       <div class="course-card-top">
-        <div style="display: flex; align-items: center; gap: 5px;">
+        <div style="display: flex; align-items: center; gap: 6px;">
           <span class="course-code-badge">${escapeHtml(course.maMH)}</span>
           <span class="course-class-code">${escapeHtml(course.maLop)}</span>
         </div>
-        <span class="course-credits-badge">${escapeHtml(creditsLabel)}</span>
+        <span class="course-credits-badge">
+          <i class="fa-solid fa-graduation-cap" style="font-size: 10px;"></i>
+          <span>${escapeHtml(creditsLabel)}</span>
+        </span>
       </div>
 
       <div class="course-title">${escapeHtml(course.tenMH)}</div>
 
       <div class="course-meta-row">
-        <span class="meta-chip"><i class="fa-regular fa-calendar"></i> ${escapeHtml(thuStr)}</span>
-        <span class="meta-chip"><i class="fa-regular fa-clock"></i> ${escapeHtml(tietStr)}</span>
-        <span class="meta-chip"><i class="fa-solid fa-door-open"></i> ${escapeHtml(phongStr)}</span>
+        <span class="meta-chip" title="Lịch học lý thuyết"><i class="fa-regular fa-calendar-days" style="color: var(--primary);"></i> ${escapeHtml(thuStr)}</span>
+        <span class="meta-chip" title="Tiết học"><i class="fa-regular fa-clock" style="color: var(--accent-amber);"></i> ${escapeHtml(tietStr)}</span>
+        <span class="meta-chip" title="Phòng học"><i class="fa-solid fa-location-dot" style="color: var(--accent-emerald);"></i> ${escapeHtml(phongStr)}</span>
         <span class="meta-chip meta-chip-teacher" data-open-et="${escapeHtml(course.tenGV || '')}" title="Bấm để xem đánh giá Everytime của ${escapeHtml(gvStr)}">
-          <i class="fa-solid fa-user-tie" style="color: #e11d48;"></i>
+          <i class="fa-solid fa-user-tie" style="color: #f43f5e;"></i>
           <span>${escapeHtml(gvStr)}</span>
           ${etBadge}
         </span>
@@ -1101,14 +1104,15 @@ function renderCourseResults() {
 
       <div class="course-card-actions">
         ${theoryConflict.hasConflict ? `
-          <span style="font-size: 10.5px; font-weight: 700; color: var(--danger);">
-            <i class="fa-solid fa-triangle-exclamation"></i> Trùng với ${escapeHtml(theoryConflict.conflictingWith.maLop)}
+          <span class="card-conflict-pill" title="Môn này bị trùng lịch học với ${escapeHtml(theoryConflict.conflictingWith.maLop)} trong TKB hiện tại">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Trùng: <strong>${escapeHtml(theoryConflict.conflictingWith.maLop)}</strong></span>
           </span>
         ` : '<span></span>'}
         
-        <button class="btn ${isSelected ? 'btn-danger' : 'btn-primary'}" data-toggle-select="${escapeHtml(course.id)}" style="padding: 4px 10px; font-size: 12px;">
-          <i class="fa-solid ${isSelected ? 'fa-xmark' : 'fa-plus'}"></i>
-          <span>${isSelected ? 'Bỏ chọn' : 'Thêm vào TKB'}</span>
+        <button class="btn ${isSelected ? 'btn-danger' : 'btn-primary'}" data-toggle-select="${escapeHtml(course.id)}" style="padding: 5px 12px; font-size: 12px; border-radius: 8px; font-weight: 700;">
+          <i class="fa-solid ${isSelected ? 'fa-check' : 'fa-plus'}"></i>
+          <span>${isSelected ? 'Đã chọn (Bỏ)' : 'Thêm vào TKB'}</span>
         </button>
       </div>
     `;

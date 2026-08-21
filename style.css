@@ -630,61 +630,74 @@ button, input, select {
   gap: 8px;
 }
 
-/* --- COMPACT COURSE CARD COMPONENT --- */
+/* --- COMPACT & BEAUTIFUL COURSE CARD COMPONENT --- */
 .course-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 10px 12px;
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  transition: var(--transition);
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .course-card:hover {
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: var(--shadow-sm);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.12), 0 2px 6px -2px rgba(0, 0, 0, 0.08);
 }
 
 .course-card.is-selected {
   border-color: var(--primary);
-  background-color: var(--primary-light);
+  border-left: 4px solid var(--primary);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 51, 234, 0.04) 100%);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.15);
 }
 
 .course-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
 }
 
 .course-code-badge {
   font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 700;
-  background-color: var(--bg-surface-elevated);
+  font-weight: 800;
+  background-color: rgba(59, 130, 246, 0.12);
   color: var(--primary);
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-color);
+  padding: 2.5px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  letter-spacing: 0.3px;
 }
 
 .course-class-code {
   font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
   color: var(--text-primary);
+  background-color: var(--bg-surface-elevated);
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
 }
 
 .course-credits-badge {
   font-size: 11px;
-  font-weight: 700;
-  background-color: rgba(16, 185, 129, 0.12);
+  font-weight: 800;
+  background-color: rgba(16, 185, 129, 0.14);
   color: #059669;
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 [data-theme="dark"] .course-credits-badge {
@@ -692,25 +705,32 @@ button, input, select {
 }
 
 .course-title {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.35;
   color: var(--text-primary);
+  letter-spacing: -0.1px;
 }
 
 .course-meta-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px 12px;
-  font-size: 11.5px;
-  color: var(--text-secondary);
+  gap: 6px;
 }
 
 .meta-chip {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: var(--transition);
 }
 
 .meta-chip i {
@@ -718,53 +738,77 @@ button, input, select {
   font-size: 11px;
 }
 
+.meta-chip-teacher {
+  background: rgba(225, 29, 72, 0.08);
+  border-color: rgba(225, 29, 72, 0.22);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meta-chip-teacher:hover {
+  background: rgba(225, 29, 72, 0.16);
+  border-color: #f43f5e;
+  transform: translateY(-1px);
+}
+
 /* Practice Pills (Inline selector for groups) */
 .practice-pills-container {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-top: 4px;
-  border-top: 1px dashed var(--border-color);
+  gap: 6px;
+  padding: 8px 10px;
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-top: 2px;
 }
 
 .practice-pills-label {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 800;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .practice-pills-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 6px;
 }
 
 .practice-pill-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 7px;
-  border-radius: var(--radius-sm);
-  background-color: var(--bg-surface-elevated);
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background-color: var(--bg-surface);
   border: 1px solid var(--border-color);
   font-size: 11px;
   font-family: var(--font-mono);
+  font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.15s ease-in-out;
   color: var(--text-secondary);
 }
 
 .practice-pill-btn:hover {
   border-color: var(--primary);
   color: var(--text-primary);
+  transform: translateY(-1px);
 }
 
 .practice-pill-btn.selected {
-  background-color: var(--accent-purple);
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
   color: #ffffff;
-  border-color: var(--accent-purple);
-  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+  font-weight: 700;
 }
 
 .practice-pill-btn.conflict {
@@ -778,8 +822,23 @@ button, input, select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  margin-top: 2px;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-color);
+}
+
+.card-conflict-pill {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 /* --------------------------------------------------------------------------
