@@ -316,8 +316,8 @@ function getActivePracticeChoices() {
 // ==============================================================================
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
-  loadPlansFromStorage();
   loadInitialDataset();
+  loadPlansFromStorage();
   buildUniqueMetaLists();
   initSearchableComboboxes();
   initMobileViewSwitcher();

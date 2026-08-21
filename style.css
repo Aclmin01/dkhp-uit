@@ -326,12 +326,13 @@ button, input, select {
 }
 
 .sidebar-search-header {
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   background-color: var(--bg-surface);
+  flex-shrink: 0;
 }
 
 .search-input-wrapper {
