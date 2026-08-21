@@ -1248,34 +1248,35 @@ function renderTimetableMatrix() {
     const blockHeight = (duration * 50) + ((duration - 1) * 1) - 4;
     block.style.height = `${blockHeight}px`;
 
-    const etBadge = renderEverytimeBadge(item.tenGV);
+    const isShort = duration <= 2;
+    const etBadge = renderEverytimeBadge(item.tenGV, true);
 
     block.innerHTML = `
       <div class="block-top-row">
         <div class="block-badge-group">
-          <span class="block-type-pill ${item.isTH ? 'type-th' : 'type-lt'}">${item.isTH ? 'THỰC HÀNH' : 'LÝ THUYẾT'}</span>
+          <span class="block-type-badge ${item.isTH ? 'th' : 'lt'}">${item.isTH ? 'TH' : 'LT'}</span>
           <span class="block-class-code">${escapeHtml(item.maLop)}</span>
         </div>
-        <button class="block-delete-btn" title="Xóa môn này khỏi TKB" data-remove-matrix="${escapeHtml(item.id)}">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+        <div class="block-top-right">
+          <span class="block-tc-tag">${item.soTC || 0} TC</span>
+          <button class="block-delete-btn" title="Xóa môn này khỏi TKB" data-remove-matrix="${escapeHtml(item.id)}">&times;</button>
+        </div>
       </div>
 
-      <div class="block-center-title">${escapeHtml(item.tenMH)}</div>
-
-      <div class="block-bottom-row">
-        <div class="block-meta-tags">
-          <span class="block-meta-pill" title="Phòng học">
+      <div class="block-content-body">
+        <div class="block-title" title="${escapeHtml(item.tenMH)}">${escapeHtml(item.tenMH)}</div>
+        
+        <div class="block-details-row">
+          <span class="block-detail-item room" title="Phòng học: ${escapeHtml(item.phong || 'Chưa xếp')}">
             <i class="fa-solid fa-location-dot" style="color: #67e8f9;"></i>
             <span>${escapeHtml(item.phong || 'N/A')}</span>
           </span>
-          <span class="block-meta-pill block-teacher-pill" data-open-et="${escapeHtml(item.tenGV || '')}" title="Bấm xem đánh giá Everytime của ${escapeHtml(item.tenGV || '')}">
+          <span class="block-detail-item teacher" data-open-et="${escapeHtml(item.tenGV || '')}" title="Xem review giảng viên ${escapeHtml(item.tenGV || '')}">
             <i class="fa-solid fa-user-tie" style="color: #fda4af;"></i>
-            <span>${escapeHtml(item.tenGV || 'Chưa phân công')}</span>
+            <span class="teacher-name">${escapeHtml(item.tenGV || 'Chưa phân công')}</span>
             ${etBadge}
           </span>
         </div>
-        <span class="block-credits-pill">${item.soTC || 0} TC</span>
       </div>
     `;
 
@@ -3415,7 +3416,7 @@ window.saveSolutionAsNewPlan = function(solutionIndex) {
 // ==============================================================================
 // 16. EVERYTIME VN REAL REVIEW MODAL & BADGE SYSTEM
 // ==============================================================================
-function renderEverytimeBadge(gvName) {
+function renderEverytimeBadge(gvName, isCompact = false) {
   if (!gvName || typeof getEverytimeRating !== 'function') return '';
   const et = getEverytimeRating(gvName);
   if (!et) return '';
@@ -3425,14 +3426,14 @@ function renderEverytimeBadge(gvName) {
 
   if (et.tier === 'S') {
     tierClass = 'tier-s';
-    badgeLabel = `🏆 Phật sống ⭐ ${et.rating}`;
+    badgeLabel = isCompact ? `🏆 ${et.rating}` : `🏆 Phật sống ⭐ ${et.rating}`;
   } else if (et.tier === 'C' || et.isWarned) {
     tierClass = 'tier-c';
-    badgeLabel = `🛑 Cảnh báo né ⭐ ${et.rating}`;
+    badgeLabel = isCompact ? `🛑 ${et.rating}` : `🛑 Cảnh báo né ⭐ ${et.rating}`;
   }
 
   return `
-    <span class="everytime-badge ${tierClass}" data-open-et="${escapeHtml(gvName)}" title="Xem ${et.reviewsCount} review Everytime VN">
+    <span class="everytime-badge ${tierClass} ${isCompact ? 'compact' : ''}" data-open-et="${escapeHtml(gvName)}" title="${et.reviewsCount} review Everytime: ${et.tier === 'S' ? 'Phật sống' : (et.isWarned ? 'Cảnh báo né' : 'Đánh giá')} (⭐ ${et.rating})">
       ${badgeLabel}
     </span>
   `;
