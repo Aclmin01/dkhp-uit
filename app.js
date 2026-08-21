@@ -436,7 +436,27 @@ function loadPlansFromStorage() {
   if (savedActivePlan && plans[savedActivePlan]) {
     currentPlanId = savedActivePlan;
   } else {
-    currentPlanId = 'plan_1';
+    currentPlanId = Object.keys(plans)[0] || 'plan_1';
+  }
+
+  const DEFAULT_COURSE_SELECTION = ['SS007.R13', 'IT007.R17', 'NT105.R11', 'MA005.R14', 'IT004.R118', 'NT106.R13'];
+  const DEFAULT_PRACTICE_CHOICES = {
+    'IT007.R17': 'IT007.R17.1',
+    'NT105.R11': 'NT105.R11.1',
+    'IT004.R118': 'IT004.R118.1',
+    'NT106.R13': 'NT106.R13.1'
+  };
+
+  // If the active plan is empty, switch to any plan with courses or auto-populate default courses
+  if (plans[currentPlanId] && (!plans[currentPlanId].selected || plans[currentPlanId].selected.length === 0)) {
+    const planWithCourses = Object.keys(plans).find(pid => plans[pid].selected && plans[pid].selected.length > 0);
+    if (planWithCourses) {
+      currentPlanId = planWithCourses;
+    } else {
+      plans[currentPlanId].selected = [...DEFAULT_COURSE_SELECTION];
+      plans[currentPlanId].practiceChoices = { ...DEFAULT_PRACTICE_CHOICES };
+      savePlansToStorage();
+    }
   }
 }
 
