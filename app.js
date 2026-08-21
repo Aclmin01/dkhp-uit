@@ -808,13 +808,13 @@ function checkItemConflictWithCurrent(targetItem) {
 // 7. UI RENDERERS
 // ==============================================================================
 function renderAll() {
-  renderPlanSelect();
-  renderExcludedTeachersChips();
-  renderActiveFilterBadges();
-  renderTimetableMatrix();
-  renderCourseResults();
-  renderStats();
-  renderSelectedTable();
+  try { renderPlanSelect(); } catch (e) { console.error('renderPlanSelect error:', e); }
+  try { renderExcludedTeachersChips(); } catch (e) { console.error('renderExcludedTeachersChips error:', e); }
+  try { renderActiveFilterBadges(); } catch (e) { console.error('renderActiveFilterBadges error:', e); }
+  try { renderTimetableMatrix(); } catch (e) { console.error('renderTimetableMatrix error:', e); }
+  try { renderCourseResults(); } catch (e) { console.error('renderCourseResults error:', e); }
+  try { renderStats(); } catch (e) { console.error('renderStats error:', e); }
+  try { renderSelectedTable(); } catch (e) { console.error('renderSelectedTable error:', e); }
 }
 
 function renderPlanSelect() {
@@ -1262,6 +1262,8 @@ function renderTimetableMatrix() {
 
     const blockHeight = (duration * 50) + ((duration - 1) * 1) - 4;
     block.style.height = `${blockHeight}px`;
+
+    const etBadge = renderEverytimeBadge(item.tenGV, true);
 
     block.innerHTML = `
       <div class="matrix-card-header">
