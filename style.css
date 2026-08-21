@@ -1104,30 +1104,32 @@ button, input, select {
 /* Timetable Course Card on Matrix */
 .matrix-course-block {
   position: absolute;
-  inset: 2px;
+  inset: 3px;
   border-radius: 12px;
-  padding: 8px 10px;
+  padding: 10px 12px;
   color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-  transition: var(--transition);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   z-index: 10;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .matrix-course-block:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
-  z-index: 20;
+  transform: translateY(-2px) scale(1.008);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32), inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  z-index: 30;
+  border-color: rgba(255, 255, 255, 0.55);
 }
 
 .matrix-course-block.conflict-block {
   background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
   border: 2px solid #ffffff !important;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6) !important;
   animation: pulseBlock 1.5s infinite;
 }
 
@@ -1140,33 +1142,63 @@ button, input, select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
+  gap: 6px;
 }
 
-.block-class-badge {
-  font-size: 10.5px;
+.block-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.block-type-pill {
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+}
+
+.block-type-pill.type-lt {
+  background: rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.block-type-pill.type-th {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.block-class-code {
+  font-size: 11px;
   font-weight: 800;
   font-family: var(--font-mono);
-  background: rgba(0, 0, 0, 0.28);
-  padding: 2px 7px;
-  border-radius: 5px;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
 }
 
 .block-delete-btn {
-  background: rgba(0, 0, 0, 0.35);
-  border: none;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   opacity: 0;
   transition: var(--transition);
+  font-size: 11px;
 }
 
 .matrix-course-block:hover .block-delete-btn {
@@ -1174,18 +1206,21 @@ button, input, select {
 }
 
 .block-delete-btn:hover {
-  background: #ffffff;
-  color: #ef4444;
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: scale(1.15);
 }
 
 .block-center-title {
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 800;
-  line-height: 1.3;
+  line-height: 1.35;
   color: #ffffff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
   margin: auto 0;
-  padding: 4px 0;
+  padding: 6px 0;
+  letter-spacing: -0.1px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -1197,39 +1232,58 @@ button, input, select {
   align-items: flex-end;
   justify-content: space-between;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
-.block-meta-left {
+.block-meta-tags {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
 }
 
-.block-teacher-info {
-  font-size: 12px;
+.block-meta-pill {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  padding: 2.5px 7px;
+  font-size: 11.5px;
   font-weight: 700;
   color: #ffffff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 145px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
-.block-room-info {
-  font-size: 11px;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  opacity: 0.95;
+.block-meta-pill i {
+  opacity: 0.9;
+  font-size: 10.5px;
 }
 
-.block-tc-badge {
+.block-teacher-pill {
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.block-teacher-pill:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.block-credits-pill {
   font-size: 11px;
   font-weight: 800;
-  opacity: 0.95;
-  background: rgba(0, 0, 0, 0.22);
-  padding: 1px 6px;
-  border-radius: 4px;
+  font-family: var(--font-mono);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fef08a;
+  padding: 2.5px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
 }
 
 /* Compact layout for 1-2 period short classes */
