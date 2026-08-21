@@ -25,16 +25,16 @@ const PERIOD_TIMES = {
 };
 
 const COLOR_PALETTE = [
-  { bg: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)', border: 'rgba(244, 114, 182, 0.65)' }, // Rose Pink
-  { bg: 'linear-gradient(135deg, #10b981 0%, #047857 100%)', border: 'rgba(52, 211, 153, 0.65)' }, // Emerald
-  { bg: 'linear-gradient(135deg, #f97316 0%, #c2410c 100%)', border: 'rgba(251, 146, 60, 0.65)' }, // Vivid Orange
-  { bg: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)', border: 'rgba(167, 139, 250, 0.65)' }, // Purple
-  { bg: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', border: 'rgba(96, 165, 250, 0.65)' }, // Blue
-  { bg: 'linear-gradient(135deg, #06b6d4 0%, #0e7490 100%)', border: 'rgba(34, 211, 238, 0.65)' }, // Cyan
-  { bg: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)', border: 'rgba(252, 211, 77, 0.65)' }, // Amber
-  { bg: 'linear-gradient(135deg, #6366f1 0%, #4338ca 100%)', border: 'rgba(129, 140, 248, 0.65)' }, // Indigo
-  { bg: 'linear-gradient(135deg, #14b8a6 0%, #0f766e 100%)', border: 'rgba(45, 212, 191, 0.65)' }, // Teal
-  { bg: 'linear-gradient(135deg, #d946ef 0%, #a21caf 100%)', border: 'rgba(232, 121, 249, 0.65)' }  // Fuchsia
+  { bg: 'linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%)', border: '#818cf8', accent: '#a5b4fc' }, // Indigo Deep
+  { bg: 'linear-gradient(145deg, #064e3b 0%, #022c22 100%)', border: '#10b981', accent: '#34d399' }, // Emerald Deep
+  { bg: 'linear-gradient(145deg, #7c2d12 0%, #431407 100%)', border: '#f97316', accent: '#fb923c' }, // Orange Deep
+  { bg: 'linear-gradient(145deg, #581c87 0%, #3b0764 100%)', border: '#a855f7', accent: '#c084fc' }, // Purple Deep
+  { bg: 'linear-gradient(145deg, #1e3a8a 0%, #172554 100%)', border: '#3b82f6', accent: '#60a5fa' }, // Blue Deep
+  { bg: 'linear-gradient(145deg, #164e63 0%, #083344 100%)', border: '#06b6d4', accent: '#22d3ee' }, // Cyan Deep
+  { bg: 'linear-gradient(145deg, #78350f 0%, #451a03 100%)', border: '#f59e0b', accent: '#fbbf24' }, // Amber Deep
+  { bg: 'linear-gradient(145deg, #831843 0%, #500724 100%)', border: '#f43f5e', accent: '#fb7185' }, // Rose Deep
+  { bg: 'linear-gradient(145deg, #134e4a 0%, #042f2e 100%)', border: '#14b8a6', accent: '#2dd4bf' }, // Teal Deep
+  { bg: 'linear-gradient(145deg, #701a75 0%, #4a044e 100%)', border: '#d946ef', accent: '#e879f9' }  // Fuchsia Deep
 ];
 
 const MAX_EXCEL_UPLOAD_BYTES = 5 * 1024 * 1024;
@@ -1248,34 +1248,29 @@ function renderTimetableMatrix() {
     const blockHeight = (duration * 50) + ((duration - 1) * 1) - 4;
     block.style.height = `${blockHeight}px`;
 
-    const isShort = duration <= 2;
-    const etBadge = renderEverytimeBadge(item.tenGV, true);
-
     block.innerHTML = `
-      <div class="block-top-row">
-        <div class="block-badge-group">
-          <span class="block-type-badge ${item.isTH ? 'th' : 'lt'}">${item.isTH ? 'TH' : 'LT'}</span>
-          <span class="block-class-code">${escapeHtml(item.maLop)}</span>
+      <div class="matrix-card-header">
+        <div class="matrix-header-left">
+          <span class="matrix-type-tag ${item.isTH ? 'th' : 'lt'}">${item.isTH ? 'TH' : 'LT'}</span>
+          <span class="matrix-code-tag">${escapeHtml(item.maLop)}</span>
         </div>
-        <div class="block-top-right">
-          <span class="block-tc-tag">${item.soTC || 0} TC</span>
-          <button class="block-delete-btn" title="Xóa môn này khỏi TKB" data-remove-matrix="${escapeHtml(item.id)}">&times;</button>
+        <div class="matrix-header-right">
+          <span class="matrix-tc-tag">${item.soTC || 0} TC</span>
+          <button class="matrix-delete-btn" title="Xóa môn này khỏi TKB" data-remove-matrix="${escapeHtml(item.id)}">&times;</button>
         </div>
       </div>
 
-      <div class="block-content-body">
-        <div class="block-title" title="${escapeHtml(item.tenMH)}">${escapeHtml(item.tenMH)}</div>
-        
-        <div class="block-details-row">
-          <span class="block-detail-item room" title="Phòng học: ${escapeHtml(item.phong || 'Chưa xếp')}">
-            <i class="fa-solid fa-location-dot" style="color: #67e8f9;"></i>
-            <span>${escapeHtml(item.phong || 'N/A')}</span>
-          </span>
-          <span class="block-detail-item teacher" data-open-et="${escapeHtml(item.tenGV || '')}" title="Xem review giảng viên ${escapeHtml(item.tenGV || '')}">
-            <i class="fa-solid fa-user-tie" style="color: #fda4af;"></i>
-            <span class="teacher-name">${escapeHtml(item.tenGV || 'Chưa phân công')}</span>
-            ${etBadge}
-          </span>
+      <div class="matrix-card-title" title="${escapeHtml(item.tenMH)}">${escapeHtml(item.tenMH)}</div>
+
+      <div class="matrix-card-info">
+        <div class="matrix-info-row">
+          <i class="fa-solid fa-location-dot matrix-info-icon" style="color: ${color.accent || '#38bdf8'};"></i>
+          <span class="matrix-info-text">${escapeHtml(item.phong ? item.phong : 'Chưa xếp phòng')}</span>
+        </div>
+        <div class="matrix-info-row matrix-teacher-row" data-open-et="${escapeHtml(item.tenGV || '')}" title="Bấm xem đánh giá của ${escapeHtml(item.tenGV || '')}">
+          <i class="fa-solid fa-user-tie matrix-info-icon" style="color: #fda4af;"></i>
+          <span class="matrix-info-text">${escapeHtml(item.tenGV || 'Chưa phân công')}</span>
+          ${etBadge}
         </div>
       </div>
     `;
