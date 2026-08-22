@@ -54,8 +54,10 @@ Dễ dàng chuyển đổi chỉ với 1 click:
 Hỗ trợ lưu trữ, chia sẻ và nạp TKB siêu tốc:
 * **Xuất mã lớp đa định dạng**:
   * 📄 **Mỗi mã một dòng (`\n`)**: Định dạng danh sách dọc chuẩn văn bản.
+  * 🚀 **Dấu cách (Space ` `)**: `NT105.R11 NT105.R11.1 MA005.R14...` (Cách nhau bằng dấu khoảng trắng).
   * 🏷️ **Dấu phẩy + Khoảng trắng (`, `)**: `NT105.R11, NT105.R11.1, MA005.R14...`
   * 콤 **Dấu phẩy liền nhau (`,`)**: `NT105.R11,NT105.R11.1,MA005.R14...`
+  * 🔖 **Mã Bookmarklet 1-Click (`javascript:...`)**: Tự động tạo Bookmark trên trình duyệt để chọn & đăng ký môn tức thì.
   * 💻 **Mảng Array JavaScript (`['...']`)**: `['NT105.R11', 'NT105.R11.1'...]`
 * **Lưu & Tải file `.txt` trực tiếp**: Tải về file danh sách mã lớp trong 1 chạm.
 * **Nhập mã lớp thông minh (Auto-Scheduler from Codes)**:
