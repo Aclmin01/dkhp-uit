@@ -1,65 +1,72 @@
 const https = require("https");
 const crypto = require("crypto");
 
-// Global memory store across warm lambda invocations
 global._otpStore = global._otpStore || new Map();
 
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-function sendEmailViaResend(apiKey, to, code, name) {
+function getEmailHtml(name, code) {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8"></head>
+    <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; margin: 0; padding: 24px; color: #f8fafc;">
+      <div style="max-width: 480px; margin: 0 auto; background: #1e293b; border-radius: 16px; border: 1px solid #334155; padding: 32px; text-align: center;">
+        <h1 style="color: #38bdf8; font-size: 26px; margin: 0 0 4px 0; font-weight: 800;">UIT HUB</h1>
+        <p style="color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 24px 0;">Cộng Đồng Sinh Viên UIT</p>
+        <p style="font-size: 15px; color: #f1f5f9; margin-bottom: 12px;">Xin chào <strong>${name}</strong>! 👋</p>
+        <p style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; margin-bottom: 20px;">
+          Mã xác thực OTP đăng ký tài khoản của bạn tại <strong>Cổng UIT HUB</strong> là:
+        </p>
+        <div style="background: #0f172a; border: 2px dashed #0284c7; border-radius: 12px; padding: 16px 24px; margin: 20px 0; display: inline-block;">
+          <span style="font-size: 32px; font-weight: 800; color: #38bdf8; letter-spacing: 8px; font-family: monospace;">${code}</span>
+        </div>
+        <p style="font-size: 12px; color: #f59e0b; margin-top: 16px;">⏱️ Mã này có hiệu lực trong <strong>5 phút</strong>. Tuyệt đối không chia sẻ cho người khác.</p>
+        <div style="margin-top: 28px; padding-top: 16px; border-top: 1px solid #334155; font-size: 11px; color: #64748b;">
+          © 2026 UIT HUB • Trường Đại học Công nghệ Thông tin - ĐHQG TP.HCM
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+function sendViaBrevo(apiKey, toEmail, otpCode, displayName) {
   return new Promise((resolve) => {
-    if (!apiKey) {
-      return resolve({ delivered: false, reason: "NO_API_KEY" });
-    }
+    if (!apiKey) return resolve({ success: false, reason: "NO_BREVO_KEY" });
 
     const payload = JSON.stringify({
-      from: "UIT HUB <onboarding@resend.dev>",
-      to: [to],
-      subject: `[UIT HUB] Mã xác thực OTP đăng ký tài khoản của bạn: ${code}`,
-      html: `
-        <div style="font-family: sans-serif; background: #0f172a; color: #fff; padding: 24px; border-radius: 12px; max-width: 480px; margin: 0 auto; text-align: center;">
-          <h2 style="color: #38bdf8; margin-bottom: 4px;">UIT HUB</h2>
-          <p style="color: #94a3b8; font-size: 12px; margin-bottom: 20px;">CỘNG ĐỒNG SINH VIÊN UIT</p>
-          <p>Xin chào <strong>${name}</strong>,</p>
-          <p>Mã xác thực 6 số đăng ký tài khoản UIT HUB của bạn là:</p>
-          <div style="background: #1e293b; border: 2px dashed #0284c7; border-radius: 8px; padding: 14px 20px; font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #38bdf8; margin: 20px 0; display: inline-block;">
-            ${code}
-          </div>
-          <p style="font-size: 12px; color: #f59e0b;">Mã có hiệu lực trong 5 phút. Vui lòng không chia sẻ cho người khác.</p>
-        </div>
-      `
+      sender: { name: "UIT HUB", email: process.env.BREVO_SENDER || "doanquanghoa007@gmail.com" },
+      to: [{ email: toEmail, name: displayName }],
+      subject: `[UIT HUB] Mã xác thực OTP đăng ký tài khoản: ${otpCode}`,
+      htmlContent: getEmailHtml(displayName, otpCode)
     });
 
-    const options = {
-      hostname: "api.resend.com",
+    const req = https.request({
+      hostname: "api.brevo.com",
       port: 443,
-      path: "/emails",
+      path: "/v3/smtp/email",
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        "api-key": apiKey,
         "Content-Type": "application/json",
         "Content-Length": Buffer.byteLength(payload)
       }
-    };
-
-    const req = https.request(options, (res) => {
-      let resBody = "";
-      res.on("data", chunk => { resBody += chunk; });
+    }, (res) => {
+      let data = "";
+      res.on("data", c => data += c);
       res.on("end", () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve({ delivered: true, data: resBody });
+          resolve({ success: true, provider: "BREVO", data });
         } else {
-          resolve({ delivered: false, statusCode: res.statusCode, body: resBody });
+          console.warn("Brevo API warning:", res.statusCode, data);
+          resolve({ success: false, statusCode: res.statusCode, body: data });
         }
       });
     });
-
-    req.on("error", (e) => {
-      resolve({ delivered: false, error: e.message });
-    });
-
+    req.on("error", e => resolve({ success: false, error: e.message }));
     req.write(payload);
     req.end();
   });
@@ -115,25 +122,15 @@ module.exports = async (req, res) => {
       lastSentAt: Date.now()
     });
 
-    const apiKey = process.env.RESEND_API_KEY || "";
-    const emailResult = await sendEmailViaResend(apiKey, email, otpCode, displayName || username);
+    const brevoKey = process.env.BREVO_API_KEY || "";
+    const sent = await sendViaBrevo(brevoKey, email, otpCode, displayName || username);
 
-    if (emailResult.delivered) {
-      return res.status(200).json({
-        success: true,
-        message: `Mã xác thực 6 số đã được gửi đến ${email}. Vui lòng kiểm tra hộp thư!`,
-        email,
-        isDelivered: true
-      });
-    } else {
-      return res.status(200).json({
-        success: true,
-        message: `Mã xác thực OTP của bạn là: ${otpCode} (Đã tự động điền vào ô xác thực)`,
-        email,
-        otpCode: otpCode,
-        isDelivered: false
-      });
-    }
+    return res.status(200).json({
+      success: true,
+      message: `Mã xác thực 6 số đã được gửi trực tiếp đến email ${email}. Vui lòng kiểm tra hộp thư!`,
+      email,
+      delivered: sent.success
+    });
   } catch (err) {
     console.error("send-otp error:", err);
     return res.status(500).json({ success: false, error: "Lỗi máy chủ khi tạo mã OTP: " + err.message });

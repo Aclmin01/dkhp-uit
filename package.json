@@ -22,6 +22,7 @@
     "terser": "^5.50.0"
   },
   "dependencies": {
+    "nodemailer": "^9.0.5",
     "ws": "^8.21.3"
   }
 }
