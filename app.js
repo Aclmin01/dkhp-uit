@@ -1017,8 +1017,22 @@ function renderCourseResults() {
     if (currentFilters.onlySelected && !isSelected) return false;
 
     if (currentFilters.hideConflict && !isSelected) {
-      const conflictRes = checkItemConflictWithCurrent(c);
-      if (conflictRes.hasConflict) return false;
+      // 1. Kiểm tra nếu Lý thuyết (LT) bị trùng với TKB hiện tại -> ẨN
+      const theoryConflict = checkItemConflictWithCurrent(c);
+      if (theoryConflict.hasConflict) return false;
+
+      // 2. Nếu môn có các nhóm Thực hành (TH):
+      if (c.practices && c.practices.length > 0) {
+        // Kiểm tra xem có ít nhất 1 nhóm TH KHÔNG bị trùng với TKB hiện tại VÀ KHÔNG trùng với chính LT
+        const hasConflictFreePractice = c.practices.some(p => {
+          const pConflictWithTKB = checkItemConflictWithCurrent(p);
+          const pConflictWithTheory = checkTwoItemsOverlap(c, p);
+          return !pConflictWithTKB.hasConflict && !pConflictWithTheory;
+        });
+
+        // Nếu tất cả các nhóm TH đều bị trùng -> ẨN môn này
+        if (!hasConflictFreePractice) return false;
+      }
     }
 
     return true;
@@ -1058,21 +1072,58 @@ function renderCourseResults() {
     const totalCourseTC = (course.soTC || 0) + practiceTC;
     const creditsLabel = practiceTC > 0 ? `${totalCourseTC} TC` : `${course.soTC || 0} TC`;
 
-    // Compact Practice Pills HTML
+    // Compact Practice Pills HTML & Conflict resolution
     let practiceHTML = '';
+    let hasConflictFreePractice = true;
+    let selectedPracticeConflict = { hasConflict: false };
+
     if (course.practices && course.practices.length > 0) {
-      const selectedPracticeId = pChoices[course.id] || course.practices[0].id;
+      let selectedPracticeId = pChoices[course.id];
+      
+      // Find the first conflict-free practice option
+      const freePractice = course.practices.find(p => !checkItemConflictWithCurrent(p).hasConflict && !checkTwoItemsOverlap(course, p));
+      if (!freePractice) {
+        hasConflictFreePractice = false;
+      }
+
+      // If current choice is not set or conflicting when hideConflict is active, auto-switch to free practice
+      if (!selectedPracticeId || (!isSelected && currentFilters.hideConflict && freePractice)) {
+        selectedPracticeId = freePractice ? freePractice.id : course.practices[0].id;
+        pChoices[course.id] = selectedPracticeId;
+      } else if (!selectedPracticeId) {
+        selectedPracticeId = course.practices[0].id;
+      }
+      
+      const currentPracticeItem = courseMap.get(selectedPracticeId);
+      if (currentPracticeItem) {
+        const pTKB = checkItemConflictWithCurrent(currentPracticeItem);
+        const pTh = checkTwoItemsOverlap(course, currentPracticeItem);
+        if (pTKB.hasConflict) {
+          selectedPracticeConflict = pTKB;
+        } else if (pTh) {
+          selectedPracticeConflict = { hasConflict: true, conflictingWith: course };
+        }
+      }
       
       const pills = course.practices.map(p => {
         const isPSelected = selectedPracticeId === p.id;
-        const pConflict = checkItemConflictWithCurrent(p);
+        const pConflictTKB = checkItemConflictWithCurrent(p);
+        const pConflictTheory = checkTwoItemsOverlap(course, p);
+        const pHasConflict = pConflictTKB.hasConflict || pConflictTheory;
         const pThu = p.thu === '*' ? '?' : `T${p.thu}`;
         const pTiet = (p.tiet && p.tiet.length) ? `${p.tiet[0]}-${p.tiet[p.tiet.length-1]}` : (p.tietRaw || 'N/A');
         const groupSuffix = p.maLop.replace(course.maLop, '');
 
+        let conflictTooltip = '';
+        if (pConflictTKB.hasConflict) {
+          conflictTooltip = ` (Trùng lịch với ${pConflictTKB.conflictingWith.maLop})`;
+        } else if (pConflictTheory) {
+          conflictTooltip = ` (Trùng giờ lý thuyết của môn)`;
+        }
+
         return `
-          <button type="button" class="practice-pill-btn ${isPSelected ? 'selected' : ''} ${pConflict.hasConflict ? 'conflict' : ''}"
-                  title="Nhóm ${escapeHtml(groupSuffix)}: ${escapeHtml(pThu)} (Tiết ${escapeHtml(pTiet)}) Phòng ${escapeHtml(p.phong || 'N/A')}"
+          <button type="button" class="practice-pill-btn ${isPSelected ? 'selected' : ''} ${pHasConflict ? 'conflict' : ''}"
+                  title="Nhóm ${escapeHtml(groupSuffix)}: ${escapeHtml(pThu)} (Tiết ${escapeHtml(pTiet)}) Phòng ${escapeHtml(p.phong || 'N/A')}${escapeHtml(conflictTooltip)}"
                   data-select-practice-theory="${escapeHtml(course.id)}"
                   data-select-practice-id="${escapeHtml(p.id)}">
             <strong>${escapeHtml(groupSuffix || p.maLop)}</strong>: ${escapeHtml(pThu)} (${escapeHtml(pTiet)})
@@ -1090,9 +1141,9 @@ function renderCourseResults() {
       `;
     }
 
-      const etBadge = renderEverytimeBadge(course.tenGV);
+    const etBadge = renderEverytimeBadge(course.tenGV);
 
-      card.innerHTML = `
+    card.innerHTML = `
       <div class="course-card-top">
         <div style="display: flex; align-items: center; gap: 6px;">
           <span class="course-code-badge">${escapeHtml(course.maMH)}</span>
@@ -1120,10 +1171,20 @@ function renderCourseResults() {
       ${practiceHTML}
 
       <div class="course-card-actions">
-        ${theoryConflict.hasConflict ? `
-          <span class="card-conflict-pill" title="Môn này bị trùng lịch học với ${escapeHtml(theoryConflict.conflictingWith.maLop)} trong TKB hiện tại">
+        ${!isSelected && theoryConflict.hasConflict ? `
+          <span class="card-conflict-pill" title="Lý thuyết môn này bị trùng lịch học với ${escapeHtml(theoryConflict.conflictingWith.maLop)} trong TKB hiện tại">
             <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>Trùng: <strong>${escapeHtml(theoryConflict.conflictingWith.maLop)}</strong></span>
+            <span>Trùng LT: <strong>${escapeHtml(theoryConflict.conflictingWith.maLop)}</strong></span>
+          </span>
+        ` : (!isSelected && !hasConflictFreePractice && course.practices && course.practices.length > 0) ? `
+          <span class="card-conflict-pill" title="Tất cả các nhóm thực hành của môn này đều bị trùng lịch!">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Trùng mọi nhóm TH</span>
+          </span>
+        ` : (!isSelected && selectedPracticeConflict.hasConflict) ? `
+          <span class="card-conflict-pill" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.35); color: #f59e0b;" title="Nhóm TH đang chọn bị trùng với ${escapeHtml(selectedPracticeConflict.conflictingWith.maLop)}, hãy bấm chọn nhóm TH khác!">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Trùng nhóm TH đang chọn</span>
           </span>
         ` : '<span></span>'}
         
@@ -1133,7 +1194,6 @@ function renderCourseResults() {
         </button>
       </div>
     `;
-
     fragment.appendChild(card);
   });
 
