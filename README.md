@@ -138,19 +138,25 @@ dkhp-uit/
 ├── index.html            # Giao diện chính, TKB Matrix, Modals & Bộ lọc
 ├── reviews.html          # Trang tra cứu & đóng góp 900+ Review Giảng viên Everytime
 ├── style.css             # Hệ thống Design System, Token CSS, Dark/Light theme & Responsive Mobile
-├── app.js                # Engine điều phối TKB, CSP Solver, Import/Export & LocalStorage
-├── reviews.js            # Logic tìm kiếm, lọc và gửi review giảng viên qua Supabase
-├── ratings.js            # Cơ sở dữ liệu 900+ Review Giảng viên Everytime UIT
-├── data.js               # Cơ sở dữ liệu Thời khóa biểu lớp học phần UIT
-├── security.js           # Module bảo mật Web Crypto SHA-256, FastHash & RateLimiter
-├── supabase-config.js    # Cấu hình kết nối Supabase API cho tính năng Review
-├── vercel.json           # Cấu hình Vercel Edge Server, CSP Headers, HSTS & Cache-Control
+├── build.js              # Script tự động Đóng gói & Nén làm rối mã nguồn (Terser Bundler)
+├── security-guard.js     # Lớp bảo vệ Anti-DevTools, Anti-Inspection & Watchdog
+├── bundle.main.min.js    # Single-file Bundle mã nguồn nén & làm rối cho App chính
+├── bundle.reviews.min.js # Single-file Bundle mã nguồn nén & làm rối cho Trang Reviews
+├── supabase_security_setup.sql # Script SQL thiết lập Row Level Security (RLS) trên Supabase
+├── app.js                # Engine điều phối TKB, CSP Solver, Import/Export & LocalStorage (Source)
+├── reviews.js            # Logic tìm kiếm, lọc và gửi review giảng viên qua Supabase (Source)
+├── ratings.js            # Cơ sở dữ liệu 900+ Review Giảng viên Everytime UIT (Source)
+├── data.js               # Cơ sở dữ liệu Thời khóa biểu lớp học phần UIT (Source)
+├── security.js           # Module bảo mật Web Crypto SHA-256, FastHash & RateLimiter (Source)
+├── supabase-config.js    # Cấu hình kết nối Supabase API cho tính năng Review (Source)
+├── vercel.json           # Cấu hình Vercel Edge Server, Build Command, CSP Headers & HSTS
 └── libs/                 # Thư viện tĩnh (XLSX, html2canvas, Supabase client)
 ```
 
-- **Frontend**: Pure Vanilla HTML5 / Modern CSS3 / Modern JavaScript (ES6+).
-- **Backend & Database**: Supabase (PostgreSQL & Realtime API).
-- **Deployment**: Vercel Global Edge Network (HTTP/2, HTTPS, Anycast CDN).
+- **Frontend Architecture**: Single-Bundle Delivery (Đóng gói 1 file JS duy nhất, nén Mangle & Obfuscate, không lộ file rời rạc khi F12).
+- **Client Security Guard**: Chống mở F12/Inspect, bẫy Anti-Debugging Watchdog, ẩn Console Logs và bẫy Anti-Bot Honeypot.
+- **Backend Security**: Supabase Row-Level Security (RLS) với ràng buộc kiểm tra nghiêm ngặt từ Database.
+- **Edge Deployment**: Vercel Global Edge Network tự động build `node build.js` mỗi lần deploy.
 
 ---
 
