@@ -18,6 +18,7 @@ config.private.json
 security.js
 security-guard.js
 supabase-config.js
+feed.js
 
 # 2. Python Virtual Environments, Bytecode & Scraper Dumps
 .venv/

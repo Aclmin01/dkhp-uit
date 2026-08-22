@@ -5,6 +5,7 @@
   "buildCommand": "node build.js",
   "outputDirectory": ".",
   "rewrites": [
+    { "source": "/feed", "destination": "/feed.html" },
     { "source": "/reviews", "destination": "/reviews.html" }
   ],
   "headers": [

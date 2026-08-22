@@ -95,6 +95,30 @@ async function build() {
   fs.writeFileSync(path.join(__dirname, 'bundle.reviews.min.js'), minifiedReviews.code, 'utf8');
   console.log(`✅ Generated bundle.reviews.min.js (${(minifiedReviews.code.length / 1024).toFixed(2)} KB)`);
 
+  // 3. Bundle Social Feed App (feed.html)
+  console.log('📦 Bundling social feed app (bundle.feed.min.js)...');
+  const feedFiles = [
+    'security-guard.js',
+    'security.js',
+    'ratings.js',
+    'supabase-config.js',
+    'feed.js'
+  ];
+
+  let feedSource = '';
+  for (const file of feedFiles) {
+    const filePath = path.join(__dirname, file);
+    if (fs.existsSync(filePath)) {
+      feedSource += fs.readFileSync(filePath, 'utf8') + '\n;\n';
+    } else {
+      console.warn(`⚠️ Warning: ${file} not found.`);
+    }
+  }
+
+  const minifiedFeed = await minify(feedSource, terserOptions);
+  fs.writeFileSync(path.join(__dirname, 'bundle.feed.min.js'), minifiedFeed.code, 'utf8');
+  console.log(`✅ Generated bundle.feed.min.js (${(minifiedFeed.code.length / 1024).toFixed(2)} KB)`);
+
   console.log('🎉 Enterprise Security Build completed successfully!');
 }
 

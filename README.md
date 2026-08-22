@@ -131,14 +131,25 @@ Hỗ trợ lưu trữ, chia sẻ và nạp TKB siêu tốc:
 
 ---
 
+### 5. 💬 Diễn Đàn Sinh Viên UIT (Campus Social Feed & Forum)
+* **Trao đổi & Nhượng lớp TKB**: Đăng bài đổi ca học, chuyển nhượng môn học phần trong mùa ĐKHP.
+* **Hỏi đáp Học tập & Tìm nhóm Đồ án**: Thảo luận tài liệu ôn thi, đề thi cũ và lập team làm đồ án môn học.
+* **Đăng bài Ẩn danh (Everytime Mode)**: Tự do chia sẻ tâm sự, hỏi ý kiến sinh viên ẩn danh hoặc theo nickname.
+* **Tương tác Thời gian thực**: Thả tim / Upvote bài viết, bình luận đa cấp theo thứ tự ẩn danh (`Tác giả`, `Sinh viên #1`, `Sinh viên #2`).
+* **Deep-Link thông minh**: Bấm vào tag môn học (`#IT004`) để mở xếp TKB ngay; bấm vào tên giảng viên (`@Đặng Việt Dũng`) để đọc 900+ Review chi tiết!
+
+---
+
 ## 💻 Cấu Trúc & Công Nghệ
 
 ```
 dkhp-uit/
 ├── index.html            # Giao diện chính, TKB Matrix, Modals & Bộ lọc
+├── feed.html             # Diễn đàn Mạng xã hội sinh viên UIT (Trao đổi TKB, Học tập, Tìm nhóm)
 ├── reviews.html          # Trang tra cứu & đóng góp 900+ Review Giảng viên Everytime
 ├── style.css             # Hệ thống Design System, Token CSS, Dark/Light theme & Responsive Mobile
 ├── bundle.main.min.js    # Gói mã nguồn phân phối ứng dụng TKB (Production Bundle)
+├── bundle.feed.min.js    # Gói mã nguồn phân phối Diễn đàn sinh viên (Production Bundle)
 ├── bundle.reviews.min.js # Gói mã nguồn phân phối trang Review Giảng viên (Production Bundle)
 ├── vercel.json           # Cấu hình Vercel Edge Server, Routing & Cache-Control
 └── libs/                 # Thư viện xử lý tĩnh (XLSX, html2canvas, Supabase client)
@@ -146,7 +157,7 @@ dkhp-uit/
 
 - **Giao diện**: Hiện đại, tối ưu hiệu năng cao với Pure Modern JavaScript (ES6+), HTML5 Semantic và CSS Variables.
 - **Xử lý thời khóa biểu**: Thuật toán CSP Solver & Hệ thống lưu trữ LocalStorage phân tán trên trình duyệt người dùng.
-- **Cơ sở dữ liệu đánh giá**: Kết nối Supabase Realtime API phục vụ tra cứu review giảng viên.
+- **Mạng xã hội & Đánh giá**: Kết nối Supabase Realtime API phục vụ diễn đàn trao đổi và tra cứu review giảng viên.
 - **Hạ tầng triển khai**: Vercel Global Edge Network phân phối tốc độ cao trên toàn cầu (HTTP/2, Anycast CDN).
 
 ---

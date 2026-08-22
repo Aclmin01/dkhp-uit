@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Diễn Đàn Sinh Viên UIT • Trao Đổi TKB & Học Tập | DKHP UIT</title>
+  
+  <meta name="description" content="Mạng xã hội và diễn đàn học tập sinh viên UIT: Trao đổi nhượng lớp TKB, tìm nhóm làm đồ án, hỏi đáp môn học và thảo luận review giảng viên.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=8.5">
+</head>
+<body>
+
+  <!-- ==============================================================================
+       1. APP HEADER
+       ============================================================================== -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-logo" style="background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);">
+        <i class="fa-solid fa-comments"></i>
+      </div>
+      <div class="brand-info">
+        <h1 class="brand-title">DIỄN ĐÀN <span>UIT</span></h1>
+        <span class="badge-semester">Cộng Đồng • Trao Đổi TKB & Học Tập</span>
+      </div>
+    </div>
+
+    <!-- Main App Navigation Tabs -->
+    <nav class="header-main-nav">
+      <a href="index.html" class="nav-tab-btn" title="Quay lại trang Xếp Thời Khóa Biểu">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>Xếp TKB & ĐKHP</span>
+      </a>
+      <a href="feed.html" class="nav-tab-btn active" title="Diễn đàn trao đổi TKB, hỏi đáp học tập & tìm nhóm UIT">
+        <i class="fa-solid fa-comments" style="color: #38bdf8;"></i>
+        <span>Diễn Đàn UIT</span>
+        <span class="nav-badge-pill" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">Mới 🔥</span>
+      </a>
+      <a href="reviews.html" class="nav-tab-btn" title="Trang tra cứu đánh giá review giảng viên & môn học">
+        <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
+        <span>Tra Cứu Review</span>
+        <span class="nav-badge-pill">900+ Review</span>
+      </a>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <button class="btn btn-primary" id="btnOpenCreatePostModal" title="Đăng bài viết mới lên Diễn đàn UIT">
+        <i class="fa-solid fa-pen-nib"></i>
+        <span>Đăng Bài Mới</span>
+      </button>
+
+      <a href="index.html" class="btn btn-magic" title="Chuyển sang công cụ Tự động xếp TKB">
+        <i class="fa-solid fa-wand-magic-sparkles" style="color: #fde047;"></i>
+        <span>Tự động xếp TKB</span>
+      </a>
+
+      <a href="https://github.com/Ins0720/dkhp-uit" target="_blank" rel="noopener noreferrer" class="btn-github-star" title="Ủng hộ dự án 1 Star trên GitHub!">
+        <i class="fa-brands fa-github"></i>
+        <span>⭐ Star</span>
+      </a>
+
+      <button class="btn-theme-toggle" id="btnThemeToggle" title="Chuyển đổi giao diện Sáng / Tối">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==============================================================================
+       2. SOCIAL FEED MAIN LAYOUT
+       ============================================================================== -->
+  <main class="feed-page-layout">
+    
+    <!-- LEFT SIDEBAR: Categories & Trending Tags -->
+    <aside class="feed-sidebar-left">
+      <div class="feed-widget-card">
+        <h3 class="feed-widget-title">
+          <i class="fa-solid fa-layer-group" style="color: var(--primary);"></i>
+          <span>Chuyên Mục</span>
+        </h3>
+        <div class="feed-category-list" id="feedCategoryList">
+          <button type="button" class="feed-category-btn active" data-feed-cat="all">
+            <span><i class="fa-solid fa-globe" style="width: 18px;"></i> Tất cả bài viết</span>
+            <span class="feed-category-count" id="countCatAll">--</span>
+          </button>
+          <button type="button" class="feed-category-btn" data-feed-cat="trade">
+            <span><i class="fa-solid fa-arrow-right-arrow-left" style="color: #10b981; width: 18px;"></i> Nhượng / Đổi lớp TKB</span>
+            <span class="feed-category-count" id="countCatTrade">--</span>
+          </button>
+          <button type="button" class="feed-category-btn" data-feed-cat="study">
+            <span><i class="fa-solid fa-book-open" style="color: #3b82f6; width: 18px;"></i> Học tập & Tài liệu</span>
+            <span class="feed-category-count" id="countCatStudy">--</span>
+          </button>
+          <button type="button" class="feed-category-btn" data-feed-cat="teacher">
+            <span><i class="fa-solid fa-chalkboard-user" style="color: #f59e0b; width: 18px;"></i> Thảo luận Giảng viên</span>
+            <span class="feed-category-count" id="countCatTeacher">--</span>
+          </button>
+          <button type="button" class="feed-category-btn" data-feed-cat="team">
+            <span><i class="fa-solid fa-users" style="color: #8b5cf6; width: 18px;"></i> Tìm bạn & Nhóm Đồ án</span>
+            <span class="feed-category-count" id="countCatTeam">--</span>
+          </button>
+          <button type="button" class="feed-category-btn" data-feed-cat="chat">
+            <span><i class="fa-solid fa-mug-hot" style="color: #f43f5e; width: 18px;"></i> Góc Tâm Sự & Confession</span>
+            <span class="feed-category-count" id="countCatChat">--</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Trending Subject Tags -->
+      <div class="feed-widget-card">
+        <h3 class="feed-widget-title">
+          <i class="fa-solid fa-hashtag" style="color: #38bdf8;"></i>
+          <span>Môn Học Nổi Bật</span>
+        </h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px;" id="feedTrendingTagsBox">
+          <span class="feed-subject-tag" data-tag-filter="IT004">#IT004 (CSDL)</span>
+          <span class="feed-subject-tag" data-tag-filter="NT106">#NT106 (LT Mạng)</span>
+          <span class="feed-subject-tag" data-tag-filter="IT007">#IT007 (HĐH)</span>
+          <span class="feed-subject-tag" data-tag-filter="MA005">#MA005 (XSTK)</span>
+          <span class="feed-subject-tag" data-tag-filter="NT105">#NT105 (Truyền DL)</span>
+          <span class="feed-subject-tag" data-tag-filter="IT002">#IT002 (OOP)</span>
+          <span class="feed-subject-tag" data-tag-filter="SS007">#SS007 (Triết)</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER: Main Feed Stream -->
+    <section class="feed-main-stream">
+      
+      <!-- Quick Post Card Trigger -->
+      <div class="feed-quick-post" id="quickPostTrigger">
+        <div class="feed-quick-avatar">
+          <i class="fa-solid fa-user-astronaut"></i>
+        </div>
+        <div class="feed-quick-input">
+          Bạn cần tìm nhóm đồ án, đổi lớp TKB hay hỏi bài tập...? Bấm để đăng bài ✍️
+        </div>
+      </div>
+
+      <!-- Feed Controls: Sorting & Search -->
+      <div class="feed-control-bar">
+        <div class="segmented-control" id="feedSortControl" style="margin: 0;">
+          <button type="button" class="seg-btn active" data-feed-sort="latest">
+            <i class="fa-solid fa-clock"></i> Mới nhất
+          </button>
+          <button type="button" class="seg-btn" data-feed-sort="hot">
+            <i class="fa-solid fa-fire" style="color: #f97316;"></i> Xu hướng 🔥
+          </button>
+          <button type="button" class="seg-btn" data-feed-sort="comments">
+            <i class="fa-solid fa-comments"></i> Thảo luận
+          </button>
+        </div>
+
+        <div class="feed-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="feedSearchInput" placeholder="Tìm bài viết, môn học, tác giả...">
+        </div>
+      </div>
+
+      <!-- Posts List Container -->
+      <div id="feedPostsContainer">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </section>
+
+    <!-- RIGHT SIDEBAR: Fast Shortcuts & Top Tier S Teachers -->
+    <aside class="feed-sidebar-right">
+      
+      <!-- TKB Shortcut Widget -->
+      <div class="feed-widget-card" style="background: linear-gradient(135deg, rgba(225, 29, 72, 0.08), rgba(59, 130, 246, 0.08)); border-color: rgba(59, 130, 246, 0.3);">
+        <h3 class="feed-widget-title" style="color: var(--primary);">
+          <i class="fa-solid fa-wand-magic-sparkles" style="color: #f59e0b;"></i>
+          <span>Xếp Lịch Học Siêu Tốc</span>
+        </h3>
+        <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+          Tự động tìm kiếm tổ hợp TKB không trùng lịch, tạo Script Auto ĐKHP 1-click cho cổng trường.
+        </p>
+        <a href="index.html" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 12.5px; padding: 8px;">
+          <i class="fa-solid fa-calendar-plus"></i> Mở Trợ Lý Xếp TKB
+        </a>
+      </div>
+
+      <!-- Top Tier S Teachers Widget -->
+      <div class="feed-widget-card">
+        <h3 class="feed-widget-title">
+          <i class="fa-solid fa-crown" style="color: #f59e0b;"></i>
+          <span>Giảng Viên Đỉnh (Tier S)</span>
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;" id="feedTopTeachersWidget">
+          <!-- Rendered dynamically from ratings.js -->
+        </div>
+        <a href="reviews.html" class="btn btn-secondary btn-sm" style="width: 100%; margin-top: 10px; justify-content: center; font-size: 11.5px;">
+          Xem tất cả 218 giảng viên ➔
+        </a>
+      </div>
+
+      <!-- Forum Rules -->
+      <div class="feed-widget-card">
+        <h3 class="feed-widget-title" style="font-size: 12.5px; color: var(--text-muted);">
+          <i class="fa-solid fa-shield-halved" style="color: #10b981;"></i>
+          <span>Văn Hóa Diễn Đàn</span>
+        </h3>
+        <ul style="font-size: 11.5px; color: var(--text-muted); line-height: 1.6; padding-left: 16px; margin: 0;">
+          <li>Tôn trọng bạn bè & giảng viên trường.</li>
+          <li>Không spam hoặc đăng tin sai lệch.</li>
+          <li>Hỗ trợ nhau cùng vượt qua mùa ĐKHP & đồ án!</li>
+        </ul>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- ==============================================================================
+       3. CREATE POST MODAL
+       ============================================================================== -->
+  <div class="modal-overlay" id="modalCreatePost" style="display: none;">
+    <div class="modal-card" style="max-width: 620px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="fa-solid fa-pen-to-square" style="color: var(--primary); font-size: 18px;"></i>
+          <h3 class="modal-title">Đăng Bài Viết Lên Diễn Đàn UIT</h3>
+        </div>
+        <button class="modal-close-btn" data-close-modal="modalCreatePost">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="formCreatePost" class="modal-body custom-scrollbar" style="max-height: calc(90vh - 130px); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 18px;">
+        
+        <!-- Category Selector -->
+        <div class="form-group">
+          <label class="form-label">📌 Chọn Chuyên mục bài đăng <span style="color: #ef4444;">*</span></label>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;" id="modalCategoryPicker">
+            <button type="button" class="btn btn-secondary btn-sm active" data-post-cat="trade" style="justify-content: center; font-size: 11.5px;">
+              <i class="fa-solid fa-arrow-right-arrow-left" style="color: #10b981;"></i> Đổi lớp TKB
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" data-post-cat="study" style="justify-content: center; font-size: 11.5px;">
+              <i class="fa-solid fa-book-open" style="color: #3b82f6;"></i> Học tập
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" data-post-cat="teacher" style="justify-content: center; font-size: 11.5px;">
+              <i class="fa-solid fa-chalkboard-user" style="color: #f59e0b;"></i> Hỏi Giảng viên
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" data-post-cat="team" style="justify-content: center; font-size: 11.5px;">
+              <i class="fa-solid fa-users" style="color: #8b5cf6;"></i> Tìm nhóm
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" data-post-cat="chat" style="justify-content: center; font-size: 11.5px;">
+              <i class="fa-solid fa-mug-hot" style="color: #f43f5e;"></i> Tâm sự
+            </button>
+          </div>
+          <input type="hidden" id="submitPostCategory" value="trade">
+        </div>
+
+        <!-- Post Title -->
+        <div class="form-group">
+          <label class="form-label" for="submitPostTitle">📝 Tiêu đề bài viết <span style="color: #ef4444;">*</span></label>
+          <input 
+            type="text" 
+            id="submitPostTitle" 
+            class="form-control" 
+            placeholder="Ví dụ: Cần nhượng lớp IT004.R18 sang ca sáng, Tìm bạn chung nhóm Đồ án Mạng..." 
+            required 
+            autocomplete="off"
+            maxlength="150"
+          >
+        </div>
+
+        <!-- Course Tag & Teacher Tag Row -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label" for="submitPostCourseTag">📚 Gắn tag Môn học (Tùy chọn)</label>
+            <input 
+              type="text" 
+              id="submitPostCourseTag" 
+              class="form-control" 
+              placeholder="VD: IT004, NT106..." 
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="submitPostTeacherTag">👨‍🏫 Gắn tag Giảng viên (Tùy chọn)</label>
+            <input 
+              type="text" 
+              id="submitPostTeacherTag" 
+              class="form-control" 
+              placeholder="VD: Đặng Việt Dũng..." 
+              autocomplete="off"
+            >
+          </div>
+        </div>
+
+        <!-- Post Content Textarea -->
+        <div class="form-group">
+          <label class="form-label" for="submitPostContent">💬 Nội dung chi tiết <span style="color: #ef4444;">*</span></label>
+          <textarea 
+            id="submitPostContent" 
+            class="form-control" 
+            rows="5" 
+            placeholder="Nhập thông tin chi tiết bạn muốn trao đổi, thông tin liên hệ (Zalo, Messenger, Email)..." 
+            required
+            style="line-height: 1.6; resize: vertical;"
+            maxlength="3000"
+          ></textarea>
+        </div>
+
+        <!-- Anonymous Checkbox -->
+        <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface-elevated); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-mask" style="color: #a855f7; font-size: 16px;"></i>
+            <div>
+              <strong style="font-size: 13px; color: var(--text-primary); display: block;">Đăng bài Ẩn danh (Everytime Mode)</strong>
+              <span style="font-size: 11.5px; color: var(--text-muted);">Tên của bạn sẽ hiển thị là "Sinh viên UIT" để bảo mật danh tính.</span>
+            </div>
+          </div>
+          <input type="checkbox" id="chkPostAnonymous" checked style="width: 18px; height: 18px; cursor: pointer;">
+        </div>
+
+        <!-- Anti-Spam Bot Honeypot Field -->
+        <div style="opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; pointer-events: none;" aria-hidden="true">
+          <input type="text" id="postHoneypotField" name="security_hp_post" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="modal-footer" style="padding: 12px 0 0 0; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+          <button type="button" class="btn btn-secondary" data-close-modal="modalCreatePost">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitPostAction">
+            <i class="fa-solid fa-paper-plane"></i> Đăng Bài Ngay
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="feedToastNotification" style="position: fixed; bottom: 24px; right: 24px; z-index: 1000000; display: none;"></div>
+
+  <!-- Scripts -->
+  <script src="libs/supabase.js"></script>
+  <script src="bundle.feed.min.js?v=8.5"></script>
+</body>
+</html>
