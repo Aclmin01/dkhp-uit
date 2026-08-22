@@ -379,17 +379,8 @@ function buildCourseMap() {
 
 function getDefaultPlans() {
   return {
-    'plan_1': {
-      name: 'Kế hoạch 1 (Chính)',
-      selected: ['SS007.R13', 'IT007.R17', 'NT105.R11', 'MA005.R14', 'IT004.R118', 'NT106.R13'],
-      practiceChoices: {
-        'IT007.R17': 'IT007.R17.1',
-        'NT105.R11': 'NT105.R11.1',
-        'IT004.R118': 'IT004.R118.1',
-        'NT106.R13': 'NT106.R13.1'
-      }
-    },
-    'plan_2': { name: 'Kế hoạch 2 (Dự phòng)', selected: [], practiceChoices: {} },
+    'plan_1': { name: 'Kế hoạch 1', selected: [], practiceChoices: {} },
+    'plan_2': { name: 'Kế hoạch 2', selected: [], practiceChoices: {} },
     'plan_3': { name: 'Kế hoạch 3', selected: [], practiceChoices: {} }
   };
 }
@@ -413,22 +404,13 @@ function loadPlansFromStorage() {
     plans = getDefaultPlans();
   }
 
-  // If plans exist but all plans are empty, load default plan_1 courses
-  const allEmpty = Object.values(plans).every(p => !p.selected || p.selected.length === 0);
-  if (allEmpty && plans['plan_1']) {
-    plans['plan_1'].selected = ['SS007.R13', 'IT007.R17', 'NT105.R11', 'MA005.R14', 'IT004.R118', 'NT106.R13'];
-    plans['plan_1'].practiceChoices = {
-      'IT007.R17': 'IT007.R17.1',
-      'NT105.R11': 'NT105.R11.1',
-      'IT004.R118': 'IT004.R118.1',
-      'NT106.R13': 'NT106.R13.1'
-    };
-  }
-
-  // Ensure each plan has practiceChoices dictionary
+  // Ensure each plan has practiceChoices dictionary and valid selected array
   Object.keys(plans).forEach(pid => {
     if (!plans[pid].practiceChoices) {
       plans[pid].practiceChoices = {};
+    }
+    if (!Array.isArray(plans[pid].selected)) {
+      plans[pid].selected = [];
     }
   });
 
@@ -437,26 +419,6 @@ function loadPlansFromStorage() {
     currentPlanId = savedActivePlan;
   } else {
     currentPlanId = Object.keys(plans)[0] || 'plan_1';
-  }
-
-  const DEFAULT_COURSE_SELECTION = ['SS007.R13', 'IT007.R17', 'NT105.R11', 'MA005.R14', 'IT004.R118', 'NT106.R13'];
-  const DEFAULT_PRACTICE_CHOICES = {
-    'IT007.R17': 'IT007.R17.1',
-    'NT105.R11': 'NT105.R11.1',
-    'IT004.R118': 'IT004.R118.1',
-    'NT106.R13': 'NT106.R13.1'
-  };
-
-  // If the active plan is empty, switch to any plan with courses or auto-populate default courses
-  if (plans[currentPlanId] && (!plans[currentPlanId].selected || plans[currentPlanId].selected.length === 0)) {
-    const planWithCourses = Object.keys(plans).find(pid => plans[pid].selected && plans[pid].selected.length > 0);
-    if (planWithCourses) {
-      currentPlanId = planWithCourses;
-    } else {
-      plans[currentPlanId].selected = [...DEFAULT_COURSE_SELECTION];
-      plans[currentPlanId].practiceChoices = { ...DEFAULT_PRACTICE_CHOICES };
-      savePlansToStorage();
-    }
   }
 }
 
