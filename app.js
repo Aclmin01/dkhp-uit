@@ -2261,15 +2261,60 @@ function showAppToast(message) {
 // ==============================================================================
 // 14. IMPORT / EXPORT CLASS CODES (AUTO SCHEDULING VIA CODE LIST)
 // ==============================================================================
-function openImportExportCodesModal(defaultTab = 'import') {
-  switchCodesModalTab(defaultTab);
-  
-  // Populate export textarea
+let currentExportFormat = 'newline'; // 'newline' | 'comma_space' | 'comma' | 'js_array'
+
+function formatExportClassCodes(codes, format = currentExportFormat) {
+  if (!codes || codes.length === 0) return '';
+  switch (format) {
+    case 'comma_space':
+      return codes.join(', ');
+    case 'comma':
+      return codes.join(',');
+    case 'js_array':
+      return "['" + codes.join("', '") + "']";
+    case 'newline':
+    default:
+      return codes.join('\n');
+  }
+}
+
+function updateExportCodesDisplay() {
   const currentCodes = getSelectedClassCodes();
   const exportArea = document.getElementById('exportCodesTextarea');
+  const countBadge = document.getElementById('exportCodesCountBadge');
+  
   if (exportArea) {
-    exportArea.value = currentCodes.length > 0 ? currentCodes.join('\n') : '';
+    exportArea.value = formatExportClassCodes(currentCodes, currentExportFormat);
   }
+  if (countBadge) {
+    const selectedCourseCount = plans[currentPlanId]?.selected?.length || 0;
+    countBadge.textContent = `📋 ${currentCodes.length} mã lớp (${selectedCourseCount} môn học)`;
+  }
+}
+
+function downloadExportCodesAsTxt() {
+  const exportArea = document.getElementById('exportCodesTextarea');
+  if (!exportArea || !exportArea.value.trim()) {
+    showAppToast('⚠️ Chưa có môn học nào trong TKB để tải về!');
+    return;
+  }
+  const planName = (plans[currentPlanId]?.name || 'TKB_UIT').replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\u00C0-\u024F\u1EA0-\u1EF9-]/g, '');
+  const filename = `${planName}_MaLop.txt`;
+  const blob = new Blob([exportArea.value.trim()], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showAppToast(`💾 Đã tải file danh sách mã lớp: ${filename}`);
+}
+
+function openImportExportCodesModal(defaultTab = 'import') {
+  switchCodesModalTab(defaultTab);
+  updateExportCodesDisplay();
 
   // Clear feedback
   const feedback = document.getElementById('importResultFeedback');
@@ -2295,9 +2340,7 @@ function switchCodesModalTab(tabName) {
     if (contentImport) contentImport.style.display = 'none';
     if (contentExport) contentExport.style.display = 'block';
 
-    const currentCodes = getSelectedClassCodes();
-    const exportArea = document.getElementById('exportCodesTextarea');
-    if (exportArea) exportArea.value = currentCodes.length > 0 ? currentCodes.join('\n') : '';
+    updateExportCodesDisplay();
   }
 }
 
@@ -3707,6 +3750,19 @@ bindEvents = function() {
 
   const btnCopyExportCodes = document.getElementById('btnCopyExportCodes');
   if (btnCopyExportCodes) btnCopyExportCodes.addEventListener('click', copyExportCodes);
+
+  const btnDownloadExportTxt = document.getElementById('btnDownloadExportTxt');
+  if (btnDownloadExportTxt) btnDownloadExportTxt.addEventListener('click', downloadExportCodesAsTxt);
+
+  // Export Format Segmented Control
+  document.querySelectorAll('#exportFormatSegmentedControl .seg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#exportFormatSegmentedControl .seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentExportFormat = btn.dataset.exportFormat || 'newline';
+      updateExportCodesDisplay();
+    });
+  });
 
   const btnModalOpenScript = document.getElementById('btnModalOpenScript');
   if (btnModalOpenScript) {
