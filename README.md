@@ -158,7 +158,7 @@ Dự án được xây dựng theo tinh thần **Vibe Coding** phục vụ phi l
 
 Mọi đóng góp, báo lỗi (Bug Reports), góp ý tính năng (Feature Requests) hoặc Pull Requests đều được hoan nghênh nồng nhiệt! 💖
 
-* **Tác giả / Maintainer**: [Đoàn Quang Hòa](https://github.com/Ins0720)
+* **Tác giả / Maintainer**: [Ins0720](https://github.com/Ins0720)
 * **GitHub Repository**: [https://github.com/Ins0720/dkhp-uit](https://github.com/Ins0720/dkhp-uit)
 
 ---
