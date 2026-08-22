@@ -2,6 +2,8 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "buildCommand": "node build.js",
+  "outputDirectory": ".",
   "rewrites": [
     { "source": "/reviews", "destination": "/reviews.html" }
   ],
