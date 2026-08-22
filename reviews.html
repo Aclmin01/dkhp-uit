@@ -248,6 +248,12 @@
       </div>
 
       <form id="formSubmitReview" class="modal-body custom-scrollbar" style="max-height: calc(90vh - 130px); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 18px;">
+        <!-- Anti-Spam Bot Honeypot Field (Invisible to humans) -->
+        <div style="opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; pointer-events: none;" aria-hidden="true">
+          <label for="submitHoneypotField">Do not fill this</label>
+          <input type="text" id="submitHoneypotField" name="security_hp_trap" tabindex="-1" autocomplete="off">
+        </div>
+
         <!-- Teacher Selection -->
         <div class="form-group" style="position: relative;">
           <label class="form-label" for="submitTeacherInput">👨‍🏫 Giảng viên đánh giá <span style="color: #ef4444;">*</span></label>

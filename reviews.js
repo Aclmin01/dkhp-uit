@@ -822,19 +822,39 @@ function initSubmitReviewModal(allTeachers, onReviewAdded) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      const teacherName = (document.getElementById('submitTeacherInput')?.value || '').trim();
-      const courseName = (document.getElementById('submitCourseInput')?.value || '').trim();
+      // 1. Anti-Bot Honeypot Trap Check
+      const honeypot = (document.getElementById('submitHoneypotField')?.value || '').trim();
+      if (honeypot) {
+        console.warn('[SECURITY] Automated bot submission dropped.');
+        closeModal('modalSubmitReview');
+        return;
+      }
+
+      // 2. Client-Side DoS / Spam Rate Limiter Guard
+      if (window.DKHP_SECURITY && !DKHP_SECURITY.rateLimit('submit_teacher_review', 3, 15000)) {
+        showReviewToast('⚠️ Bạn gửi đánh giá quá nhanh! Vui lòng đợi 15 giây trước khi gửi tiếp.');
+        return;
+      }
+
+      const teacherName = (document.getElementById('submitTeacherInput')?.value || '').trim().slice(0, 120);
+      const courseName = (document.getElementById('submitCourseInput')?.value || '').trim().slice(0, 120);
       const semesterName = document.getElementById('submitSemesterSelect')?.value || 'HK2 2025-2026';
-      const rating = parseInt(document.getElementById('submitRatingValue')?.value || '5');
+      const rawRating = parseInt(document.getElementById('submitRatingValue')?.value || '5');
+      const rating = Math.max(1, Math.min(5, isNaN(rawRating) ? 5 : rawRating));
       const grading = document.getElementById('submitGradingSelect')?.value || 'Rộng rãi (Thoáng)';
       const attendance = document.getElementById('submitAttendanceSelect')?.value || 'Không điểm danh / Dễ';
       const workload = document.getElementById('submitWorkloadSelect')?.value || 'Vừa sức';
-      const reviewText = (document.getElementById('submitReviewText')?.value || '').trim();
+      const reviewText = (document.getElementById('submitReviewText')?.value || '').trim().slice(0, 2500);
 
-      const selectedTags = Array.from(document.querySelectorAll('#submitTagsSelector .submit-tag-pill.active')).map(el => el.dataset.tag);
+      const selectedTags = Array.from(document.querySelectorAll('#submitTagsSelector .submit-tag-pill.active')).map(el => el.dataset.tag.slice(0, 50));
 
       if (!teacherName || !courseName || !reviewText) {
-        alert('Vui lòng điền đầy đủ Tên Giảng Viên, Môn Học và Nội Dung Đánh Giá!');
+        showReviewToast('⚠️ Vui lòng điền đầy đủ Tên Giảng Viên, Môn Học và Nội Dung Đánh Giá!');
+        return;
+      }
+
+      if (reviewText.length < 5) {
+        showReviewToast('⚠️ Nội dung nhận xét phải có ít nhất 5 ký tự!');
         return;
       }
 
