@@ -131,32 +131,23 @@ Hỗ trợ lưu trữ, chia sẻ và nạp TKB siêu tốc:
 
 ---
 
-## 💻 Cấu Trúc Mã Nguồn
+## 💻 Cấu Trúc & Công Nghệ
 
 ```
 dkhp-uit/
 ├── index.html            # Giao diện chính, TKB Matrix, Modals & Bộ lọc
 ├── reviews.html          # Trang tra cứu & đóng góp 900+ Review Giảng viên Everytime
 ├── style.css             # Hệ thống Design System, Token CSS, Dark/Light theme & Responsive Mobile
-├── build.js              # Script tự động Đóng gói & Nén làm rối mã nguồn (Terser Bundler)
-├── security-guard.js     # Lớp bảo vệ Anti-DevTools, Anti-Inspection & Watchdog
-├── bundle.main.min.js    # Single-file Bundle mã nguồn nén & làm rối cho App chính
-├── bundle.reviews.min.js # Single-file Bundle mã nguồn nén & làm rối cho Trang Reviews
-├── supabase_security_setup.sql # Script SQL thiết lập Row Level Security (RLS) trên Supabase
-├── app.js                # Engine điều phối TKB, CSP Solver, Import/Export & LocalStorage (Source)
-├── reviews.js            # Logic tìm kiếm, lọc và gửi review giảng viên qua Supabase (Source)
-├── ratings.js            # Cơ sở dữ liệu 900+ Review Giảng viên Everytime UIT (Source)
-├── data.js               # Cơ sở dữ liệu Thời khóa biểu lớp học phần UIT (Source)
-├── security.js           # Module bảo mật Web Crypto SHA-256, FastHash & RateLimiter (Source)
-├── supabase-config.js    # Cấu hình kết nối Supabase API cho tính năng Review (Source)
-├── vercel.json           # Cấu hình Vercel Edge Server, Build Command, CSP Headers & HSTS
-└── libs/                 # Thư viện tĩnh (XLSX, html2canvas, Supabase client)
+├── bundle.main.min.js    # Gói mã nguồn phân phối ứng dụng TKB (Production Bundle)
+├── bundle.reviews.min.js # Gói mã nguồn phân phối trang Review Giảng viên (Production Bundle)
+├── vercel.json           # Cấu hình Vercel Edge Server, Routing & Cache-Control
+└── libs/                 # Thư viện xử lý tĩnh (XLSX, html2canvas, Supabase client)
 ```
 
-- **Frontend Architecture**: Single-Bundle Delivery (Đóng gói 1 file JS duy nhất, nén Mangle & Obfuscate, không lộ file rời rạc khi F12).
-- **Client Security Guard**: Chống mở F12/Inspect, bẫy Anti-Debugging Watchdog, ẩn Console Logs và bẫy Anti-Bot Honeypot.
-- **Backend Security**: Supabase Row-Level Security (RLS) với ràng buộc kiểm tra nghiêm ngặt từ Database.
-- **Edge Deployment**: Vercel Global Edge Network tự động build `node build.js` mỗi lần deploy.
+- **Giao diện**: Hiện đại, tối ưu hiệu năng cao với Pure Modern JavaScript (ES6+), HTML5 Semantic và CSS Variables.
+- **Xử lý thời khóa biểu**: Thuật toán CSP Solver & Hệ thống lưu trữ LocalStorage phân tán trên trình duyệt người dùng.
+- **Cơ sở dữ liệu đánh giá**: Kết nối Supabase Realtime API phục vụ tra cứu review giảng viên.
+- **Hạ tầng triển khai**: Vercel Global Edge Network phân phối tốc độ cao trên toàn cầu (HTTP/2, Anycast CDN).
 
 ---
 

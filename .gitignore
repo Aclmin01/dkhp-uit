@@ -11,6 +11,7 @@
 *.key
 *.cert
 *.crt
+*.sql
 id_rsa*
 secrets.json
 config.private.json
