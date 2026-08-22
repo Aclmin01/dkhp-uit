@@ -85,16 +85,24 @@
   }
   </script>
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts (Be Vietnam Pro & Inter for crystal-clear Vietnamese readability) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Font Awesome Icons (Local High-Performance) -->
+  <link rel="stylesheet" href="libs/fontawesome/all.min.css">
   
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=8.0">
+  <!-- Favicon & PWA Manifest -->
+  <link rel="icon" type="image/png" href="assets/favicon-32.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="stylesheet" href="style.css?v=8.8">
+  <script>
+    const savedTheme = localStorage.getItem('dkhp_theme') || localStorage.getItem('tkb_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'light') document.documentElement.classList.add('light-theme');
+  </script>
 </head>
 <body>
 
@@ -102,64 +110,41 @@
        1. APP HEADER
        ============================================================================== -->
   <header class="app-header">
-    <div class="brand-section">
-      <div class="brand-logo" style="background: linear-gradient(135deg, #e11d48 0%, #3b82f6 100%);">
-        <i class="fa-solid fa-graduation-cap"></i>
+    <div class="header-left-group">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <img src="assets/logo-icon.png" alt="UIT HUB Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">UIT <span>HUB</span></h1>
+          <span class="badge-semester" id="semesterBadge">Thời Khóa Biểu & ĐKHP</span>
+        </div>
       </div>
-      <div class="brand-info">
-        <h1 class="brand-title">DKHP <span>UIT</span></h1>
-        <span class="badge-semester" id="semesterBadge">Trợ lý AI • Everytime Review</span>
-      </div>
+
+      <!-- Main App Navigation Tabs -->
+      <nav class="header-main-nav">
+        <a href="index.html" class="nav-tab-btn active" title="Trang xếp thời khóa biểu và xuất script ĐKHP">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>Xếp TKB & ĐKHP</span>
+        </a>
+        <a href="feed.html" class="nav-tab-btn" title="Diễn đàn trao đổi TKB, hỏi đáp học tập & tìm nhóm UIT">
+          <i class="fa-solid fa-comments" style="color: #38bdf8;"></i>
+          <span>Diễn Đàn UIT</span>
+          <span class="nav-badge-pill" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">Mới 🔥</span>
+        </a>
+        <a href="reviews.html" class="nav-tab-btn" title="Trang tra cứu đánh giá review giảng viên & môn học">
+          <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
+          <span>Tra Cứu Review</span>
+          <span class="nav-badge-pill">900+ Review</span>
+        </a>
+      </nav>
     </div>
 
-    <!-- Main App Navigation Tabs -->
-    <nav class="header-main-nav">
-      <a href="index.html" class="nav-tab-btn active" title="Trang xếp thời khóa biểu và xuất script ĐKHP">
-        <i class="fa-solid fa-calendar-days"></i>
-        <span>Xếp TKB & ĐKHP</span>
-      </a>
-      <a href="feed.html" class="nav-tab-btn" title="Diễn đàn trao đổi TKB, hỏi đáp học tập & tìm nhóm UIT">
-        <i class="fa-solid fa-comments" style="color: #38bdf8;"></i>
-        <span>Diễn Đàn UIT</span>
-        <span class="nav-badge-pill" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">Mới 🔥</span>
-      </a>
-      <a href="reviews.html" class="nav-tab-btn" title="Trang tra cứu đánh giá review giảng viên & môn học">
-        <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
-        <span>Tra Cứu Review</span>
-        <span class="nav-badge-pill">900+ Review</span>
-      </a>
-    </nav>
-
-    <!-- Center Plan Management -->
-    <div class="header-center">
-      <div class="plan-selector-box">
-        <i class="fa-solid fa-folder-open" style="color: var(--text-muted); font-size: 13px; margin-left: 4px;"></i>
-        <select id="planSelect" title="Chọn kế hoạch thời khóa biểu">
-          <option value="plan_1">Kế hoạch 1 (Chính)</option>
-          <option value="plan_2">Kế hoạch 2 (Dự phòng)</option>
-          <option value="plan_3">Kế hoạch 3</option>
-        </select>
-        <button class="btn btn-secondary btn-icon-only" id="btnManagePlans" title="Quản lý / Đổi tên kế hoạch" style="width: 28px; height: 28px; padding: 0;">
-          <i class="fa-solid fa-ellipsis-vertical" style="font-size: 12px;"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Right Header Actions -->
+    <!-- Right Header Actions (SYNCHRONIZED WITH FEED & REVIEWS) -->
     <div class="header-actions">
       <button class="btn btn-magic" id="btnOpenAutoScheduler" title="Tự động xếp và gợi ý các tổ hợp Thời khóa biểu tối ưu">
         <i class="fa-solid fa-wand-magic-sparkles" style="color: #fde047;"></i>
         <span>Tự động xếp TKB</span>
-      </button>
-
-      <button class="btn btn-secondary" id="btnUploadModal" title="Tải lên file Excel TKB mới">
-        <i class="fa-solid fa-file-excel" style="color: #10b981;"></i>
-        <span>Tải file Excel</span>
-      </button>
-
-      <button class="btn btn-secondary" id="btnImportExportCodes" title="Nhập hoặc Xuất danh sách mã lớp để xếp TKB tự động">
-        <i class="fa-solid fa-arrow-right-arrow-left" style="color: #c084fc;"></i>
-        <span>Nhập/Xuất mã lớp</span>
       </button>
 
       <button class="btn btn-primary" id="btnExportScript" title="Xuất Script tự động Đăng ký Học phần (Auto ĐKHP)">
@@ -167,18 +152,34 @@
         <span>Xuất Script ĐKHP</span>
       </button>
 
-      <button class="btn btn-secondary" id="btnExportImage" title="Xuất ảnh thời khóa biểu dạng PNG">
-        <i class="fa-solid fa-camera"></i>
-        <span>Lưu ảnh PNG</span>
-      </button>
+      <!-- Dropdown menu công cụ TKB gọn gàng -->
+      <div class="dropdown-container" style="position: relative;">
+        <button class="btn btn-secondary" id="btnToggleTkbToolsMenu" type="button" title="Công cụ xuất nhập file, lưu ảnh & sao lưu TKB">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Công cụ TKB</span>
+          <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px; opacity: 0.7;"></i>
+        </button>
+        <div class="user-profile-dropdown" id="tkbToolsDropdown" style="display: none; right: 0; width: 220px;">
+          <button type="button" class="dropdown-item" id="btnExportImage">
+            <i class="fa-solid fa-camera" style="color: #38bdf8;"></i> Lưu ảnh TKB (PNG)
+          </button>
+          <button type="button" class="dropdown-item" id="btnUploadModal">
+            <i class="fa-solid fa-file-excel" style="color: #10b981;"></i> Tải lên file Excel mới
+          </button>
+          <button type="button" class="dropdown-item" id="btnImportExportCodes">
+            <i class="fa-solid fa-arrow-right-arrow-left" style="color: #c084fc;"></i> Nhập/Xuất mã lớp
+          </button>
+          <button type="button" class="dropdown-item" id="btnExportJson">
+            <i class="fa-solid fa-cloud-arrow-down" style="color: #f59e0b;"></i> Sao lưu / Nhập file JSON
+          </button>
+        </div>
+      </div>
 
-      <button class="btn btn-secondary btn-icon-only" id="btnExportJson" title="Sao lưu / Nhập file JSON">
-        <i class="fa-solid fa-cloud-arrow-down"></i>
-      </button>
-
-      <button class="btn btn-danger btn-icon-only" id="btnClearAll" title="Xóa toàn bộ môn đã chọn trong kế hoạch này">
-        <i class="fa-solid fa-trash-can"></i>
-      </button>
+      <!-- Direct Android APK Download Button -->
+      <a href="/downloads/UIT-HUB-v1.0.apk" download="UIT-HUB-v1.0.apk" class="btn-apk-download" title="Tải ứng dụng Android (APK) trực tiếp">
+        <i class="fa-brands fa-android"></i>
+        <span>Tải App APK</span>
+      </a>
 
       <a href="https://github.com/Ins0720/dkhp-uit" target="_blank" rel="noopener noreferrer" class="btn-github-star" title="Ủng hộ dự án 1 Star trên GitHub!">
         <i class="fa-brands fa-github"></i>
@@ -188,6 +189,9 @@
       <button class="btn-theme-toggle" id="btnThemeToggle" title="Chuyển đổi giao diện Sáng / Tối">
         <i class="fa-solid fa-moon" id="themeIcon"></i>
       </button>
+
+      <!-- User Authentication / Profile Widget -->
+      <div class="header-user-auth-widget"></div>
     </div>
   </header>
 
@@ -331,8 +335,24 @@
     <!-- RIGHT PANEL: TIMETABLE MATRIX & STATS -->
     <main class="main-viewport">
       
-      <!-- Stats Summary Bar -->
+      <!-- Stats & Plan Summary Toolbar -->
       <div class="stats-summary-bar">
+        <!-- Plan Selector Box -->
+        <div class="plan-selector-box" style="margin-right: 8px;">
+          <i class="fa-solid fa-folder-open" style="color: var(--primary); font-size: 13px; margin-left: 4px;"></i>
+          <select id="planSelect" title="Chọn kế hoạch thời khóa biểu">
+            <option value="plan_1">Kế hoạch 1 (Chính)</option>
+            <option value="plan_2">Kế hoạch 2 (Dự phòng)</option>
+            <option value="plan_3">Kế hoạch 3</option>
+          </select>
+          <button class="btn btn-secondary btn-icon-only" id="btnManagePlans" title="Quản lý / Đổi tên kế hoạch" style="width: 28px; height: 28px; padding: 0;">
+            <i class="fa-solid fa-gear" style="font-size: 11px;"></i>
+          </button>
+          <button class="btn btn-danger btn-icon-only" id="btnClearAll" title="Xóa toàn bộ môn đã chọn trong kế hoạch này" style="width: 28px; height: 28px; padding: 0;">
+            <i class="fa-solid fa-trash-can" style="font-size: 11px;"></i>
+          </button>
+        </div>
+
         <div class="stat-group">
           <div class="stat-card">
             <span class="stat-label">Tổng tín chỉ</span>
@@ -897,7 +917,7 @@
 
   <!-- Manage Plans Modal -->
   <div class="modal-backdrop" id="modalPlans">
-    <div class="modal-box">
+    <div class="modal-box" style="max-width: 580px;">
       <div class="modal-header">
         <h3 class="modal-title"><i class="fa-solid fa-folder-tree" style="color: var(--accent-purple); margin-right: 8px;"></i> Quản lý các Kế hoạch TKB</h3>
         <button class="modal-close-btn" data-close-modal="modalPlans">&times;</button>
@@ -908,7 +928,23 @@
           <button class="btn btn-primary" id="btnCreateNewPlan"><i class="fa-solid fa-plus"></i> Tạo</button>
         </div>
 
-        <div id="plansListContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+        <!-- Bulk Action Toolbar -->
+        <div id="plansBulkActionBar" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; padding: 8px 12px; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+          <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; color: var(--text-primary); cursor: pointer; user-select: none;">
+            <input type="checkbox" id="chkSelectAllPlans" style="accent-color: var(--danger); cursor: pointer; width: 15px; height: 15px;">
+            <span>Chọn tất cả (<span id="selectedPlansCount">0</span>)</span>
+          </label>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn btn-secondary btn-sm" id="btnDeleteEmptyPlans" style="font-size: 11px; padding: 4px 8px; color: var(--text-muted);" title="Xóa tất cả kế hoạch có 0 môn">
+              <i class="fa-solid fa-broom"></i> Xóa nhanh KH trống (0 môn)
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" id="btnDeleteSelectedPlans" style="font-size: 11px; padding: 4px 10px; display: none;" title="Xóa các kế hoạch đã chọn">
+              <i class="fa-solid fa-trash-can"></i> Xóa đã chọn (<span id="btnDeleteSelectedCount">0</span>)
+            </button>
+          </div>
+        </div>
+
+        <div id="plansListContainer" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 380px; overflow-y: auto; padding-right: 2px;" class="custom-scrollbar">
           <!-- Rendered by app.js -->
         </div>
       </div>

@@ -1,32 +1,34 @@
 <div align="center">
 
-# 🎓 DKHP UIT
-### Hệ Thống Tự Động Xếp Thời Khóa Biểu & Hỗ Trợ Đăng Ký Học Phần UIT
+# 🎓 UIT HUB (DKHP UIT)
+### Hệ Sinh Thái Xếp Thời Khóa Biểu Tự Động, Diễn Đàn Sinh Viên & Tra Cứu Review Giảng Viên UIT
 
-[![Live Production App](https://img.shields.io/badge/Production-dkhpuit.vercel.app-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://dkhpuit.vercel.app/)
+[![Live Production App](https://img.shields.io/badge/Production-uithub.vercel.app-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://tkb-scheduler.vercel.app/)
+[![Backup Mirror](https://img.shields.io/badge/Mirror-dkhp--uit--backup-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://dkhp-uit-backup.vercel.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Ins0720%2Fdkhp--uit-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Ins0720/dkhp-uit)
-[![Everytime Reviews](https://img.shields.io/badge/Everytime%20UIT-900+%20Reviews-d97706?style=for-the-badge&logo=star&logoColor=white)](https://dkhpuit.vercel.app/)
-[![Constraint Solver](https://img.shields.io/badge/Algorithm-CSP%20Auto--Scheduler-059669?style=for-the-badge&logo=speedtest&logoColor=white)](https://dkhpuit.vercel.app/)
+[![Everytime Reviews](https://img.shields.io/badge/Everytime%20UIT-900+%20Reviews-d97706?style=for-the-badge&logo=star&logoColor=white)](https://tkb-scheduler.vercel.app/reviews)
+[![Constraint Solver](https://img.shields.io/badge/Algorithm-CSP%20Auto--Scheduler-059669?style=for-the-badge&logo=speedtest&logoColor=white)](https://tkb-scheduler.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-7c3aed?style=for-the-badge)](LICENSE)
 
 <p align="center">
-  <b>Giải pháp xếp lịch học thông minh, chống trùng giờ 100%, tra cứu 900+ review giảng viên thực tế, xuất danh sách mã lớp đa định dạng và tạo Script Auto ĐKHP 1-click dành cho sinh viên Trường Đại học Công nghệ Thông tin (ĐHQG TP.HCM - UIT).</b>
+  <b>Nền tảng tất-cả-trong-một (All-in-One) dành cho sinh viên Trường Đại học Công nghệ Thông tin (ĐHQG TP.HCM - UIT): Xếp lịch học thông minh không trùng giờ, Diễn đàn trao đổi học thuật & đổi lớp TKB, Nhắn tin Messenger thời gian thực, Cập nhật thông báo Portal UIT trực tiếp, Tra cứu 900+ review giảng viên và tạo Script Auto ĐKHP 1-click.</b>
 </p>
 
-[🌐 Trải nghiệm trực tiếp](https://dkhpuit.vercel.app/) • [⚡ Hướng dẫn sử dụng](#-hướng-dẫn-sử-dụng-nhanh) • [✨ Tính năng mới](#-tính-năng-nổi-bật) • [👨‍🏫 Review Giảng viên](#5-tra-cứu-900-review-giảng-viên-everytime-uit--đánh-giá-cộng-đồng) • [📜 Script Auto ĐKHP](#6-xuất-script-auto-đăng-ký-học-phần-1-click) • [🤝 Đóng góp mã nguồn](#-đóng-góp-cộng-đồng)
+[🌐 Trải Nghiệm Trực Tiếp](https://tkb-scheduler.vercel.app/) • [💬 Diễn Đàn Sinh Viên](https://tkb-scheduler.vercel.app/feed) • [👨‍🏫 Review Giảng Viên](https://tkb-scheduler.vercel.app/reviews) • [📱 Cài Đặt App Android](#-cài-đặt-ứng-dụng-di-động-pwa--webapk) • [⚡ Tính Năng Nổi Bật](#-tính-năng-nổi-bật) • [📜 Script Auto ĐKHP](#6-xuất-script-auto-đăng-ký-học-phần-1-click)
 
 </div>
 
 ---
 
-## 🌐 Hệ thống Tên miền & Mirror Links
+## 🌐 Hệ Thống Tên Miền & Mirror Links Dự Phòng
 
-Khi hệ thống mạng bị nghẽn trong giờ cao điểm đăng ký học phần, bạn có thể truy cập qua các mirror links dự phòng:
+Nhằm đảm bảo trải nghiệm thông suốt và không bị nghẽn mạng trong các đợt cao điểm đăng ký học phần của trường, hệ thống được phân phối trên mạng lưới máy chủ đa điểm (Multi-Region CDN):
 
-| Tên miền | Trạng thái | Loại mạng |
+| Tên miền / Mirror Link | Trạng thái | Mục đích sử dụng |
 | :--- | :---: | :--- |
-| 🚀 **[dkhpuit.vercel.app](https://dkhpuit.vercel.app)** | 🟢 Hoạt động | **Primary Production** (Khuyên dùng) |
-| 🔗 **[tkb-scheduler.vercel.app](https://tkb-scheduler.vercel.app)** | 🟢 Hoạt động | Production Alias |
+| 🚀 **[tkb-scheduler.vercel.app](https://tkb-scheduler.vercel.app)** | 🟢 Hoạt động | **Primary Production** (Web Chính Thức) |
+| 🛡️ **[dkhp-uit-backup.vercel.app](https://dkhp-uit-backup.vercel.app)** | 🟢 Hoạt động | **Secondary Backup** (Máy chủ dự phòng) |
+| 🌟 **[dkhpuit.vercel.app](https://dkhpuit.vercel.app)** | 🟢 Hoạt động | Production Alias 1 |
 | 🔗 **[uit-tkb.vercel.app](https://uit-tkb.vercel.app)** | 🟢 Hoạt động | Mirror Backup 1 |
 | 🔗 **[xeptkb-uit.vercel.app](https://xeptkb-uit.vercel.app)** | 🟢 Hoạt động | Mirror Backup 2 |
 | 🔗 **[dkhp-uit-ai.vercel.app](https://dkhp-uit-ai.vercel.app)** | 🟢 Hoạt động | Mirror Backup 3 |
@@ -36,55 +38,53 @@ Khi hệ thống mạng bị nghẽn trong giờ cao điểm đăng ký học ph
 ## ✨ Tính Năng Nổi Bật
 
 ### 1. 📅 Giao Diện Thời Khóa Biểu Hiện Đại (Modern Calendar UI)
-* **Phong cách Linear / Notion / Apple Calendar**: Thiết kế thẻ môn học với nền tối sâu sang trọng (`Deep Contrast`), viền điểm nhấn màu riêng biệt bên trái (`border-left: 4px solid ...`) cho từng môn học.
-* **Bố cục Top-to-Bottom Flow**: Trình bày thông tin liền mạch gồm `[Mã lớp/Loại lớp/Số TC]` ➔ `[Tên môn học]` ➔ `[Phòng học & Giảng viên]`. Chấm dứt hoàn toàn tình trạng mất chữ hay khoảng trống thừa ở giữa.
-* **Tương thích hoàn hảo cho ca ngắn & dài**: Hiển thị sắc nét, trọn vẹn thông tin cho cả lớp 2 tiết lẫn ca học 3–5 tiết.
-* **Huy hiệu Everytime Compact (`🏆 4.9`, `⭐ 5.0`)**: Tích hợp xếp hạng giảng viên trực tiếp vào thẻ môn trên bảng TKB.
+* **Phong cách Linear / Notion / Apple Calendar**: Thiết kế thẻ môn học nền tối sâu (`Deep Contrast`), viền điểm nhấn màu riêng biệt bên trái (`border-left: 4px solid ...`) cho từng môn học.
+* **Bố cục Top-to-Bottom Flow**: Trình bày thông tin liền mạch gồm `[Mã lớp/Loại lớp/Số TC]` ➔ `[Tên môn học]` ➔ `[Phòng học & Giảng viên]`.
+* **Chế độ xem 2 chế độ (2 View Modes)**:
+  * 🔬 **Tuần Có Thực Hành** *(Mặc định)*: Hiển thị đầy đủ cả ca Lý thuyết và nhóm Thực hành.
+  * 📘 **Tuần Không TH (Chỉ LT)**: Lọc riêng các buổi Lý thuyết cho những tuần không có lịch thực hành.
+* **Quản lý kế hoạch nâng cao & Xóa hàng loạt**: Thêm mới, nhân bản, chọn nhiều kế hoạch để xóa cùng lúc với modal xác nhận an toàn và dọn dẹp kế hoạch rỗng trong 1 chạm.
 
 ---
 
-### 2. 🎛️ Chế Độ Xem Tuần Tinh Gọn (2 View Modes)
-Dễ dàng chuyển đổi chỉ với 1 click:
-* 🔬 **Tuần Có Thực Hành** *(Mặc định)*: Hiển thị trọn vẹn toàn bộ lịch học gồm ca Lý thuyết và các buổi Thực hành.
-* 📘 **Tuần Không TH (Chỉ LT)**: Lọc hiển thị riêng các buổi Lý thuyết cho những tuần không có lịch thực hành.
+### 2. 💬 Diễn Đàn Sinh Viên UIT & Mạng Xã Hội Học Thuật (`/feed`)
+Không gian kết nối và thảo luận năng động dành riêng cho cộng đồng sinh viên UIT:
+* **Đa dạng chuyên mục thảo luận**:
+  * 🔄 **Nhượng & Đổi Lớp TKB**: Trao đổi lịch học giữa các lớp lý thuyết và thực hành.
+  * 📚 **Học Tập & Chia Sẻ Tài Liệu**: Slide bài giảng, đề thi giữa kỳ / cuối kỳ các môn đại cương & chuyên ngành.
+  * 👨‍🏫 **Thảo Luận Giảng Viên**: Chia sẻ kinh nghiệm học tập và review phong cách dạy của thầy/cô.
+  * 👥 **Tìm Bạn & Lập Nhóm Đồ Án**: Tìm đồng đội gánh team qua môn, làm khóa luận và thi công nghệ (Hackathon, Olympic).
+  * ☕ **Góc Tâm Sự & Confession**: Chia sẻ đời sống sinh viên, KTX và văn hóa UIT.
+* **Tương tác mượt mà (Zero-Flicker)**: Đăng bài kèm ảnh chất lượng cao, thả Upvote, bình luận đa cấp không giật lag.
 
 ---
 
-### 3. 📤 Nhập & Xuất Mã Lớp Học Phần Đa Định Dạng
-Hỗ trợ lưu trữ, chia sẻ và nạp TKB siêu tốc:
-* **Xuất mã lớp đa định dạng**:
-  * 📄 **Mỗi mã một dòng (`\n`)**: Định dạng danh sách dọc chuẩn văn bản.
-  * 🚀 **Dấu cách (Space ` `)**: `NT105.R11 NT105.R11.1 MA005.R14...` (Cách nhau bằng dấu khoảng trắng).
-  * 🏷️ **Dấu phẩy + Khoảng trắng (`, `)**: `NT105.R11, NT105.R11.1, MA005.R14...`
-  * 콤 **Dấu phẩy liền nhau (`,`)**: `NT105.R11,NT105.R11.1,MA005.R14...`
-  * 🔖 **Mã Bookmarklet 1-Click (`javascript:...`)**: Tự động tạo Bookmark trên trình duyệt để chọn & đăng ký môn tức thì.
-  * 💻 **Mảng Array JavaScript (`['...']`)**: `['NT105.R11', 'NT105.R11.1'...]`
-* **Lưu & Tải file `.txt` trực tiếp**: Tải về file danh sách mã lớp trong 1 chạm.
-* **Nhập mã lớp thông minh (Auto-Scheduler from Codes)**:
-  * Tự động giải mã văn bản thô, mảng mã lớp, hoặc **toàn bộ mã Bookmarklet/Script**.
-  * Hỗ trợ **kéo thả 1 hoặc nhiều file `.txt`** vào khung nhập để tự động tick chọn môn & nhóm thực hành tương ứng.
+### 3. ⚡ Hộp Thư Chat Messenger Trực Tiếp & Kết Bạn 2 Chiều
+Hệ thống nhắn tin thời gian thực với đầy đủ tính năng hiện đại:
+* 📷 **Gửi ảnh trực tiếp**: Tự động mã hóa Base64 nén mượt mà, xem trước ảnh trước khi gửi.
+* 📎 **Gửi tài liệu & File đính kèm**: Thẻ tải file thông minh hiển thị rõ tên tệp, dung lượng và nút tải về 1-click.
+* 😊 **Khay Emoji 24 biểu tượng cảm xúc**: Chọn nhanh icon biểu cảm sinh động.
+* ↩️ **Trích dẫn & Trả lời tin nhắn (Reply Quote)**: Trích dẫn nội dung tin nhắn của đối phương kèm bubble xem trước.
+* 📌 **Nhắc lại tin nhắn (Remind)**: Gắn huy hiệu nhắc lại trực tiếp trên hội thoại.
+* 📋 **Sao chép văn bản & Chia sẻ**: Copy nội dung tin nhắn và chia sẻ liên kết nhanh chóng.
+* 👥 **Hệ thống kết bạn 2 chiều**: Gửi lời mời kết bạn, chấp nhận/từ chối và quản lý danh sách bạn bè trực tuyến.
 
 ---
 
-### 4. ⚡ Tự Động Xếp TKB Thông Minh (CSP Backtracking Engine)
+### 4. 🔔 Cập Nhật Thông Báo Cổng UIT (`portal.uit.edu.vn`) Trực Tiếp
+* Tích hợp widget bản tin trực tiếp từ **Cổng thông tin sinh viên UIT (portal.uit.edu.vn)**.
+* Tự động hiển thị các thông báo mới nhất từ **Phòng Đào tạo đại học**, **Phòng Công tác sinh viên** (lịch ĐKHP, điểm rèn luyện, học phí, lịch thi...).
+* Đánh dấu huy hiệu **`MỚI`** và **`📌 Ghim`** nổi bật.
+
+---
+
+### 5. ⚡ Thuật Toán Xếp TKB Tự Động (CSP Backtracking Engine)
 * **Giải bài toán xếp lịch trong 0.01s**: Quét và kết hợp hàng nghìn tổ hợp lớp Lý thuyết + nhóm Thực hành để tìm ra các phương án **hoàn toàn không bị trùng lịch**.
 * **Chấm điểm phương án trực quan (Score / 100)**: Đánh giá theo mức độ tập trung ca học, độ giãn tiết và xếp hạng giảng viên.
 * **Bộ lọc nâng cao theo nhu cầu**:
-  * Ưu tiên ngày nghỉ trong tuần (Nghỉ Thứ 2, Nghỉ Thứ 7, Nghỉ Thứ 6...).
+  * Ưu tiên ngày nghỉ trong tuần (Nghỉ Thứ 2, Thứ 6, Thứ 7...).
   * Lựa chọn ca học cố định: Chỉ học buổi Sáng (Tiết 1–5), Chiều (Tiết 6–10) hoặc Tối.
   * Tự động né giảng viên trong danh sách loại trừ (Blacklist).
-
----
-
-### 5. 👨‍🏫 Tra Cứu 900+ Review Giảng Viên Everytime UIT & Đánh Giá Cộng Đồng
-* **Dữ liệu thực tế từ sinh viên UIT**: Tổng hợp 909 đánh giá chân thực của **218 giảng viên**.
-* **Phân tầng độ uy tín (Tiers)**:
-  * 🏆 **Tier S ("Phật Sống UIT")**: Đánh giá $\ge 4.8★$, 100% sinh viên đề xuất, chấm điểm thoáng, bài tập vừa sức.
-  * 🌟 **Tier A ("Dạy Tốt & Có Tâm")**: Giảng viên giảng dạy tâm huyết, hỗ trợ sinh viên nhiệt tình.
-  * ⚠️ **Tier C ("Cảnh Báo")**: Giảng viên có nhiều phản hồi về khối lượng bài tập nặng hoặc chấm gắt.
-* **Trang Review riêng biệt (`reviews.html`)**:
-  * Tìm kiếm giảng viên theo tên, mã môn, khoa.
-  * Gửi review và đánh giá giảng viên mới kết nối cơ sở dữ liệu Supabase theo thời gian thực.
 
 ---
 
@@ -95,90 +95,57 @@ Hỗ trợ lưu trữ, chia sẻ và nạp TKB siêu tốc:
 
 ---
 
-### 7. 📱 Mobile-First, Dark Mode & Đa Nền Tảng
-* **Segmented Navigation trên điện thoại**: Chuyển đổi mượt mà giữa *Lịch TKB*, *Tìm & Chọn môn* và *Môn đã chọn*.
-* **Cột Tiết học cố định (Sticky Column)**: Khi vuốt ngang xem từ Thứ 2 đến Thứ 7 trên điện thoại, cột giờ học luôn được ghim bên trái giúp dễ dàng đối chiếu.
-* **Giao diện Dark / Light Theme**: Tự động ghi nhớ chế độ sáng/tối bảo vệ mắt.
-* **Xuất ảnh TKB chất lượng cao (PNG)**: Lưu ảnh lịch học sắc nét để cài hình nền hoặc gửi cho bạn bè.
+### 7. 👨‍🏫 Tra Cứu 900+ Review Giảng Viên Everytime UIT (`/reviews`)
+* **Dữ liệu thực tế từ sinh viên UIT**: Tổng hợp 909 đánh giá chân thực của **218 giảng viên**.
+* **Phân tầng độ uy tín (Tiers)**:
+  * 🏆 **Tier S ("Phật Sống UIT")**: Đánh giá $\ge 4.8★$, 100% sinh viên đề xuất, chấm điểm thoáng, bài tập vừa sức.
+  * 🌟 **Tier A ("Dạy Tốt & Có Tâm")**: Giảng viên giảng dạy tâm huyết, hỗ trợ sinh viên nhiệt tình.
+  * ⚠️ **Tier C ("Cảnh Báo")**: Giảng viên có nhiều phản hồi về khối lượng bài tập nặng hoặc chấm gắt.
+* Tìm kiếm theo tên giảng viên, mã môn học, khoa viện và gửi đánh giá đóng góp mới.
 
 ---
 
-### 8. 🔒 Lưu Trữ Đa Kế Hoạch & Tự Động Phục Hồi (Auto-Recovery)
-* **100% Client-Side**: Toàn bộ dữ liệu được lưu trữ trực tiếp trên trình duyệt của người dùng (LocalStorage).
-* **Quản lý đa kế hoạch**: Tạo song song Kế hoạch 1 (Chính), Kế hoạch 2 (Dự phòng), Kế hoạch 3...
-* **Auto-Recovery**: Tự động phục hồi kế hoạch môn học, chống tình trạng mất dữ liệu do cập nhật mã nguồn hay xoá cache trình duyệt.
+### 8. 📱 Cài Đặt Ứng Dụng Di Động (PWA / WebAPK)
+* **Cài đặt 1-chạm (1-Click Install)**: Hỗ trợ PWA chuẩn WebAPK cho Android (Chrome, Samsung Internet, Edge, Cốc Cốc).
+* **Trải nghiệm App Native**: Khởi chạy toàn màn hình không có thanh địa chỉ duyệt web, có icon sắc nét trên màn hình chính và hỗ trợ bộ nhớ đệm Offline.
+* **Tối ưu Mobile-First**: Giao diện co giãn thông minh, thanh điều hướng vuốt ngang tiện lợi, cố định cột giờ học khi xem bảng TKB.
 
 ---
 
-## 🛠️ Hướng Dẫn Sử Dụng Nhanh
+## 🛠️ Hướng Dẫn Phát Triển & Triển Khai (Development)
 
-### Cách 1: Xếp lịch thủ công
-1. Gõ tên môn (ví dụ: `IT004`, `Cơ sở dữ liệu`) hoặc tên giảng viên vào thanh tìm kiếm bên trái.
-2. Bấm **`+ Thêm vào TKB`** và chọn nhóm Thực hành mong muốn.
+### Yêu Cầu Hệ Thống:
+* Node.js $\ge 18.0.0$
+* npm $\ge 9.0.0$
 
-### Cách 2: Tự động xếp TKB bằng AI
-1. Bấm nút **`⚡ Tự động xếp TKB`** trên thanh Header.
-2. Chọn các môn cần học trong học kỳ ➔ Chọn tiêu chí (Nghỉ thứ mấy, ca học Sáng/Chiều) ➔ Bấm **`Tạo & Tìm Kiếm`**.
-3. Xem các phương án tối ưu và bấm **`Áp dụng vào TKB`**.
+### Cài Đặt & Chạy Môi Trường Cục Bộ:
+```bash
+# 1. Clone repository
+git clone https://github.com/Ins0720/dkhp-uit.git
+cd dkhp-uit
 
-### Cách 3: Nạp nhanh từ danh sách mã lớp / File .txt
-1. Bấm nút **`⇄ Nhập/Xuất mã lớp`** trên thanh Header.
-2. Dán danh sách mã lớp hoặc kéo thả file `.txt` vào khung ➔ Bấm **`Tự động giải mã & Xếp TKB`**.
+# 2. Cài đặt các gói phụ thuộc
+npm install
 
-### Cách 4: Đăng ký học phần 1-Click
-1. Bấm **`</> Xuất Script ĐKHP`** ➔ Bấm **`Sao chép Script`**.
-2. Đăng nhập vào **[dkhp.uit.edu.vn](https://dkhp.uit.edu.vn)** ➔ Nhấn `F12` ➔ Chọn tab `Console` ➔ Dán script và nhấn `Enter`.
+# 3. Biên dịch và tối ưu hóa bảo mật (Security Build)
+node build.js
 
----
-
-### 5. 💬 Diễn Đàn Sinh Viên UIT (Campus Social Feed & Forum)
-* **Trao đổi & Nhượng lớp TKB**: Đăng bài đổi ca học, chuyển nhượng môn học phần trong mùa ĐKHP.
-* **Hỏi đáp Học tập & Tìm nhóm Đồ án**: Thảo luận tài liệu ôn thi, đề thi cũ và lập team làm đồ án môn học.
-* **Đăng bài Ẩn danh (Everytime Mode)**: Tự do chia sẻ tâm sự, hỏi ý kiến sinh viên ẩn danh hoặc theo nickname.
-* **Tương tác Thời gian thực**: Thả tim / Upvote bài viết, bình luận đa cấp theo thứ tự ẩn danh (`Tác giả`, `Sinh viên #1`, `Sinh viên #2`).
-* **Deep-Link thông minh**: Bấm vào tag môn học (`#IT004`) để mở xếp TKB ngay; bấm vào tên giảng viên (`@Đặng Việt Dũng`) để đọc 900+ Review chi tiết!
-
----
-
-## 💻 Cấu Trúc & Công Nghệ
-
+# 4. Khởi chạy máy chủ phát triển (Express + WebSocket Realtime)
+node server.js
 ```
-dkhp-uit/
-├── index.html            # Giao diện chính, TKB Matrix, Modals & Bộ lọc
-├── feed.html             # Diễn đàn Mạng xã hội sinh viên UIT (Trao đổi TKB, Học tập, Tìm nhóm)
-├── reviews.html          # Trang tra cứu & đóng góp 900+ Review Giảng viên Everytime
-├── style.css             # Hệ thống Design System, Token CSS, Dark/Light theme & Responsive Mobile
-├── bundle.main.min.js    # Gói mã nguồn phân phối ứng dụng TKB (Production Bundle)
-├── bundle.feed.min.js    # Gói mã nguồn phân phối Diễn đàn sinh viên (Production Bundle)
-├── bundle.reviews.min.js # Gói mã nguồn phân phối trang Review Giảng viên (Production Bundle)
-├── vercel.json           # Cấu hình Vercel Edge Server, Routing & Cache-Control
-└── libs/                 # Thư viện xử lý tĩnh (XLSX, html2canvas, Supabase client)
-```
-
-- **Giao diện**: Hiện đại, tối ưu hiệu năng cao với Pure Modern JavaScript (ES6+), HTML5 Semantic và CSS Variables.
-- **Xử lý thời khóa biểu**: Thuật toán CSP Solver & Hệ thống lưu trữ LocalStorage phân tán trên trình duyệt người dùng.
-- **Mạng xã hội & Đánh giá**: Kết nối Supabase Realtime API phục vụ diễn đàn trao đổi và tra cứu review giảng viên.
-- **Hạ tầng triển khai**: Vercel Global Edge Network phân phối tốc độ cao trên toàn cầu (HTTP/2, Anycast CDN).
+👉 Mở trình duyệt và truy cập: **`http://localhost:3000`**
 
 ---
 
 ## 🤝 Đóng Góp Cộng Đồng
 
-Dự án được xây dựng theo tinh thần **Vibe Coding** phục vụ phi lợi nhuận cho cộng đồng sinh viên Trường Đại học Công nghệ Thông tin (ĐHQG TP.HCM).
+Dự án được xây dựng hoàn toàn phi lợi nhuận nhằm hỗ trợ cộng đồng sinh viên UIT. Mọi đóng góp, báo lỗi (Issue) hoặc tính năng mới (Pull Request) đều được nhiệt liệt hoan nghênh!
 
-Mọi đóng góp, báo lỗi (Bug Reports), góp ý tính năng (Feature Requests) hoặc Pull Requests đều được hoan nghênh nồng nhiệt! 💖
-
-* **Tác giả / Maintainer**: [Ins0720](https://github.com/Ins0720)
-* **GitHub Repository**: [https://github.com/Ins0720/dkhp-uit](https://github.com/Ins0720/dkhp-uit)
-
----
-
-## 📄 Giấy Phép (License)
-
-Dự án được phân phối dưới giấy phép **[MIT License](LICENSE)**.
+* 🌟 Hãy tặng dự án **1 Star trên GitHub** để tiếp thêm động lực phát triển nhé!
+* 💬 Mọi ý kiến đóng góp xin vui lòng tạo Issue trên GitHub hoặc thảo luận trực tiếp tại Diễn Đàn UIT HUB.
 
 ---
 
 <div align="center">
-  <sub>Phát triển vì cộng đồng sinh viên UIT ❤️ • Chúc các bạn luôn có một mùa ĐKHP suôn sẻ và đạt trọn vẹn TKB như ý!</sub>
+  <sub>Phát triển với ❤️ bởi Ins0720 & Cộng đồng Sinh viên UIT</sub>
 </div>

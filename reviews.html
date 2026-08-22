@@ -18,16 +18,26 @@
 
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts (Be Vietnam Pro & Inter for crystal-clear Vietnamese readability) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Font Awesome Icons (Local High-Performance) -->
+  <link rel="stylesheet" href="libs/fontawesome/all.min.css">
   
+  <!-- Favicon & PWA Manifest -->
+  <link rel="icon" type="image/png" href="assets/favicon-32.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=8.0">
+  <link rel="stylesheet" href="style.css?v=8.8">
+  <script>
+    const savedTheme = localStorage.getItem('dkhp_theme') || localStorage.getItem('tkb_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'light') document.documentElement.classList.add('light-theme');
+  </script>
 </head>
 <body>
 
@@ -35,33 +45,35 @@
        1. APP HEADER
        ============================================================================== -->
   <header class="app-header">
-    <div class="brand-section">
-      <div class="brand-logo" style="background: linear-gradient(135deg, #e11d48 0%, #3b82f6 100%);">
-        <i class="fa-solid fa-graduation-cap"></i>
+    <div class="header-left-group">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <img src="assets/logo-icon.png" alt="UIT HUB Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">UIT <span>HUB</span></h1>
+          <span class="badge-semester">Review Giảng Viên</span>
+        </div>
       </div>
-      <div class="brand-info">
-        <h1 class="brand-title">DKHP <span>UIT</span></h1>
-        <span class="badge-semester">Everytime Review Hub</span>
-      </div>
-    </div>
 
-    <!-- Main App Navigation Tabs -->
-    <nav class="header-main-nav">
-      <a href="index.html" class="nav-tab-btn" title="Quay lại trang Xếp TKB & Đăng Ký Học Phần">
-        <i class="fa-solid fa-calendar-days"></i>
-        <span>Xếp TKB & ĐKHP</span>
-      </a>
-      <a href="feed.html" class="nav-tab-btn" title="Diễn đàn trao đổi TKB, hỏi đáp học tập & tìm nhóm UIT">
-        <i class="fa-solid fa-comments" style="color: #38bdf8;"></i>
-        <span>Diễn Đàn UIT</span>
-        <span class="nav-badge-pill" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">Mới 🔥</span>
-      </a>
-      <a href="reviews.html" class="nav-tab-btn active" title="Trang tra cứu đánh giá giảng viên & môn học">
-        <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
-        <span>Tra Cứu Review</span>
-        <span class="nav-badge-pill">900+ Review</span>
-      </a>
-    </nav>
+      <!-- Main App Navigation Tabs -->
+      <nav class="header-main-nav">
+        <a href="index.html" class="nav-tab-btn" title="Quay lại trang Xếp TKB & Đăng Ký Học Phần">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>Xếp TKB & ĐKHP</span>
+        </a>
+        <a href="feed.html" class="nav-tab-btn" title="Diễn đàn trao đổi TKB, hỏi đáp học tập & tìm nhóm UIT">
+          <i class="fa-solid fa-comments" style="color: #38bdf8;"></i>
+          <span>Diễn Đàn UIT</span>
+          <span class="nav-badge-pill" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">Mới 🔥</span>
+        </a>
+        <a href="reviews.html" class="nav-tab-btn active" title="Trang tra cứu đánh giá giảng viên & môn học">
+          <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
+          <span>Tra Cứu Review</span>
+          <span class="nav-badge-pill">900+ Review</span>
+        </a>
+      </nav>
+    </div>
 
     <!-- Header Actions -->
     <div class="header-actions">
@@ -75,6 +87,12 @@
         <span>Tự động xếp TKB</span>
       </a>
 
+      <!-- Direct Android APK Download Button -->
+      <a href="/downloads/UIT-HUB-v1.0.apk" download="UIT-HUB-v1.0.apk" class="btn-apk-download" title="Tải ứng dụng Android (APK) trực tiếp">
+        <i class="fa-brands fa-android"></i>
+        <span>Tải App APK</span>
+      </a>
+
       <a href="https://github.com/Ins0720/dkhp-uit" target="_blank" rel="noopener noreferrer" class="btn-github-star" title="Ủng hộ dự án 1 Star trên GitHub!">
         <i class="fa-brands fa-github"></i>
         <span>⭐ Star</span>
@@ -83,6 +101,9 @@
       <button class="btn-theme-toggle" id="btnThemeToggle" title="Chuyển đổi giao diện Sáng / Tối">
         <i class="fa-solid fa-moon" id="themeIcon"></i>
       </button>
+
+      <!-- User Authentication / Profile Widget -->
+      <div class="header-user-auth-widget"></div>
     </div>
   </header>
 

@@ -1023,24 +1023,65 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
+function applyGlobalTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  if (theme === 'light') {
+    document.documentElement.classList.add('light-theme');
+  } else {
+    document.documentElement.classList.remove('light-theme');
+  }
+  const icon = document.getElementById('themeIcon');
+  if (icon) {
+    icon.className = theme === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+  }
+}
+
 function initThemeToggle() {
   const btn = document.getElementById('btnThemeToggle');
-  const icon = document.getElementById('themeIcon');
-  const currentTheme = localStorage.getItem('dkhp_theme') || 'dark';
+  const savedTheme = localStorage.getItem('dkhp_theme') || localStorage.getItem('tkb_theme') || 'dark';
+  applyGlobalTheme(savedTheme);
 
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  if (icon) {
-    icon.className = currentTheme === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-  }
+  // Cross-tab realtime theme synchronization
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'dkhp_theme' || e.key === 'tkb_theme') {
+      applyGlobalTheme(e.newValue || 'dark');
+    }
+  });
 
   if (btn) {
     btn.addEventListener('click', () => {
-      const now = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', now);
-      localStorage.setItem('dkhp_theme', now);
-      if (icon) {
-        icon.className = now === 'light' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-      }
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('dkhp_theme', next);
+      localStorage.setItem('tkb_theme', next);
+      applyGlobalTheme(next);
     });
   }
+
+  // PWA Service Worker Registration & 1-Click App Install Prompt
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+
+  let deferredPwaPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPwaPrompt = e;
+    const apkBtns = document.querySelectorAll('.btn-apk-download');
+    apkBtns.forEach(btn => {
+      btn.innerHTML = '<i class="fa-solid fa-download"></i> <span>Cài Đặt App</span>';
+      btn.title = 'Cài đặt ứng dụng UIT HUB trực tiếp lên điện thoại';
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-apk-download');
+    if (btn && deferredPwaPrompt) {
+      e.preventDefault();
+      deferredPwaPrompt.prompt();
+      deferredPwaPrompt.userChoice.then(() => {
+        deferredPwaPrompt = null;
+      });
+    }
+  });
 }

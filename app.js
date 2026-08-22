@@ -476,20 +476,36 @@ function savePlansToStorage() {
 }
 
 // ==============================================================================
-// 4. THEME MANAGEMENT
+// 4. THEME MANAGEMENT (CROSS-TAB SYNCHRONIZATION)
 // ==============================================================================
+function applyGlobalTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  if (theme === 'light') {
+    document.documentElement.classList.add('light-theme');
+  } else {
+    document.documentElement.classList.remove('light-theme');
+  }
+  updateThemeIcon(theme);
+}
+
 function initTheme() {
-  const savedTheme = localStorage.getItem('tkb_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeIcon(savedTheme);
+  const savedTheme = localStorage.getItem('dkhp_theme') || localStorage.getItem('tkb_theme') || 'dark';
+  applyGlobalTheme(savedTheme);
+
+  // Cross-tab realtime theme synchronization
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'dkhp_theme' || e.key === 'tkb_theme') {
+      applyGlobalTheme(e.newValue || 'dark');
+    }
+  });
 }
 
 function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('dkhp_theme', next);
   localStorage.setItem('tkb_theme', next);
-  updateThemeIcon(next);
+  applyGlobalTheme(next);
 }
 
 function updateThemeIcon(theme) {
@@ -1769,11 +1785,46 @@ function bindEvents() {
   });
 
   // Export Image
-  document.getElementById('btnExportImage').addEventListener('click', exportTimetableImage);
+  document.getElementById('btnExportImage')?.addEventListener('click', () => {
+    document.getElementById('tkbToolsDropdown')?.style.setProperty('display', 'none');
+    exportTimetableImage();
+  });
 
-  // Clear All
-  document.getElementById('btnClearAll').addEventListener('click', () => {
-    if (confirm(`Bạn có chắc muốn xóa toàn bộ môn trong "${plans[currentPlanId]?.name}"?`)) {
+  // TKB Tools Dropdown Toggle
+  const btnToggleTools = document.getElementById('btnToggleTkbToolsMenu');
+  const dropdownTools = document.getElementById('tkbToolsDropdown');
+  if (btnToggleTools && dropdownTools) {
+    btnToggleTools.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isShown = dropdownTools.style.display === 'block';
+      dropdownTools.style.display = isShown ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown-container')) {
+        dropdownTools.style.display = 'none';
+      }
+    });
+  }
+
+  // Clear All with Custom Confirm Dialog
+  document.getElementById('btnClearAll')?.addEventListener('click', () => {
+    const planName = plans[currentPlanId]?.name || 'Kế hoạch này';
+    if (window.UITHubAuth && typeof window.UITHubAuth.confirm === 'function') {
+      window.UITHubAuth.confirm({
+        title: 'Xóa toàn bộ môn học',
+        message: `Bạn có chắc chắn muốn xóa tất cả các môn đã chọn trong "${planName}"? Thao tác này không thể hoàn tác.`,
+        icon: '<i class="fa-solid fa-trash-can" style="color: #ef4444; font-size: 26px;"></i>',
+        confirmText: 'Xóa toàn bộ',
+        cancelText: 'Hủy bỏ',
+        confirmColor: '#ef4444',
+        onConfirm: () => {
+          plans[currentPlanId].selected = [];
+          savePlansToStorage();
+          renderAll();
+        }
+      });
+    } else if (confirm(`Bạn có chắc muốn xóa toàn bộ môn trong "${planName}"?`)) {
       plans[currentPlanId].selected = [];
       savePlansToStorage();
       renderAll();
@@ -1781,9 +1832,12 @@ function bindEvents() {
   });
 
   // Modals Open / Close
-  document.getElementById('btnUploadModal').addEventListener('click', () => openModal('modalUpload'));
-  document.getElementById('btnToggleSelectedList').addEventListener('click', () => openModal('modalSelectedList'));
-  document.getElementById('btnManagePlans').addEventListener('click', () => {
+  document.getElementById('btnUploadModal')?.addEventListener('click', () => {
+    document.getElementById('tkbToolsDropdown')?.style.setProperty('display', 'none');
+    openModal('modalUpload');
+  });
+  document.getElementById('btnToggleSelectedList')?.addEventListener('click', () => openModal('modalSelectedList'));
+  document.getElementById('btnManagePlans')?.addEventListener('click', () => {
     renderPlansListModal();
     openModal('modalPlans');
   });
@@ -2088,26 +2142,53 @@ document.addEventListener('click', (e) => {
   }
 });
 
+let selectedPlanIdsForBulk = new Set();
+
 function renderPlansListModal() {
   const container = document.getElementById('plansListContainer');
   if (!container) return;
   container.innerHTML = '';
 
-  Object.keys(plans).forEach(pid => {
+  const planIds = Object.keys(plans);
+  const chkSelectAll = document.getElementById('chkSelectAllPlans');
+  const countBadge = document.getElementById('selectedPlansCount');
+  const btnDeleteSelected = document.getElementById('btnDeleteSelectedPlans');
+  const btnDeleteSelectedCount = document.getElementById('btnDeleteSelectedCount');
+
+  // Filter out any IDs from selectedPlanIdsForBulk that no longer exist
+  selectedPlanIdsForBulk = new Set([...selectedPlanIdsForBulk].filter(id => plans[id]));
+
+  if (chkSelectAll) {
+    chkSelectAll.checked = planIds.length > 0 && selectedPlanIdsForBulk.size === planIds.length;
+    chkSelectAll.indeterminate = selectedPlanIdsForBulk.size > 0 && selectedPlanIdsForBulk.size < planIds.length;
+  }
+  if (countBadge) countBadge.textContent = selectedPlanIdsForBulk.size;
+  if (btnDeleteSelected) {
+    btnDeleteSelected.style.display = selectedPlanIdsForBulk.size > 0 ? 'inline-flex' : 'none';
+  }
+  if (btnDeleteSelectedCount) btnDeleteSelectedCount.textContent = selectedPlanIdsForBulk.size;
+
+  planIds.forEach(pid => {
     const plan = plans[pid];
+    const isSelectedForBulk = selectedPlanIdsForBulk.has(pid);
     const row = document.createElement('div');
     row.style.display = 'flex';
     row.style.alignItems = 'center';
     row.style.justifyContent = 'space-between';
     row.style.padding = '8px 12px';
-    row.style.backgroundColor = 'var(--bg-surface-elevated)';
+    row.style.backgroundColor = isSelectedForBulk ? 'rgba(239, 68, 68, 0.08)' : 'var(--bg-surface-elevated)';
     row.style.borderRadius = 'var(--radius-md)';
-    row.style.border = pid === currentPlanId ? '1.5px solid var(--primary)' : '1px solid var(--border-color)';
+    row.style.border = pid === currentPlanId ? '1.5px solid var(--primary)' : (isSelectedForBulk ? '1.5px solid rgba(239, 68, 68, 0.5)' : '1px solid var(--border-color)');
+    row.style.transition = 'all 0.18s ease';
 
     row.innerHTML = `
-      <div>
-        <strong>${escapeHtml(plan.name)}</strong>
-        <span style="font-size: 11px; color: var(--text-muted); margin-left: 6px;">(${(plan.selected || []).length} môn)</span>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="checkbox" class="plan-bulk-chk" data-plan-id="${escapeHtml(pid)}" ${isSelectedForBulk ? 'checked' : ''} style="accent-color: var(--danger); cursor: pointer; width: 16px; height: 16px;">
+        <div>
+          <strong style="color: var(--text-primary); font-size: 13.5px;">${escapeHtml(plan.name)}</strong>
+          <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">(${(plan.selected || []).length} môn)</span>
+          ${pid === currentPlanId ? '<span style="font-size: 10px; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 1px 6px; border-radius: 4px; margin-left: 6px;">Đang dùng</span>' : ''}
+        </div>
       </div>
       <div style="display: flex; gap: 6px;">
         <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" data-rename-plan="${escapeHtml(pid)}">
@@ -2116,8 +2197,8 @@ function renderPlansListModal() {
         <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" data-duplicate-plan="${escapeHtml(pid)}">
           <i class="fa-solid fa-copy"></i> Nhân bản
         </button>
-        ${Object.keys(plans).length > 1 ? `
-          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 11px;" data-delete-plan="${escapeHtml(pid)}">
+        ${planIds.length > 1 ? `
+          <button class="btn btn-danger" style="padding: 4px 8px; font-size: 11px;" data-delete-plan="${escapeHtml(pid)}" title="Xóa kế hoạch này">
             <i class="fa-solid fa-trash"></i>
           </button>
         ` : ''}
@@ -2126,6 +2207,103 @@ function renderPlansListModal() {
     container.appendChild(row);
   });
 }
+
+// Bulk Selection and Deletion Event Handlers
+document.addEventListener('change', (e) => {
+  if (e.target && e.target.classList.contains('plan-bulk-chk')) {
+    const pid = e.target.getAttribute('data-plan-id');
+    if (e.target.checked) {
+      selectedPlanIdsForBulk.add(pid);
+    } else {
+      selectedPlanIdsForBulk.delete(pid);
+    }
+    renderPlansListModal();
+  }
+
+  if (e.target && e.target.id === 'chkSelectAllPlans') {
+    const planIds = Object.keys(plans);
+    if (e.target.checked) {
+      selectedPlanIdsForBulk = new Set(planIds);
+    } else {
+      selectedPlanIdsForBulk.clear();
+    }
+    renderPlansListModal();
+  }
+});
+
+// Bulk Delete Buttons Listener
+document.addEventListener('click', async (e) => {
+  const btnDeleteSelected = e.target.closest('#btnDeleteSelectedPlans');
+  if (btnDeleteSelected) {
+    const count = selectedPlanIdsForBulk.size;
+    if (count === 0) return;
+
+    const confirmed = typeof UITHubAuth !== 'undefined' && UITHubAuth.confirm
+      ? await UITHubAuth.confirm(`Xác nhận xóa hàng loạt ${count} kế hoạch TKB đã chọn? Thao tác này không thể hoàn tác.`, {
+          title: 'Xóa Số Lượng Lớn Kế Hoạch',
+          confirmText: `Xóa ${count} kế hoạch`,
+          isDestructive: true
+        })
+      : confirm(`Xác nhận xóa hàng loạt ${count} kế hoạch TKB đã chọn?`);
+
+    if (confirmed) {
+      selectedPlanIdsForBulk.forEach(pid => {
+        delete plans[pid];
+      });
+      selectedPlanIdsForBulk.clear();
+
+      if (Object.keys(plans).length === 0) {
+        plans['plan_1'] = { name: 'Kế hoạch 1 (Chính)', selected: [], practiceChoices: {} };
+        currentPlanId = 'plan_1';
+      } else if (!plans[currentPlanId]) {
+        currentPlanId = Object.keys(plans)[0];
+      }
+
+      savePlansToStorage();
+      renderPlansListModal();
+      renderAll();
+      if (typeof showToast === 'function') showToast(`✅ Đã xóa ${count} kế hoạch TKB thành công!`);
+    }
+    return;
+  }
+
+  const btnDeleteEmpty = e.target.closest('#btnDeleteEmptyPlans');
+  if (btnDeleteEmpty) {
+    const emptyPlanIds = Object.keys(plans).filter(pid => (plans[pid]?.selected || []).length === 0);
+    if (emptyPlanIds.length === 0) {
+      if (typeof showToast === 'function') showToast('ℹ️ Hiện không có kế hoạch trống nào (0 môn).');
+      return;
+    }
+
+    const confirmed = typeof UITHubAuth !== 'undefined' && UITHubAuth.confirm
+      ? await UITHubAuth.confirm(`Tìm thấy ${emptyPlanIds.length} kế hoạch trống (0 môn). Bạn có muốn dọn dẹp xóa tất cả không?`, {
+          title: 'Dọn Dẹp Kế Hoạch Trống',
+          confirmText: `Dọn ${emptyPlanIds.length} kế hoạch`,
+          isDestructive: true
+        })
+      : confirm(`Tìm thấy ${emptyPlanIds.length} kế hoạch trống (0 môn). Bạn có muốn dọn dẹp xóa tất cả không?`);
+
+    if (confirmed) {
+      emptyPlanIds.forEach(pid => {
+        delete plans[pid];
+      });
+      selectedPlanIdsForBulk.clear();
+
+      if (Object.keys(plans).length === 0) {
+        plans['plan_1'] = { name: 'Kế hoạch 1 (Chính)', selected: [], practiceChoices: {} };
+        currentPlanId = 'plan_1';
+      } else if (!plans[currentPlanId]) {
+        currentPlanId = Object.keys(plans)[0];
+      }
+
+      savePlansToStorage();
+      renderPlansListModal();
+      renderAll();
+      if (typeof showToast === 'function') showToast(`🧹 Đã dọn dẹp ${emptyPlanIds.length} kế hoạch trống thành công!`);
+    }
+    return;
+  }
+});
 
 window.renamePlan = function(pid) {
   const currentName = plans[pid]?.name || '';
@@ -2152,11 +2330,25 @@ window.duplicatePlan = function(pid) {
   renderAll();
 };
 
-window.deletePlan = function(pid) {
+window.deletePlan = async function(pid) {
   const planName = plans[pid]?.name || '';
-  if (confirm(`Xác nhận xóa kế hoạch "${planName}"?`)) {
+  const confirmed = typeof UITHubAuth !== 'undefined' && UITHubAuth.confirm
+    ? await UITHubAuth.confirm(`Xác nhận xóa kế hoạch "${planName}"?`, {
+        title: 'Xác Nhận Xóa Kế Hoạch',
+        confirmText: 'Xóa kế hoạch',
+        isDestructive: true
+      })
+    : confirm(`Xác nhận xóa kế hoạch "${planName}"?`);
+
+  if (confirmed) {
     delete plans[pid];
-    if (currentPlanId === pid) currentPlanId = Object.keys(plans)[0];
+    selectedPlanIdsForBulk.delete(pid);
+    if (Object.keys(plans).length === 0) {
+      plans['plan_1'] = { name: 'Kế hoạch 1 (Chính)', selected: [], practiceChoices: {} };
+      currentPlanId = 'plan_1';
+    } else if (currentPlanId === pid) {
+      currentPlanId = Object.keys(plans)[0];
+    }
     savePlansToStorage();
     renderPlansListModal();
     renderAll();
@@ -3878,5 +4070,32 @@ bindEvents = function() {
   } catch (err) {
     console.warn('URL search parameter error:', err);
   }
+
+  // PWA Service Worker Registration & 1-Click App Install Prompt
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+
+  let deferredPwaPrompt = null;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPwaPrompt = e;
+    const apkBtns = document.querySelectorAll('.btn-apk-download');
+    apkBtns.forEach(btn => {
+      btn.innerHTML = '<i class="fa-solid fa-download"></i> <span>Cài Đặt App</span>';
+      btn.title = 'Cài đặt ứng dụng UIT HUB trực tiếp lên điện thoại';
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-apk-download');
+    if (btn && deferredPwaPrompt) {
+      e.preventDefault();
+      deferredPwaPrompt.prompt();
+      deferredPwaPrompt.userChoice.then(() => {
+        deferredPwaPrompt = null;
+      });
+    }
+  });
 };
 

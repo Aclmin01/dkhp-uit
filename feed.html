@@ -1,23 +1,32 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Diễn Đàn Sinh Viên UIT • Trao Đổi TKB & Học Tập | DKHP UIT</title>
+  <title>Diễn Đàn Sinh Viên UIT • UIT HUB | DKHP UIT</title>
   
   <meta name="description" content="Mạng xã hội và diễn đàn học tập sinh viên UIT: Trao đổi nhượng lớp TKB, tìm nhóm làm đồ án, hỏi đáp môn học và thảo luận review giảng viên.">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <!-- Favicon & PWA Manifest -->
+  <link rel="icon" type="image/png" href="assets/favicon-32.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts (Be Vietnam Pro & Inter for crystal-clear Vietnamese readability) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- FontAwesome Icons (Local High-Performance) -->
+  <link rel="stylesheet" href="libs/fontawesome/all.min.css">
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=8.5">
+  <link rel="stylesheet" href="style.css?v=8.8">
+  <script>
+    // Immediate Theme Sync to prevent flickering
+    const savedTheme = localStorage.getItem('dkhp_theme') || localStorage.getItem('tkb_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    if (savedTheme === 'light') document.documentElement.classList.add('light-theme');
+  </script>
 </head>
 <body>
 
@@ -25,33 +34,35 @@
        1. APP HEADER
        ============================================================================== -->
   <header class="app-header">
-    <div class="brand-section">
-      <div class="brand-logo" style="background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);">
-        <i class="fa-solid fa-comments"></i>
+    <div class="header-left-group">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <img src="assets/logo-icon.png" alt="UIT HUB Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">UIT <span>HUB</span></h1>
+          <span class="badge-semester">Diễn Đàn Sinh Viên</span>
+        </div>
       </div>
-      <div class="brand-info">
-        <h1 class="brand-title">DIỄN ĐÀN <span>UIT</span></h1>
-        <span class="badge-semester">Cộng Đồng • Trao Đổi TKB & Học Tập</span>
-      </div>
-    </div>
 
-    <!-- Main App Navigation Tabs -->
-    <nav class="header-main-nav">
-      <a href="index.html" class="nav-tab-btn" title="Quay lại trang Xếp Thời Khóa Biểu">
-        <i class="fa-solid fa-calendar-days"></i>
-        <span>Xếp TKB & ĐKHP</span>
-      </a>
-      <a href="feed.html" class="nav-tab-btn active" title="Diễn đàn trao đổi TKB, hỏi đáp học tập & tìm nhóm UIT">
-        <i class="fa-solid fa-comments" style="color: #38bdf8;"></i>
-        <span>Diễn Đàn UIT</span>
-        <span class="nav-badge-pill" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">Mới 🔥</span>
-      </a>
-      <a href="reviews.html" class="nav-tab-btn" title="Trang tra cứu đánh giá review giảng viên & môn học">
-        <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
-        <span>Tra Cứu Review</span>
-        <span class="nav-badge-pill">900+ Review</span>
-      </a>
-    </nav>
+      <!-- Main App Navigation Tabs -->
+      <nav class="header-main-nav">
+        <a href="index.html" class="nav-tab-btn" title="Quay lại trang Xếp Thời Khóa Biểu">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>Xếp TKB & ĐKHP</span>
+        </a>
+        <a href="feed.html" class="nav-tab-btn active" title="Diễn đàn trao đổi TKB, hỏi đáp học tập & tìm nhóm UIT">
+          <i class="fa-solid fa-comments" style="color: #38bdf8;"></i>
+          <span>Diễn Đàn UIT</span>
+          <span class="nav-badge-pill" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">Mới 🔥</span>
+        </a>
+        <a href="reviews.html" class="nav-tab-btn" title="Trang tra cứu đánh giá review giảng viên & môn học">
+          <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
+          <span>Tra Cứu Review</span>
+          <span class="nav-badge-pill">900+ Review</span>
+        </a>
+      </nav>
+    </div>
 
     <!-- Header Actions -->
     <div class="header-actions">
@@ -65,6 +76,12 @@
         <span>Tự động xếp TKB</span>
       </a>
 
+      <!-- Direct Android APK Download Button -->
+      <a href="/downloads/UIT-HUB-v1.0.apk" download="UIT-HUB-v1.0.apk" class="btn-apk-download" title="Tải ứng dụng Android (APK) trực tiếp">
+        <i class="fa-brands fa-android"></i>
+        <span>Tải App APK</span>
+      </a>
+
       <a href="https://github.com/Ins0720/dkhp-uit" target="_blank" rel="noopener noreferrer" class="btn-github-star" title="Ủng hộ dự án 1 Star trên GitHub!">
         <i class="fa-brands fa-github"></i>
         <span>⭐ Star</span>
@@ -73,6 +90,9 @@
       <button class="btn-theme-toggle" id="btnThemeToggle" title="Chuyển đổi giao diện Sáng / Tối">
         <i class="fa-solid fa-moon" id="themeIcon"></i>
       </button>
+
+      <!-- User Authentication / Profile Widget -->
+      <div class="header-user-auth-widget"></div>
     </div>
   </header>
 
@@ -81,7 +101,7 @@
        ============================================================================== -->
   <main class="feed-page-layout">
     
-    <!-- LEFT SIDEBAR: Categories & Trending Tags -->
+    <!-- LEFT SIDEBAR: Categories -->
     <aside class="feed-sidebar-left">
       <div class="feed-widget-card">
         <h3 class="feed-widget-title">
@@ -116,20 +136,49 @@
         </div>
       </div>
 
-      <!-- Trending Subject Tags -->
-      <div class="feed-widget-card">
-        <h3 class="feed-widget-title">
-          <i class="fa-solid fa-hashtag" style="color: #38bdf8;"></i>
-          <span>Môn Học Nổi Bật</span>
+      <!-- User Mini Profile Box -->
+      <div class="feed-widget-card" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.06), rgba(59, 130, 246, 0.06));">
+        <h3 class="feed-widget-title" style="font-size: 12px; color: var(--text-muted);">
+          <i class="fa-solid fa-address-card" style="color: var(--primary);"></i>
+          <span>Tài Khoản Diễn Đàn</span>
         </h3>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;" id="feedTrendingTagsBox">
-          <span class="feed-subject-tag" data-tag-filter="IT004">#IT004 (CSDL)</span>
-          <span class="feed-subject-tag" data-tag-filter="NT106">#NT106 (LT Mạng)</span>
-          <span class="feed-subject-tag" data-tag-filter="IT007">#IT007 (HĐH)</span>
-          <span class="feed-subject-tag" data-tag-filter="MA005">#MA005 (XSTK)</span>
-          <span class="feed-subject-tag" data-tag-filter="NT105">#NT105 (Truyền DL)</span>
-          <span class="feed-subject-tag" data-tag-filter="IT002">#IT002 (OOP)</span>
-          <span class="feed-subject-tag" data-tag-filter="SS007">#SS007 (Triết)</span>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <div class="fb-user-avatar" style="width: 34px; height: 34px; font-size: 15px;">
+            <i class="fa-solid fa-user-astronaut"></i>
+          </div>
+          <div style="overflow: hidden;">
+            <div id="sidebarMyUserName" style="font-size: 13px; font-weight: 800; color: var(--text-primary); text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Sinh viên UIT</div>
+            <div style="font-size: 11px; color: #10b981; font-weight: 700;">🟢 Đang hoạt động</div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="btnSidebarOpenMessenger" style="width: 100%; justify-content: center; font-size: 12px;">
+          <i class="fa-brands fa-facebook-messenger" style="color: #0ea5e9;"></i> Mở Hộp Thư & Bạn Bè
+        </button>
+      </div>
+
+      <!-- 3. Portal UIT Live Notices Widget (Cổng Thông Tin UIT) -->
+      <div class="feed-widget-card" id="widgetPortalNotices" style="margin-top: 14px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color);">
+          <h3 class="feed-widget-title" style="margin: 0; font-size: 13px;">
+            <i class="fa-solid fa-bullhorn" style="color: #ef4444;"></i>
+            <span>Bản Tin Cổng UIT</span>
+          </h3>
+          <span style="font-size: 10.5px; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.12); padding: 2px 7px; border-radius: 12px; display: inline-flex; align-items: center; gap: 4px;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Live
+          </span>
+        </div>
+
+        <div id="portalNoticesList" class="portal-notices-scroll-list custom-scrollbar" style="display: flex; flex-direction: column; gap: 8px; max-height: 360px; overflow-y: auto; padding-right: 4px;">
+          <div style="text-align: center; padding: 16px; font-size: 12px; color: var(--text-muted);">
+            <i class="fa-solid fa-spinner fa-spin"></i> Đang tải thông báo portal...
+          </div>
+        </div>
+
+        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border-color); text-align: center;">
+          <a href="https://portal.uit.edu.vn" target="_blank" rel="noopener noreferrer" style="font-size: 11.5px; font-weight: 700; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+            <span>Xem trên portal.uit.edu.vn</span>
+            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i>
+          </a>
         </div>
       </div>
     </aside>
@@ -137,13 +186,34 @@
     <!-- CENTER: Main Feed Stream -->
     <section class="feed-main-stream">
       
-      <!-- Quick Post Card Trigger -->
-      <div class="feed-quick-post" id="quickPostTrigger">
-        <div class="feed-quick-avatar">
-          <i class="fa-solid fa-user-astronaut"></i>
+      <!-- Facebook-style Quick Post Box -->
+      <div class="fb-quick-post-card">
+        <div class="fb-quick-post-top">
+          <div class="fb-avatar">
+            <i class="fa-solid fa-user-astronaut"></i>
+          </div>
+          <button type="button" class="fb-quick-input-btn" id="quickPostTrigger">
+            <span>Sinh viên UIT ơi, bạn cần tìm nhóm, đổi lớp hay hỏi bài gì?</span>
+          </button>
         </div>
-        <div class="feed-quick-input">
-          Bạn cần tìm nhóm đồ án, đổi lớp TKB hay hỏi bài tập...? Bấm để đăng bài ✍️
+        <div class="fb-quick-post-divider"></div>
+        <div class="fb-quick-post-actions">
+          <button type="button" class="fb-action-pill" data-quick-cat="trade">
+            <i class="fa-solid fa-arrow-right-arrow-left" style="color: #10b981;"></i>
+            <span>Đổi lớp TKB</span>
+          </button>
+          <button type="button" class="fb-action-pill" data-quick-cat="study">
+            <i class="fa-solid fa-book-open" style="color: #3b82f6;"></i>
+            <span>Hỏi bài / Tài liệu</span>
+          </button>
+          <button type="button" class="fb-action-pill" data-quick-cat="teacher">
+            <i class="fa-solid fa-chalkboard-user" style="color: #f59e0b;"></i>
+            <span>Hỏi Giảng viên</span>
+          </button>
+          <button type="button" class="fb-action-pill" data-quick-cat="team">
+            <i class="fa-solid fa-users" style="color: #8b5cf6;"></i>
+            <span>Tìm nhóm Đồ án</span>
+          </button>
         </div>
       </div>
 
@@ -177,7 +247,7 @@
     <aside class="feed-sidebar-right">
       
       <!-- TKB Shortcut Widget -->
-      <div class="feed-widget-card" style="background: linear-gradient(135deg, rgba(225, 29, 72, 0.08), rgba(59, 130, 246, 0.08)); border-color: rgba(59, 130, 246, 0.3);">
+      <div class="feed-widget-card" style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(59, 130, 246, 0.08)); border-color: rgba(59, 130, 246, 0.3);">
         <h3 class="feed-widget-title" style="color: var(--primary);">
           <i class="fa-solid fa-wand-magic-sparkles" style="color: #f59e0b;"></i>
           <span>Xếp Lịch Học Siêu Tốc</span>
@@ -222,130 +292,364 @@
   </main>
 
   <!-- ==============================================================================
-       3. CREATE POST MODAL
+       3. FACEBOOK-STYLE CREATE POST MODAL
        ============================================================================== -->
   <div class="modal-overlay" id="modalCreatePost" style="display: none;">
-    <div class="modal-card" style="max-width: 620px;">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <i class="fa-solid fa-pen-to-square" style="color: var(--primary); font-size: 18px;"></i>
-          <h3 class="modal-title">Đăng Bài Viết Lên Diễn Đàn UIT</h3>
-        </div>
-        <button class="modal-close-btn" data-close-modal="modalCreatePost">
+    <div class="modal-card fb-modal-card">
+      
+      <!-- Modal Header -->
+      <div class="fb-modal-header">
+        <h3 class="fb-modal-title">Tạo bài viết</h3>
+        <button class="fb-modal-close-btn" data-close-modal="modalCreatePost" title="Đóng">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <form id="formCreatePost" class="modal-body custom-scrollbar" style="max-height: calc(90vh - 130px); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 18px;">
-        
-        <!-- Category Selector -->
-        <div class="form-group">
-          <label class="form-label">📌 Chọn Chuyên mục bài đăng <span style="color: #ef4444;">*</span></label>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px;" id="modalCategoryPicker">
-            <button type="button" class="btn btn-secondary btn-sm active" data-post-cat="trade" style="justify-content: center; font-size: 11.5px;">
-              <i class="fa-solid fa-arrow-right-arrow-left" style="color: #10b981;"></i> Đổi lớp TKB
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" data-post-cat="study" style="justify-content: center; font-size: 11.5px;">
-              <i class="fa-solid fa-book-open" style="color: #3b82f6;"></i> Học tập
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" data-post-cat="teacher" style="justify-content: center; font-size: 11.5px;">
-              <i class="fa-solid fa-chalkboard-user" style="color: #f59e0b;"></i> Hỏi Giảng viên
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" data-post-cat="team" style="justify-content: center; font-size: 11.5px;">
-              <i class="fa-solid fa-users" style="color: #8b5cf6;"></i> Tìm nhóm
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" data-post-cat="chat" style="justify-content: center; font-size: 11.5px;">
-              <i class="fa-solid fa-mug-hot" style="color: #f43f5e;"></i> Tâm sự
-            </button>
+      <!-- User Profile Row & Privacy Dropdown -->
+      <div class="fb-modal-user-row">
+        <div class="fb-user-avatar">
+          <i class="fa-solid fa-user-astronaut"></i>
+        </div>
+        <div class="fb-user-details" style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input 
+              type="text" 
+              id="fbModalAuthorNameInput" 
+              class="fb-modal-author-input" 
+              placeholder="Tên / Nickname hiển thị..." 
+              value="Sinh viên UIT"
+              maxlength="40"
+              title="Nhấn vào để thay đổi tên hiển thị của bạn khi đăng bài"
+            >
           </div>
-          <input type="hidden" id="submitPostCategory" value="trade">
+          <button type="button" class="fb-privacy-pill" id="btnTogglePrivacy" title="Nhấn để đổi chế độ Ẩn danh / Công khai">
+            <i class="fa-solid fa-mask" id="iconPrivacyPill" style="color: #a855f7;"></i>
+            <span id="txtPrivacyLabel">Đăng Ẩn danh</span>
+            <i class="fa-solid fa-caret-down" style="font-size: 11px; margin-left: 2px;"></i>
+          </button>
         </div>
+      </div>
 
-        <!-- Post Title -->
-        <div class="form-group">
-          <label class="form-label" for="submitPostTitle">📝 Tiêu đề bài viết <span style="color: #ef4444;">*</span></label>
-          <input 
-            type="text" 
-            id="submitPostTitle" 
-            class="form-control" 
-            placeholder="Ví dụ: Cần nhượng lớp IT004.R18 sang ca sáng, Tìm bạn chung nhóm Đồ án Mạng..." 
-            required 
-            autocomplete="off"
-            maxlength="150"
-          >
+      <!-- Form Body -->
+      <form id="formCreatePost" class="fb-modal-form custom-scrollbar">
+        <!-- Category Selector Chips -->
+        <div class="fb-cat-chips-row" id="modalCategoryPicker">
+          <button type="button" class="fb-cat-chip active" data-post-cat="trade">
+            <i class="fa-solid fa-arrow-right-arrow-left" style="color: #10b981;"></i> Đổi lớp TKB
+          </button>
+          <button type="button" class="fb-cat-chip" data-post-cat="study">
+            <i class="fa-solid fa-book-open" style="color: #3b82f6;"></i> Học tập & Tài liệu
+          </button>
+          <button type="button" class="fb-cat-chip" data-post-cat="teacher">
+            <i class="fa-solid fa-chalkboard-user" style="color: #f59e0b;"></i> Hỏi Giảng viên
+          </button>
+          <button type="button" class="fb-cat-chip" data-post-cat="team">
+            <i class="fa-solid fa-users" style="color: #8b5cf6;"></i> Tìm nhóm Đồ án
+          </button>
+          <button type="button" class="fb-cat-chip" data-post-cat="chat">
+            <i class="fa-solid fa-mug-hot" style="color: #f43f5e;"></i> Tâm sự UIT
+          </button>
         </div>
+        <input type="hidden" id="submitPostCategory" value="trade">
+        <input type="hidden" id="chkPostAnonymous" value="true">
 
-        <!-- Course Tag & Teacher Tag Row -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div class="form-group">
-            <label class="form-label" for="submitPostCourseTag">📚 Gắn tag Môn học (Tùy chọn)</label>
+        <!-- Title Input -->
+        <input 
+          type="text" 
+          id="submitPostTitle" 
+          class="fb-post-title-input" 
+          placeholder="Tiêu đề bài viết (VD: Cần nhượng lớp IT004.R18 sang ca sáng, Tìm nhóm...)" 
+          required 
+          autocomplete="off"
+          maxlength="150"
+        >
+
+        <!-- Post Content Textarea -->
+        <textarea 
+          id="submitPostContent" 
+          class="fb-post-textarea custom-scrollbar" 
+          placeholder="Sinh viên UIT ơi, bạn muốn chia sẻ điều gì? Hãy nhập nội dung chi tiết..." 
+          required
+          maxlength="3000"
+        ></textarea>
+
+        <!-- Add Attachments / Tags Drawer with Auto-Suggestions -->
+        <div class="fb-tags-attachment-box" id="fbTagsAttachmentBox" style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <div class="fb-tag-input-group">
             <input 
               type="text" 
               id="submitPostCourseTag" 
-              class="form-control" 
-              placeholder="VD: IT004, NT106..." 
+              class="fb-tag-input" 
+              placeholder="📚 Gắn mã môn (VD: IT004, NT106...)" 
               autocomplete="off"
             >
+            <div id="courseTagSuggestions" class="tag-suggestions-list custom-scrollbar" style="display: none;"></div>
           </div>
-
-          <div class="form-group">
-            <label class="form-label" for="submitPostTeacherTag">👨‍🏫 Gắn tag Giảng viên (Tùy chọn)</label>
+          <div class="fb-tag-input-group">
             <input 
               type="text" 
               id="submitPostTeacherTag" 
-              class="form-control" 
-              placeholder="VD: Đặng Việt Dũng..." 
+              class="fb-tag-input" 
+              placeholder="👨‍🏫 Gắn tên Giảng viên (VD: Đặng Việt Dũng...)" 
               autocomplete="off"
             >
+            <div id="teacherTagSuggestions" class="tag-suggestions-list custom-scrollbar" style="display: none;"></div>
           </div>
         </div>
 
-        <!-- Post Content Textarea -->
-        <div class="form-group">
-          <label class="form-label" for="submitPostContent">💬 Nội dung chi tiết <span style="color: #ef4444;">*</span></label>
-          <textarea 
-            id="submitPostContent" 
-            class="form-control" 
-            rows="5" 
-            placeholder="Nhập thông tin chi tiết bạn muốn trao đổi, thông tin liên hệ (Zalo, Messenger, Email)..." 
-            required
-            style="line-height: 1.6; resize: vertical;"
-            maxlength="3000"
-          ></textarea>
+        <!-- Attached Image Preview Container -->
+        <div id="postAttachedImagePreviewContainer" style="display: none; position: relative; margin: 10px 0; border-radius: var(--radius-md); overflow: hidden; border: 1.5px dashed var(--primary); max-height: 260px; background: var(--bg-surface-elevated);">
+          <img id="postAttachedImagePreview" src="" style="width: 100%; max-height: 260px; object-fit: cover; display: block;" alt="Ảnh đính kèm">
+          <button type="button" id="btnRemoveAttachedImage" title="Gỡ bỏ ảnh này" style="position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; background: rgba(0,0,0,0.7); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: background 0.15s ease;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
 
-        <!-- Anonymous Checkbox -->
-        <div style="display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface-elevated); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-mask" style="color: #a855f7; font-size: 16px;"></i>
-            <div>
-              <strong style="font-size: 13px; color: var(--text-primary); display: block;">Đăng bài Ẩn danh (Everytime Mode)</strong>
-              <span style="font-size: 11.5px; color: var(--text-muted);">Tên của bạn sẽ hiển thị là "Sinh viên UIT" để bảo mật danh tính.</span>
-            </div>
+        <!-- Facebook "Add to your post" Floating Tool Strip -->
+        <div class="fb-add-to-post-bar">
+          <span class="fb-add-label">Thêm vào bài viết của bạn</span>
+          <div class="fb-add-icons">
+            <button type="button" class="fb-add-icon-btn" title="Đính kèm Hình ảnh" id="btnTriggerPostImageUpload">
+              <i class="fa-solid fa-image" style="color: #10b981;"></i>
+            </button>
+            <input type="file" id="inputPostImageFile" accept="image/*" style="display: none;">
+
+            <button type="button" class="fb-add-icon-btn" title="Gắn tag Môn học" id="btnFocusCourseTag">
+              <i class="fa-solid fa-calendar-days" style="color: #3b82f6;"></i>
+            </button>
+            <button type="button" class="fb-add-icon-btn" title="Gắn tag Giảng viên" id="btnFocusTeacherTag">
+              <i class="fa-solid fa-star" style="color: #f59e0b;"></i>
+            </button>
+            <button type="button" class="fb-add-icon-btn" title="Đổi chế độ Ẩn danh" id="btnQuickToggleAnon">
+              <i class="fa-solid fa-mask" style="color: #a855f7;"></i>
+            </button>
           </div>
-          <input type="checkbox" id="chkPostAnonymous" checked style="width: 18px; height: 18px; cursor: pointer;">
         </div>
 
-        <!-- Anti-Spam Bot Honeypot Field -->
+        <!-- Bot Honeypot Field -->
         <div style="opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; pointer-events: none;" aria-hidden="true">
           <input type="text" id="postHoneypotField" name="security_hp_post" tabindex="-1" autocomplete="off">
         </div>
 
-        <div class="modal-footer" style="padding: 12px 0 0 0; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
-          <button type="button" class="btn btn-secondary" data-close-modal="modalCreatePost">Hủy</button>
-          <button type="submit" class="btn btn-primary" id="btnSubmitPostAction">
-            <i class="fa-solid fa-paper-plane"></i> Đăng Bài Ngay
-          </button>
-        </div>
+        <!-- Facebook Big Blue Post Button -->
+        <button type="submit" class="btn btn-primary fb-btn-post" id="btnSubmitPostAction">
+          <i class="fa-solid fa-paper-plane"></i> Đăng
+        </button>
       </form>
     </div>
   </div>
 
+  <!-- ==============================================================================
+       4. REALTIME SOCKET MESSENGER, INBOX & 2-WAY FRIENDS WIDGET
+       ============================================================================== -->
+  <div id="realtimeChatApp">
+    <!-- Floating Messenger Launcher Button -->
+    <button id="btnOpenMessenger" class="messenger-floating-btn" title="Mở hộp thư Messenger & Bạn bè">
+      <i class="fa-brands fa-facebook-messenger"></i>
+      <span class="messenger-unread-badge" id="chatUnreadBadge" style="display: none;">0</span>
+      <span class="messenger-status-dot" id="chatSocketStatusDot" title="Trạng thái hoạt động"></span>
+    </button>
+
+    <!-- Messenger Chat Window -->
+    <div id="messengerChatWindow" class="messenger-chat-box" style="display: none;">
+      <!-- Window Header -->
+      <div class="messenger-header">
+        <div class="messenger-header-left">
+          <button type="button" class="messenger-action-btn" id="btnBackToInbox" style="display: none; margin-right: 4px;" title="Quay lại danh sách tin nhắn">
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <div class="messenger-avatar" id="chatHeaderAvatar">
+            <i class="fa-solid fa-comments"></i>
+            <span class="online-indicator"></span>
+          </div>
+          <div>
+            <div class="messenger-title" id="chatHeaderTitle">Messenger UIT</div>
+            <div class="messenger-subtitle">
+              <span id="chatSocketStatusText">🟢 Trực tuyến</span> • <span id="chatOnlineCountText">1 online</span>
+            </div>
+          </div>
+        </div>
+        <div class="messenger-header-actions">
+          <button type="button" class="messenger-action-btn" id="btnMinimizeChat" title="Thu nhỏ">
+            <i class="fa-solid fa-minus"></i>
+          </button>
+          <button type="button" class="messenger-action-btn" id="btnCloseChat" title="Đóng">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messenger Main Navigation Tabs (Inbox • Bạn bè • Phòng chung) -->
+      <div class="messenger-nav-bar" id="messengerNavBar">
+        <button type="button" class="messenger-nav-tab active" data-msg-tab="inbox">
+          <i class="fa-solid fa-comments"></i> Đoạn chat
+        </button>
+        <button type="button" class="messenger-nav-tab" data-msg-tab="friends">
+          <i class="fa-solid fa-user-group"></i> Bạn bè
+          <span class="nav-badge-count" id="badgeFriendRequests" style="display: none;">0</span>
+        </button>
+        <button type="button" class="messenger-nav-tab" data-msg-tab="rooms">
+          <i class="fa-solid fa-layer-group"></i> Phòng chung
+        </button>
+      </div>
+
+      <!-- VIEW 1: INBOX / CONVERSATIONS LIST -->
+      <div id="viewMessengerInbox" class="messenger-view-panel custom-scrollbar">
+        <div class="messenger-search-bar">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="inputSearchConversations" placeholder="Tìm kiếm đoạn chat...">
+        </div>
+        <div id="inboxConversationsList" class="messenger-conversations-list">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- VIEW 2: FRIENDS & FRIEND REQUESTS -->
+      <div id="viewMessengerFriends" class="messenger-view-panel custom-scrollbar" style="display: none;">
+        <!-- Friend Requests Section -->
+        <div class="friends-section-header">
+          <span>Lời mời kết bạn</span>
+          <span class="friends-section-badge" id="countPendingRequests">0</span>
+        </div>
+        <div id="friendRequestsContainer" class="friend-requests-list">
+          <!-- Pending requests rendered here -->
+        </div>
+
+        <!-- Accepted Friends Section -->
+        <div class="friends-section-header" style="margin-top: 10px;">
+          <span>Danh sách bạn bè</span>
+          <span class="friends-section-badge" id="countAcceptedFriends">0</span>
+        </div>
+        <div id="acceptedFriendsContainer" class="accepted-friends-list">
+          <!-- Accepted friends rendered here -->
+        </div>
+      </div>
+
+      <!-- VIEW 3: ROOMS LIST -->
+      <div id="viewMessengerRooms" class="messenger-view-panel" style="display: none;">
+        <div class="messenger-rooms-list">
+          <button type="button" class="messenger-room-card" data-room-pick="general">
+            <div class="room-card-icon" style="background: #3b82f6;"><i class="fa-solid fa-globe"></i></div>
+            <div class="room-card-info">
+              <div class="room-card-title">Sảnh Chung UIT</div>
+              <div class="room-card-sub">Trò chuyện tự do cùng toàn thể sinh viên UIT</div>
+            </div>
+          </button>
+          <button type="button" class="messenger-room-card" data-room-pick="trade">
+            <div class="room-card-icon" style="background: #10b981;"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+            <div class="room-card-info">
+              <div class="room-card-title">Chợ Đổi Lớp TKB</div>
+              <div class="room-card-sub">Trao đổi và nhượng lớp thời khóa biểu realtime</div>
+            </div>
+          </button>
+          <button type="button" class="messenger-room-card" data-room-pick="study">
+            <div class="room-card-icon" style="background: #f59e0b;"><i class="fa-solid fa-book-open"></i></div>
+            <div class="room-card-info">
+              <div class="room-card-title">Góc Học Tập & Đồ Án</div>
+              <div class="room-card-sub">Hỏi tài liệu, đề thi và kinh nghiệm qua môn</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW 4: ACTIVE CHAT THREAD VIEW -->
+      <div id="viewMessengerChat" class="messenger-view-panel" style="display: none; flex-direction: column; height: 100%; position: relative;">
+        <!-- Messages Stream Container -->
+        <div class="messenger-messages-body custom-scrollbar" id="chatMessagesContainer">
+          <!-- Messages rendered in real time -->
+        </div>
+
+        <!-- Typing Indicator Row -->
+        <div class="messenger-typing-indicator" id="chatTypingIndicator" style="display: none;">
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span id="chatTypingUserText" style="font-size: 11px; margin-left: 4px;">Ai đó đang nhập...</span>
+        </div>
+
+        <!-- Reply Quote Preview Bar -->
+        <div id="chatReplyBar" class="chat-reply-bar" style="display: none;">
+          <div class="chat-reply-bar-content">
+            <span class="chat-reply-author">↩️ Trả lời <span id="chatReplyAuthorName">...</span>:</span>
+            <span id="chatReplySnippet" class="chat-reply-snippet">...</span>
+          </div>
+          <button type="button" id="btnCancelChatReply" class="chat-bar-close-btn" title="Hủy trả lời">&times;</button>
+        </div>
+
+        <!-- Attachment Preview Bar -->
+        <div id="chatAttachmentPreviewBar" class="chat-attachment-bar" style="display: none;">
+          <div id="chatAttachmentPreviewContent" class="chat-attachment-preview-content"></div>
+          <button type="button" id="btnRemoveChatAttachment" class="chat-bar-close-btn" title="Xóa đính kèm">&times;</button>
+        </div>
+
+        <!-- Emoji Picker Popover Tray -->
+        <div id="chatEmojiPicker" class="chat-emoji-picker-popover custom-scrollbar" style="display: none;">
+          <div class="emoji-picker-grid">
+            <span class="chat-emoji-item" data-emoji="❤️">❤️</span>
+            <span class="chat-emoji-item" data-emoji="😂">😂</span>
+            <span class="chat-emoji-item" data-emoji="👍">👍</span>
+            <span class="chat-emoji-item" data-emoji="🔥">🔥</span>
+            <span class="chat-emoji-item" data-emoji="😍">😍</span>
+            <span class="chat-emoji-item" data-emoji="🥺">🥺</span>
+            <span class="chat-emoji-item" data-emoji="🎉">🎉</span>
+            <span class="chat-emoji-item" data-emoji="🚀">🚀</span>
+            <span class="chat-emoji-item" data-emoji="👏">👏</span>
+            <span class="chat-emoji-item" data-emoji="💯">💯</span>
+            <span class="chat-emoji-item" data-emoji="🎓">🎓</span>
+            <span class="chat-emoji-item" data-emoji="✨">✨</span>
+            <span class="chat-emoji-item" data-emoji="💙">💙</span>
+            <span class="chat-emoji-item" data-emoji="😎">😎</span>
+            <span class="chat-emoji-item" data-emoji="🤣">🤣</span>
+            <span class="chat-emoji-item" data-emoji="😭">😭</span>
+            <span class="chat-emoji-item" data-emoji="💡">💡</span>
+            <span class="chat-emoji-item" data-emoji="📚">📚</span>
+            <span class="chat-emoji-item" data-emoji="☕">☕</span>
+            <span class="chat-emoji-item" data-emoji="🎮">🎮</span>
+            <span class="chat-emoji-item" data-emoji="🌸">🌸</span>
+            <span class="chat-emoji-item" data-emoji="⚡">⚡</span>
+            <span class="chat-emoji-item" data-emoji="⭐">⭐</span>
+            <span class="chat-emoji-item" data-emoji="📌">📌</span>
+          </div>
+        </div>
+
+        <!-- Hidden File & Image Inputs -->
+        <input type="file" id="chatImageInput" accept="image/*" style="display: none;">
+        <input type="file" id="chatFileInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar,.txt,.json,.csv" style="display: none;">
+
+        <!-- Chat Input Footer -->
+        <form id="formSendChatMessage" class="messenger-footer">
+          <button type="button" class="messenger-tool-btn" id="btnChatAttachImage" title="Gửi ảnh">
+            <i class="fa-regular fa-image"></i>
+          </button>
+          <button type="button" class="messenger-tool-btn" id="btnChatAttachFile" title="Gửi tài liệu/file">
+            <i class="fa-solid fa-paperclip"></i>
+          </button>
+          <button type="button" class="messenger-tool-btn" id="btnChatToggleEmoji" title="Chèn biểu tượng cảm xúc">
+            <i class="fa-regular fa-face-smile"></i>
+          </button>
+
+          <input 
+            type="text" 
+            id="inputChatMessage" 
+            class="messenger-input" 
+            placeholder="Nhập tin nhắn (Enter để gửi)..." 
+            autocomplete="off"
+            maxlength="1000"
+          >
+          <button type="submit" class="btn btn-primary messenger-send-btn" title="Gửi tin nhắn">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
-  <div id="feedToastNotification" style="position: fixed; bottom: 24px; right: 24px; z-index: 1000000; display: none;"></div>
+  <div id="feedToastNotification" style="position: fixed; bottom: 24px; right: 90px; z-index: 1000000; display: none;"></div>
 
   <!-- Scripts -->
   <script src="libs/supabase.js"></script>
-  <script src="bundle.feed.min.js?v=8.5"></script>
+  <script src="bundle.feed.min.js?v=8.7"></script>
 </body>
 </html>

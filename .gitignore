@@ -15,10 +15,8 @@
 id_rsa*
 secrets.json
 config.private.json
-security.js
-security-guard.js
-supabase-config.js
-feed.js
+social_db.json
+*.log
 
 # 2. Python Virtual Environments, Bytecode & Scraper Dumps
 .venv/

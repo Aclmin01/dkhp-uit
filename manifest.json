@@ -1,0 +1,36 @@
+{
+  "id": "vn.edu.uit.hub",
+  "name": "UIT HUB - Xếp TKB & Diễn Đàn Sinh Viên UIT",
+  "short_name": "UIT HUB",
+  "description": "Ứng dụng xếp thời khóa biểu tự động, tra cứu review giảng viên và diễn đàn sinh viên UIT",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#111827",
+  "theme_color": "#2563eb",
+  "categories": [
+    "education",
+    "social",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "assets/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

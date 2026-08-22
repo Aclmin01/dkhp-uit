@@ -20,5 +20,8 @@
     "esbuild": "^0.28.2",
     "javascript-obfuscator": "^5.5.1",
     "terser": "^5.50.0"
+  },
+  "dependencies": {
+    "ws": "^8.21.3"
   }
 }

@@ -6,7 +6,8 @@
   "outputDirectory": ".",
   "rewrites": [
     { "source": "/feed", "destination": "/feed.html" },
-    { "source": "/reviews", "destination": "/reviews.html" }
+    { "source": "/reviews", "destination": "/reviews.html" },
+    { "source": "/api/download/apk", "destination": "/downloads/UIT-HUB-v1.0.apk" }
   ],
   "headers": [
     {
@@ -22,7 +23,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://img.shields.io https://avatars.githubusercontent.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; frame-src 'none'; upgrade-insecure-requests; block-all-mixed-content"
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://img.shields.io https://avatars.githubusercontent.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co; worker-src 'self' blob:; manifest-src 'self'; frame-src 'none'; upgrade-insecure-requests;"
         },
         {
           "key": "X-XSS-Protection",
@@ -46,7 +47,7 @@
         },
         {
           "key": "Cross-Origin-Resource-Policy",
-          "value": "same-site"
+          "value": "cross-origin"
         },
         {
           "key": "Cache-Control",

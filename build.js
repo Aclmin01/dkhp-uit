@@ -53,6 +53,7 @@ async function build() {
     'security.js',
     'ratings.js',
     'data.js',
+    'auth.js',
     'app.js'
   ];
 
@@ -78,6 +79,7 @@ async function build() {
     'data.js',
     'ratings.js',
     'supabase-config.js',
+    'auth.js',
     'reviews.js'
   ];
 
@@ -100,8 +102,10 @@ async function build() {
   const feedFiles = [
     'security-guard.js',
     'security.js',
+    'data.js',
     'ratings.js',
     'supabase-config.js',
+    'auth.js',
     'feed.js'
   ];
 
