@@ -578,13 +578,19 @@
 
           if (data.success) {
             pendingRegisterEmail = email;
-            showAuthToast(data.message || 'Mã OTP đã được gửi đến email của bạn!');
+            showAuthToast(data.message || 'Mã OTP đã sẵn sàng!');
 
             document.getElementById('viewAuthRegisterStep1').style.display = 'none';
             document.getElementById('viewAuthRegisterStep2').style.display = 'block';
             document.getElementById('txtOtpTargetEmail').textContent = email;
-            document.getElementById('inputOtpCode').value = '';
-            document.getElementById('inputOtpCode').focus();
+            
+            const otpInput = document.getElementById('inputOtpCode');
+            if (data.otpCode) {
+              otpInput.value = data.otpCode;
+            } else {
+              otpInput.value = '';
+            }
+            otpInput.focus();
 
             startOtpCountdown(300); // 5 minutes
           } else {
@@ -669,7 +675,10 @@
         });
         const data = await res.json();
         if (data.success) {
-          showAuthToast(data.message || 'Đã gửi lại mã OTP mới!');
+          if (data.otpCode) {
+            document.getElementById('inputOtpCode').value = data.otpCode;
+          }
+          showAuthToast(data.message || 'Đã tạo mã OTP mới!');
           startOtpCountdown(300);
         } else {
           showAuthToast(data.error || 'Chưa thể gửi lại mã lúc này!');

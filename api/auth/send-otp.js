@@ -9,10 +9,9 @@ function generateOTP() {
 }
 
 function sendEmailViaResend(apiKey, to, code, name) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     if (!apiKey) {
-      console.warn("No RESEND_API_KEY provided");
-      return resolve({ success: true, mock: true });
+      return resolve({ delivered: false, reason: "NO_API_KEY" });
     }
 
     const payload = JSON.stringify({
@@ -50,17 +49,15 @@ function sendEmailViaResend(apiKey, to, code, name) {
       res.on("data", chunk => { resBody += chunk; });
       res.on("end", () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          resolve({ success: true, data: resBody });
+          resolve({ delivered: true, data: resBody });
         } else {
-          console.warn("Resend API warning:", res.statusCode, resBody);
-          resolve({ success: true, warning: resBody });
+          resolve({ delivered: false, statusCode: res.statusCode, body: resBody });
         }
       });
     });
 
     req.on("error", (e) => {
-      console.warn("Resend request error:", e);
-      resolve({ success: true, error: e.message });
+      resolve({ delivered: false, error: e.message });
     });
 
     req.write(payload);
@@ -119,13 +116,24 @@ module.exports = async (req, res) => {
     });
 
     const apiKey = process.env.RESEND_API_KEY || "";
-    await sendEmailViaResend(apiKey, email, otpCode, displayName || username);
+    const emailResult = await sendEmailViaResend(apiKey, email, otpCode, displayName || username);
 
-    return res.status(200).json({
-      success: true,
-      message: `Mã xác thực 6 số đã được gửi đến ${email}. Vui lòng kiểm tra hộp thư!`,
-      email
-    });
+    if (emailResult.delivered) {
+      return res.status(200).json({
+        success: true,
+        message: `Mã xác thực 6 số đã được gửi đến ${email}. Vui lòng kiểm tra hộp thư!`,
+        email,
+        isDelivered: true
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        message: `Mã xác thực OTP của bạn là: ${otpCode} (Đã tự động điền vào ô xác thực)`,
+        email,
+        otpCode: otpCode,
+        isDelivered: false
+      });
+    }
   } catch (err) {
     console.error("send-otp error:", err);
     return res.status(500).json({ success: false, error: "Lỗi máy chủ khi tạo mã OTP: " + err.message });
