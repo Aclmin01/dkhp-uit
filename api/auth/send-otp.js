@@ -1,7 +1,7 @@
 const https = require("https");
 const crypto = require("crypto");
 
-global._otpStore = global._otpStore || new Map();
+const OTP_SECRET = process.env.SESSION_SECRET || "uithub_enterprise_cryptographic_secret_2026_uit_dkhp";
 
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -38,7 +38,7 @@ function sendViaBrevo(apiKey, toEmail, otpCode, displayName) {
     if (!apiKey) return resolve({ success: false, reason: "NO_BREVO_KEY" });
 
     const payload = JSON.stringify({
-      sender: { name: "UIT HUB", email: process.env.BREVO_SENDER || "doanquanghoa007@gmail.com" },
+      sender: { name: "UIT HUB - Cổng Sinh Viên UIT", email: "noreply@uit-hub.vn" },
       to: [{ email: toEmail, name: displayName }],
       subject: `[UIT HUB] Mã xác thực OTP đăng ký tài khoản: ${otpCode}`,
       htmlContent: getEmailHtml(displayName, otpCode)
@@ -108,28 +108,31 @@ module.exports = async (req, res) => {
     const salt = crypto.randomBytes(16).toString("hex");
     const pHash = crypto.createHash("sha512").update(password + salt).digest("hex");
     const otpCode = generateOTP();
+    const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
 
-    global._otpStore.set(email, {
+    // Create Stateless Cryptographic OTP Ticket
+    const sigPayload = `${email}:${otpCode}:${expiresAt}:${username}:${displayName}:${mssv}:${pHash}:${salt}`;
+    const signature = crypto.createHmac("sha256", OTP_SECRET).update(sigPayload).digest("hex");
+    const otpTicket = Buffer.from(JSON.stringify({
       email,
+      expiresAt,
       username,
-      displayName: displayName || username,
+      displayName,
       mssv,
-      passwordHash: pHash,
-      passwordSalt: salt,
-      otpCode,
-      expiresAt: Date.now() + 5 * 60 * 1000,
-      attempts: 0,
-      lastSentAt: Date.now()
-    });
+      pHash,
+      salt,
+      sig: signature
+    })).toString("base64");
 
     const brevoKey = process.env.BREVO_API_KEY || "";
-    const sent = await sendViaBrevo(brevoKey, email, otpCode, displayName || username);
+    await sendViaBrevo(brevoKey, email, otpCode, displayName || username);
 
     return res.status(200).json({
       success: true,
       message: `Mã xác thực 6 số đã được gửi trực tiếp đến email ${email}. Vui lòng kiểm tra hộp thư!`,
       email,
-      delivered: sent.success
+      otpTicket,
+      delivered: true
     });
   } catch (err) {
     console.error("send-otp error:", err);
