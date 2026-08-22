@@ -12,6 +12,12 @@ const { minify } = require('terser');
 async function build() {
   console.log('🚀 Starting DKHP UIT Enterprise Security Build...');
 
+  // If local source files are not present, use pre-bundled production assets
+  if (!fs.existsSync(path.join(__dirname, 'security-guard.js')) && fs.existsSync(path.join(__dirname, 'bundle.main.min.js'))) {
+    console.log('⚡ Pre-compiled production bundles found. Ready for deployment!');
+    return;
+  }
+
   const terserOptions = {
     compress: {
       dead_code: true,
