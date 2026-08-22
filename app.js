@@ -2261,15 +2261,25 @@ function showAppToast(message) {
 // ==============================================================================
 // 14. IMPORT / EXPORT CLASS CODES (AUTO SCHEDULING VIA CODE LIST)
 // ==============================================================================
-let currentExportFormat = 'newline'; // 'newline' | 'comma_space' | 'comma' | 'js_array'
+let currentExportFormat = 'newline'; // 'newline' | 'space' | 'comma_space' | 'comma' | 'bookmarklet' | 'js_array'
+
+function generateBookmarkletCode(codes) {
+  if (!codes || codes.length === 0) return '';
+  const codesStr = codes.map(c => `'${c}'`).join(',');
+  return `javascript:(function(){var list=new Set([${codesStr}]);document.querySelectorAll('table tr').forEach(function(r){var t=r.querySelector('td:nth-child(2)')?.textContent?.trim().toUpperCase();if(t&&list.has(t)){var k=r.querySelector('input[type="checkbox"]')||r.querySelector('td:first-child');if(k){if(k.type==='checkbox'){if(!k.checked)k.click();}else{k.click();}}}});var count=0;var timer=setInterval(function(){count++;var btn=null;var all=document.querySelectorAll('button, div[role="button"], a');for(var i=0;i<all.length;i++){var txt=all[i].textContent||'';if(txt.includes('Đăng ký')&&(txt.includes('lớp')||txt.includes('tc'))){btn=all[i];break;}}if(!btn){var leaves=document.querySelectorAll('*');for(var j=leaves.length-1;j>=0;j--){if(leaves[j].children.length===0&&(leaves[j].textContent||'').includes('Đăng ký')){btn=leaves[j];break;}}}if(btn){btn.click();btn.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));clearInterval(timer);}if(count>=10)clearInterval(timer);},150);})();`;
+}
 
 function formatExportClassCodes(codes, format = currentExportFormat) {
   if (!codes || codes.length === 0) return '';
   switch (format) {
+    case 'space':
+      return codes.join(' ');
     case 'comma_space':
       return codes.join(', ');
     case 'comma':
       return codes.join(',');
+    case 'bookmarklet':
+      return generateBookmarkletCode(codes);
     case 'js_array':
       return "['" + codes.join("', '") + "']";
     case 'newline':
@@ -2282,6 +2292,7 @@ function updateExportCodesDisplay() {
   const currentCodes = getSelectedClassCodes();
   const exportArea = document.getElementById('exportCodesTextarea');
   const countBadge = document.getElementById('exportCodesCountBadge');
+  const bmBanner = document.getElementById('bookmarkletHintBanner');
   
   if (exportArea) {
     exportArea.value = formatExportClassCodes(currentCodes, currentExportFormat);
@@ -2289,6 +2300,9 @@ function updateExportCodesDisplay() {
   if (countBadge) {
     const selectedCourseCount = plans[currentPlanId]?.selected?.length || 0;
     countBadge.textContent = `📋 ${currentCodes.length} mã lớp (${selectedCourseCount} môn học)`;
+  }
+  if (bmBanner) {
+    bmBanner.style.display = (currentExportFormat === 'bookmarklet') ? 'block' : 'none';
   }
 }
 

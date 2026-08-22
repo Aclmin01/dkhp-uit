@@ -94,7 +94,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=6.5">
+  <link rel="stylesheet" href="style.css?v=7.0">
 </head>
 <body>
 
@@ -641,15 +641,21 @@
             <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
               Chọn định dạng xuất danh sách mã lớp:
             </p>
-            <div class="segmented-control" id="exportFormatSegmentedControl" style="margin: 0;">
+            <div class="segmented-control" id="exportFormatSegmentedControl" style="margin: 0; flex-wrap: wrap;">
               <button type="button" class="seg-btn active" data-export-format="newline" title="Mỗi mã một dòng riêng biệt">
                 <i class="fa-solid fa-list-ul"></i> Xuống dòng (\n)
+              </button>
+              <button type="button" class="seg-btn" data-export-format="space" title="Cách nhau bằng dấu cách: NT105.R11 NT105.R11.1 MA005.R14...">
+                <i class="fa-solid fa-arrows-left-right"></i> Dấu cách (Space)
               </button>
               <button type="button" class="seg-btn" data-export-format="comma_space" title="Cách nhau bằng dấu phẩy và khoảng trắng: NT105.R11, NT105.R11.1...">
                 <i class="fa-solid fa-quote-right"></i> Dấu phẩy (, )
               </button>
               <button type="button" class="seg-btn" data-export-format="comma" title="Cách nhau bằng dấu phẩy liền: NT105.R11,NT105.R11.1...">
                 <i class="fa-solid fa-comma"></i> Dấu phẩy liền (,)
+              </button>
+              <button type="button" class="seg-btn" data-export-format="bookmarklet" title="Mã Bookmarklet 1-Click tự tick chọn môn & bấm Đăng ký (javascript:...)">
+                <i class="fa-solid fa-bookmark" style="color: #fbbf24;"></i> Bookmarklet 1-Click
               </button>
               <button type="button" class="seg-btn" data-export-format="js_array" title="Mảng JavaScript: ['NT105.R11', 'NT105.R11.1'...]">
                 <i class="fa-brands fa-js"></i> Mảng Array [...]
@@ -658,6 +664,10 @@
           </div>
           <textarea id="exportCodesTextarea" class="code-box-textarea custom-scrollbar" readonly spellcheck="false" style="min-height: 160px; font-family: var(--font-mono); font-size: 13px;"></textarea>
           
+          <div id="bookmarkletHintBanner" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 8px 12px; font-size: 12px; color: #fbbf24; line-height: 1.4; margin-top: 4px;">
+            <i class="fa-solid fa-lightbulb"></i> <strong>Cách dùng Bookmarklet:</strong> Bạn tạo 1 Bookmark mới trên trình duyệt (Chrome/Edge/Firefox), dán đoạn mã này vào ô URL. Khi mở trang <strong>dkhp.uit.edu.vn</strong>, chỉ cần click Bookmark là tự động chọn &amp; đăng ký ngay!
+          </div>
+
           <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
             <span id="exportCodesCountBadge" style="font-size: 12.5px; color: var(--primary); font-weight: 700;"></span>
             <div style="display: flex; gap: 8px;">
@@ -934,11 +944,11 @@
   </div>
 
   <!-- Offline / Online Scripts -->
-  <script src="security.js?v=6.5"></script>
+  <script src="security.js?v=7.0"></script>
   <script src="libs/xlsx.full.min.js"></script>
   <script src="libs/html2canvas.min.js"></script>
-  <script src="ratings.js?v=6.5"></script>
-  <script src="data.js?v=6.5"></script>
-  <script src="app.js?v=6.5"></script>
+  <script src="ratings.js?v=7.0"></script>
+  <script src="data.js?v=7.0"></script>
+  <script src="app.js?v=7.0"></script>
 </body>
 </html>
