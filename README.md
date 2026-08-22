@@ -26,7 +26,7 @@ Nhằm đảm bảo trải nghiệm thông suốt và không bị nghẽn mạng
 
 | Tên miền / Mirror Link | Trạng thái | Mục đích sử dụng |
 | :--- | :---: | :--- |
-| 🚀 **[tkb-scheduler.vercel.app](https://tkb-scheduler.vercel.app)** | 🟢 Hoạt động | **Primary Production** (Web Chính Thức) |
+| 🚀 **[uithub-vn.vercel.app](https://uithub-vn.vercel.app)** | 🟢 Hoạt động | **Official Brand URL (UIT HUB)** |\n| ⚡ **[tkb-scheduler.vercel.app](https://tkb-scheduler.vercel.app)** | 🟢 Hoạt động | **Primary Production** (Web Chính Thức) |\n| 🔗 **[uit-hub-vn.vercel.app](https://uit-hub-vn.vercel.app)** | 🟢 Hoạt động | Brand Alias 1 |\n| 🔗 **[dkhp-uithub.vercel.app](https://dkhp-uithub.vercel.app)** | 🟢 Hoạt động | Brand Alias 2 |
 | 🛡️ **[dkhp-uit-backup.vercel.app](https://dkhp-uit-backup.vercel.app)** | 🟢 Hoạt động | **Secondary Backup** (Máy chủ dự phòng) |
 | 🌟 **[dkhpuit.vercel.app](https://dkhpuit.vercel.app)** | 🟢 Hoạt động | Production Alias 1 |
 | 🔗 **[uit-tkb.vercel.app](https://uit-tkb.vercel.app)** | 🟢 Hoạt động | Mirror Backup 1 |
