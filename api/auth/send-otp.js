@@ -1,5 +1,7 @@
 const https = require("https");
 const crypto = require("crypto");
+let nodemailer;
+try { nodemailer = require("nodemailer"); } catch(e) {}
 
 const OTP_SECRET = process.env.SESSION_SECRET || "uithub_enterprise_cryptographic_secret_2026_uit_dkhp";
 
@@ -33,12 +35,15 @@ function getEmailHtml(name, code) {
   `;
 }
 
+// 1. Send via Brevo API
 function sendViaBrevo(apiKey, toEmail, otpCode, displayName) {
   return new Promise((resolve) => {
     if (!apiKey) return resolve({ success: false, reason: "NO_BREVO_KEY" });
 
+    // Use verified sender on Brevo
+    const senderEmail = process.env.BREVO_SENDER || "doanquanghoa007@gmail.com";
     const payload = JSON.stringify({
-      sender: { name: "UIT HUB - Cổng Sinh Viên UIT", email: "noreply@uit-hub.vn" },
+      sender: { name: "UIT HUB", email: senderEmail },
       to: [{ email: toEmail, name: displayName }],
       subject: `[UIT HUB] Mã xác thực OTP đăng ký tài khoản: ${otpCode}`,
       htmlContent: getEmailHtml(displayName, otpCode)
@@ -70,6 +75,29 @@ function sendViaBrevo(apiKey, toEmail, otpCode, displayName) {
     req.write(payload);
     req.end();
   });
+}
+
+// 2. Send via SMTP (Gmail)
+async function sendViaSMTP(smtpUser, smtpPass, toEmail, otpCode, displayName) {
+  if (!smtpUser || !smtpPass || !nodemailer) return { success: false };
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: { user: smtpUser, pass: smtpPass }
+    });
+    const info = await transporter.sendMail({
+      from: `"UIT HUB" <${smtpUser}>`,
+      to: toEmail,
+      subject: `[UIT HUB] Mã xác thực OTP đăng ký tài khoản: ${otpCode}`,
+      html: getEmailHtml(displayName, otpCode)
+    });
+    return { success: true, provider: "SMTP", messageId: info.messageId };
+  } catch (err) {
+    console.error("SMTP error:", err.message);
+    return { success: false, error: err.message };
+  }
 }
 
 module.exports = async (req, res) => {
@@ -124,15 +152,20 @@ module.exports = async (req, res) => {
       sig: signature
     })).toString("base64");
 
+    // Try sending: Brevo -> SMTP
     const brevoKey = process.env.BREVO_API_KEY || "";
-    await sendViaBrevo(brevoKey, email, otpCode, displayName || username);
+    let sent = await sendViaBrevo(brevoKey, email, otpCode, displayName || username);
+    
+    if (!sent.success && process.env.SMTP_USER && process.env.SMTP_PASS) {
+      sent = await sendViaSMTP(process.env.SMTP_USER, process.env.SMTP_PASS, email, otpCode, displayName || username);
+    }
 
     return res.status(200).json({
       success: true,
-      message: `Mã xác thực 6 số đã được gửi trực tiếp đến email ${email}. Vui lòng kiểm tra hộp thư!`,
+      message: `Mã xác thực 6 số đã được gửi trực tiếp đến email ${email}. Vui lòng kiểm tra hộp thư (cả mục Spam/Quảng cáo nếu có)!`,
       email,
       otpTicket,
-      delivered: true
+      delivered: sent.success
     });
   } catch (err) {
     console.error("send-otp error:", err);
